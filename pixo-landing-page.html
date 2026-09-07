@@ -19,6 +19,17 @@
     .nav-link:hover { color: #9fe9ff; }
     .nav-link.is-active { color: #4decfe; }
 
+    /* ---- real sliding carousel (a track of slides that translates) ---- */
+    /* mount keeps its own positioning (desktop: Tailwind .absolute, mobile: .m-crsl) */
+    .crsl-vp { position: absolute; inset: 0; overflow: hidden; }
+    .crsl-track { display: flex; align-items: center; height: 100%; will-change: transform; }
+    .crsl-slide { position: relative; flex: 0 0 auto; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .55s cubic-bezier(.4,0,.2,1), opacity .55s ease, filter .55s ease; }
+    .crsl-slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .crsl-slide:not(.is-active) { opacity: .5; transform: scale(.8); filter: saturate(.85) brightness(.62); }
+    .crsl-slide.is-active { opacity: 1; transform: scale(1); z-index: 2; }
+
     /* ================= MOBILE LAYOUT ( < 768px ) ================= */
     .mobile-site { display: none; }
     @media (max-width: 767px) {
@@ -92,41 +103,20 @@
       background: radial-gradient(circle at 42% 34%, #1a3b63, #0a1c33 68%);
       box-shadow: inset 0 2px 5px rgba(0,0,0,.6);
     }
-    /* World carousel: big centre card, just a ~7% sliver of the neighbour cards at each edge */
-    .m-carousel {
-      position: relative; overflow: hidden;
-      margin: 22px calc(var(--m-pad, 30px) * -1) 12px;
-      height: 214px;
-      display: flex; align-items: center; justify-content: center;
+    /* Mobile carousel: a sliding track, big centre slide, dim neighbours peeking at each edge */
+    .m-crsl {
+      position: relative;
+      margin: 18px calc(var(--m-pad, 30px) * -1) 10px;
+      height: 210px;
     }
-    .m-carousel .card {
-      position: relative; z-index: 2; flex: 0 0 auto;
-      width: min(275px, calc(100% - 100px)); height: 100%;
-    }
-    .m-carousel .card img {
-      width: 100%; height: 100%; object-fit: contain; display: block;
-      /* follows the PNG's notched frame shape, so no square box */
-      filter: drop-shadow(0 6px 18px rgba(5,20,45,.5)) drop-shadow(0 0 7px rgba(62,221,239,.30));
-    }
-    .m-carousel .peek {
-      position: absolute; z-index: 1; top: 50%; transform: translateY(-50%);
-      width: 130px; height: 178px;
-      object-fit: cover;
-      opacity: .55; filter: brightness(.58) saturate(.8);
-    }
-    .m-carousel .peek.l { left: -85px; object-position: right center; }
-    .m-carousel .peek.r { right: -85px; object-position: left center; }
-    .m-carousel .arw {
-      position: absolute; z-index: 3; top: 50%; transform: translateY(-50%);
-      width: 34px; height: 34px; cursor: pointer;
+    .m-crsl.abil { height: 168px; }
+    .m-crsl .crsl-arw {
+      position: absolute; z-index: 5; top: 50%; transform: translateY(-50%);
+      width: 38px; height: 38px; cursor: pointer;
       filter: drop-shadow(0 2px 6px rgba(5,20,45,.55));
     }
-    .m-carousel .arw.l { left: 4px; }
-    .m-carousel .arw.r { right: 4px; }
-    .m-abil { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 26px 0 8px; }
-    .m-abil img { border-radius: 999px; object-fit: cover; }
-    .m-abil .side { width: 84px; height: 84px; opacity: .82; }
-    .m-abil .mid { width: 148px; height: 148px; }
+    .m-crsl .crsl-arw.l { left: 2px; }
+    .m-crsl .crsl-arw.r { right: 2px; }
     .m-navrow { display: flex; justify-content: center; gap: 14px; margin-top: 16px; }
     .m-navrow img { width: 40px; height: 40px; }
     .m-field { display: flex; align-items: center; gap: 10px; height: 56px; padding: 0 16px; border: 1px solid rgba(255,255,255,.35); border-radius: 6px; margin-bottom: 18px; }
@@ -215,27 +205,7 @@
     </div>
     <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[3357px]" src="icon/line2.png">
     <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[3357px]" src="icon/line1.png">
-    <div class="absolute left-[calc(8.33%+93.96px)] rounded-full size-[232.925px] top-[3663.07px] overflow-hidden" data-node-id="6118:23071" data-name="image 1089">
-      <img alt="" class="absolute inset-0 max-w-none object-cover size-full" data-ac="slot" data-slot="1" src="image/6.png">
-    </div>
-    <div class="absolute left-[calc(58.33%+43.98px)] rounded-full size-[232.925px] top-[3614.1px] overflow-hidden" data-node-id="6118:23088" data-name="image 1083">
-      <img alt="" class="absolute inset-0 max-w-none object-cover size-full" data-ac="slot" data-slot="4" src="image/8.png">
-    </div>
-    <div class="absolute left-[calc(25%+54.96px)] rounded-full size-[232.925px] top-[3614.1px] overflow-hidden" data-node-id="6118:23090" data-name="image 1079">
-      <img alt="" class="absolute inset-0 max-w-none object-cover size-full" data-ac="slot" data-slot="2" src="image/7.png">
-    </div>
-    <div class="absolute left-[calc(75%+4.98px)] rounded-full size-[232.925px] top-[3663.07px] overflow-hidden" data-node-id="6118:23108" data-name="image 1031">
-      <img alt="" class="absolute inset-0 max-w-none object-cover size-full" data-ac="slot" data-slot="5" src="image/9.png">
-    </div>
-    <div class="absolute left-[-29px] rounded-full size-[234px] top-[3712px] overflow-hidden" data-node-id="6118:23114" data-name="image 1089">
-      <img alt="" class="absolute inset-0 max-w-none object-cover size-full" data-ac="slot" data-slot="0" src="image/5.png">
-    </div>
-    <div class="absolute left-[calc(91.67%-34px)] rounded-full size-[235px] top-[3712px] overflow-hidden" data-node-id="6118:23132" data-name="image 1031">
-      <img alt="" class="absolute inset-0 max-w-none object-cover size-full" data-ac="slot" data-slot="6" src="image/10.png">
-    </div>
-    <div class="absolute left-[calc(41.67%+15.55px)] rounded-full size-[300.057px] top-[3525px] overflow-hidden" data-node-id="6118:23145" data-name="image 1083">
-      <img alt="" class="absolute inset-0 max-w-none object-cover size-full" style="transition:opacity .32s ease, transform .32s ease" data-ac="slot" data-slot="3" src="image/8-1.png">
-    </div>
+    <div class="absolute left-1/2 -translate-x-1/2 top-[3500px] h-[380px] w-[1760px]" data-node-id="6118:23145" id="acMount"></div>
     <a href="#" data-node-id="6118:23151" data-ac="next-btn" aria-label="Next ability" class="absolute flex items-center justify-center size-[58px] left-[calc(50%+26px)] top-[4022px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
       <img alt="" class="block size-full" src="icon/2.png">
     </a>
@@ -308,51 +278,7 @@
     </div>
     <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[2360px]" src="icon/line2.png">
     <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[2360px]" src="icon/line1.png">
-    <div class="absolute h-[390.642px] left-[calc(25%+150px)] top-[2506px] w-[658.996px]" data-node-id="6118:23264">
-      <div class="absolute inset-[0_0_0.33%_0]">
-        <img alt="" class="block max-w-none size-full" style="transition:opacity .16s ease" data-wc="card" height="389.357" src="image/4.png" width="658.996">
-      </div>
-    </div>
-    <div class="absolute h-[80.393px] left-[calc(66.67%+3.34px)] top-[2657.73px] w-[5.661px]" data-node-id="6118:23265">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/5e234793-145e-49e4-ae3b-c45598717c79.svg">
-    </div>
-    <div class="absolute flex h-[80.393px] items-center justify-center left-[calc(25%+150px)] top-[2657.73px] w-[5.661px]" data-node-id="6118:23266">
-      <div class="-scale-y-100 flex-none rotate-180">
-        <div class="h-[80.393px] relative w-[5.661px]">
-          <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/d5ef7ecc-bebb-4a77-8078-814053f9bb0b.svg">
-        </div>
-      </div>
-    </div>
-    <div class="absolute h-[333.207px] left-[-52px] top-[2535px] w-[562.106px]" data-node-id="6118:23269">
-      <div class="absolute inset-[0_0_0.33%_0]">
-        <img alt="" class="block max-w-none size-full" data-wc="side-prev" height="332.111" src="image/3.png" width="562.106">
-      </div>
-    </div>
-    <div class="absolute h-[68.573px] left-[calc(25%+25.28px)] top-[2664.42px] w-[4.829px]" data-node-id="6118:23270">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/b687479a-c95a-410b-8187-5b3b700a990e.svg">
-    </div>
-    <div class="absolute flex h-[68.573px] items-center justify-center left-[-52px] top-[2664.42px] w-[4.829px]" data-node-id="6118:23271">
-      <div class="-scale-y-100 flex-none rotate-180">
-        <div class="h-[68.573px] relative w-[4.829px]">
-          <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/4078c2d4-8661-47ad-af60-bf73f9ed0a0c.svg">
-        </div>
-      </div>
-    </div>
-    <div class="absolute h-[333.207px] left-[calc(75%-30.9px)] top-[2535px] w-[562.106px]" data-node-id="6118:23275">
-      <div class="absolute inset-[0_0_0.33%_0]">
-        <img alt="" class="block max-w-none size-full" data-wc="side-next" height="332.111" src="image/3.png" width="562.106">
-      </div>
-    </div>
-    <div class="absolute h-[68.573px] left-[calc(100%+46.38px)] top-[2664.42px] w-[4.829px]" data-node-id="6118:23276">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/b687479a-c95a-410b-8187-5b3b700a990e.svg">
-    </div>
-    <div class="absolute flex h-[68.573px] items-center justify-center left-[calc(75%-30.9px)] top-[2664.42px] w-[4.829px]" data-node-id="6118:23277">
-      <div class="-scale-y-100 flex-none rotate-180">
-        <div class="h-[68.573px] relative w-[4.829px]">
-          <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/4078c2d4-8661-47ad-af60-bf73f9ed0a0c.svg">
-        </div>
-      </div>
-    </div>
+    <div class="absolute left-1/2 -translate-x-1/2 top-[2506px] h-[400px] w-[1920px]" data-node-id="6118:23264" id="wcMount"></div>
     <a href="#" data-node-id="6118:23279" data-wc="prev-btn" aria-label="Previous slide" class="absolute flex items-center justify-center size-[58px] left-[calc(25%+62px)] top-[2672px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
       <img alt="" class="block size-full" src="icon/1.png">
     </a>
@@ -540,12 +466,9 @@
       <h1 class="m-title c">A World Beyond<br>The Horizon</h1>
       <div class="m-flourish c"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></div>
       <p class="m-lead c">Curious by nature, fearless by design. PIXO is ready to explore a world of mystery, challenge, and adventure.</p>
-      <div class="m-carousel">
-        <img class="peek l" data-wc="side-prev" src="image/3.png" alt="">
-        <img class="peek r" data-wc="side-next" src="image/3.png" alt="">
-        <div class="card"><img data-wc="card" style="transition:opacity .16s ease" src="image/4.png" alt="Wild Frontiers"></div>
-        <img class="arw l" data-wc="prev-btn" src="icon/1.png" alt="Previous" role="button" tabindex="0">
-        <img class="arw r" data-wc="next-btn" src="icon/2.png" alt="Next" role="button" tabindex="0">
+      <div class="m-crsl" id="wcMountM">
+        <img class="crsl-arw l" data-wc="prev-btn" src="icon/1.png" alt="Previous" role="button" tabindex="0">
+        <img class="crsl-arw r" data-wc="next-btn" src="icon/2.png" alt="Next" role="button" tabindex="0">
       </div>
       <p class="m-cardlabel" data-wc="label">Wild Fronttiers</p>
       <p class="m-lead c" style="margin-bottom:0;" data-wc="desc">Lush forests, floating island and untamed lands full of life and wonder.</p>
@@ -557,14 +480,12 @@
       <h1 class="m-title c">Built To Break<br>The Rules</h1>
       <div class="m-flourish c"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></div>
       <p class="m-lead c">Master PIXO&rsquo;s unique abilities to move faster, fight smarter, and overcome challenges in unexpected ways.</p>
-      <div class="m-abil">
-        <img class="side" data-ac="slot" data-slot="2" src="image/7.png" alt="">
-        <img class="mid" data-ac="slot" data-slot="3" style="transition:opacity .32s ease, transform .32s ease" src="image/8-1.png" alt="">
-        <img class="side" data-ac="slot" data-slot="4" src="image/8.png" alt="">
+      <div class="m-crsl abil" id="acMountM">
+        <img class="crsl-arw l" data-ac="prev-btn" src="icon/1.png" alt="Previous" role="button" tabindex="0">
+        <img class="crsl-arw r" data-ac="next-btn" src="icon/2.png" alt="Next" role="button" tabindex="0">
       </div>
       <p class="m-cardlabel" data-ac="label">Time Bubble</p>
       <p class="m-lead c" style="margin-bottom:0;" data-ac="desc">Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.</p>
-      <div class="m-navrow"><img data-ac="prev-btn" src="icon/1.png" alt="Previous" role="button" tabindex="0"><img data-ac="next-btn" src="icon/2.png" alt="Next" role="button" tabindex="0"></div>
     </section>
 
     <!-- ENEMIES -->
@@ -645,117 +566,119 @@
       window.addEventListener('orientationchange', fit);
       window.addEventListener('load', fit);
 
-      // ================= carousels (shared, smooth cross-fade) =================
+      // ================= real sliding carousels (a track that translates) =================
       (function () {
         var q = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
-        var DUR = 320; // ms for each half of the fade — slow & smooth
+        var SLIDE_MS = 550, EASE = 'cubic-bezier(.4,0,.2,1)';
 
-        // Wire a set of prev/next buttons to a render(index) callback with a fade.
-        function carousel(opts) {
-          var i = opts.start || 0, busy = false;
-          function step(dir) {
-            if (busy || opts.count < 2) return;
-            busy = true;
-            i = (i + dir + opts.count) % opts.count;
-            opts.fadeOut(dir);
-            setTimeout(function () {
-              opts.render(i);
-              opts.fadeIn(dir);
-              setTimeout(function () { busy = false; }, DUR);
-            }, DUR);
+        // items: [{img,label,desc}]. mounts: [{el, widthPct, gap}]. All mounts + labels + descs
+        // stay in sync off one shared index. The track holds 3 copies of the items so it can
+        // slide forever; after each move it snaps (no transition) back into the middle copy.
+        function build(cfg) {
+          var items = cfg.items, n = items.length;
+          if (n < 2) return;
+          var mounts = cfg.mounts.filter(function (m) { return m.el; });
+          if (!mounts.length) return;
+          var labels = q(cfg.labels), descs = q(cfg.descs);
+          var index = n, busy = false;
+
+          mounts.forEach(function (m) {
+            var vp = document.createElement('div'); vp.className = 'crsl-vp';
+            var track = document.createElement('div'); track.className = 'crsl-track';
+            items.concat(items, items).forEach(function (it) {
+              var s = document.createElement('div'); s.className = 'crsl-slide';
+              var im = document.createElement('img'); im.src = it.img; im.alt = it.label || '';
+              s.appendChild(im); track.appendChild(s);
+            });
+            vp.appendChild(track); m.el.appendChild(vp);
+            m.vp = vp; m.track = track; m.slides = q('.crsl-slide', track);
+          });
+
+          function layout(m) {
+            var vw = m.vp.clientWidth || 1;
+            m.w = Math.max(40, Math.round(vw * m.widthPct));
+            m.slides.forEach(function (s) { s.style.width = m.w + 'px'; s.style.marginRight = m.gap + 'px'; });
           }
-          function bind(els, dir) {
-            els.forEach(function (b) {
-              b.addEventListener('click', function (e) { e.preventDefault(); step(dir); });
+          function place(animate) {
+            mounts.forEach(function (m) {
+              var vw = m.vp.clientWidth;
+              var x = Math.round(vw / 2 - m.w / 2 - index * (m.w + m.gap));
+              m.track.style.transition = animate ? ('transform ' + SLIDE_MS + 'ms ' + EASE) : 'none';
+              m.track.style.transform = 'translate3d(' + x + 'px,0,0)';
+              if (!animate) {
+                m.slides.forEach(function (s) { s.style.transition = 'none'; });
+                void m.track.offsetHeight;
+                m.slides.forEach(function (s) { s.style.transition = ''; });
+              }
+              m.slides.forEach(function (s, k) { s.classList.toggle('is-active', k === index); });
+            });
+            var it = items[((index % n) + n) % n];
+            labels.forEach(function (el) { el.textContent = it.label; });
+            descs.forEach(function (el) { el.textContent = it.desc; });
+          }
+          function go(dir) {
+            if (busy) return;
+            busy = true;
+            index += dir;
+            place(true);
+            var t = mounts[0].track, fired = false;
+            function done(e) {
+              if (fired || (e && e.target !== t)) return;
+              fired = true;
+              t.removeEventListener('transitionend', done);
+              if (index < n) index += n; else if (index >= 2 * n) index -= n;
+              place(false);
+              busy = false;
+            }
+            t.addEventListener('transitionend', done);
+            setTimeout(function () { done(); }, SLIDE_MS + 120);
+          }
+          function bind(sel, dir) {
+            q(sel).forEach(function (b) {
+              b.addEventListener('click', function (e) { e.preventDefault(); go(dir); });
               b.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); step(dir); }
+                if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); go(dir); }
               });
             });
           }
-          bind(q(opts.prev), -1);
-          bind(q(opts.next), 1);
-          opts.render(i);
+          function relayout() { mounts.forEach(layout); place(false); }
+          bind(cfg.prev, -1); bind(cfg.next, 1);
+          relayout();
+          window.addEventListener('resize', relayout);
+          window.addEventListener('load', relayout);
         }
 
-        // ---------- "The World" carousel ----------
-        (function () {
-          var slides = [
+        build({
+          prev: '[data-wc="prev-btn"]', next: '[data-wc="next-btn"]',
+          labels: '[data-wc="label"]', descs: '[data-wc="desc"]',
+          mounts: [
+            { el: document.getElementById('wcMount'),  widthPct: 0.345, gap: 44 },
+            { el: document.getElementById('wcMountM'), widthPct: 0.74, gap: 10 }
+          ],
+          items: [
             { img: 'image/4.png', label: 'WILD FRONTTIERS', desc: 'Lush forests, floating island and untamed lands full of life and wonder.' },
             { img: 'image/3.png', label: 'COMING SOON', desc: 'A new realm is being forged — explore what lies beyond, very soon.' },
             { img: 'image/3.png', label: 'COMING SOON', desc: 'More worlds await discovery. Stay tuned for the next frontier.' }
-          ];
-          var n = slides.length;
-          var cards = q('[data-wc="card"]'), sidePrev = q('[data-wc="side-prev"]'), sideNext = q('[data-wc="side-next"]');
-          var labels = q('[data-wc="label"]'), descs = q('[data-wc="desc"]');
-          if (!cards.length) return;
-          var fx = cards.concat(labels, descs);
-          fx.forEach(function (el) { el.style.transition = 'opacity ' + DUR + 'ms ease, transform ' + DUR + 'ms ease'; });
+          ]
+        });
 
-          carousel({
-            count: n, start: 0,
-            prev: '[data-wc="prev-btn"]', next: '[data-wc="next-btn"]',
-            fadeOut: function (dir) {
-              cards.forEach(function (el) { el.style.opacity = '0'; el.style.transform = 'scale(.955) translateX(' + (dir > 0 ? -12 : 12) + 'px)'; });
-              labels.concat(descs).forEach(function (el) { el.style.opacity = '0'; });
-            },
-            fadeIn: function () {
-              cards.forEach(function (el) { el.style.opacity = '1'; el.style.transform = 'scale(1) translateX(0)'; });
-              labels.concat(descs).forEach(function (el) { el.style.opacity = '1'; });
-            },
-            render: function (idx) {
-              var s = slides[idx], p = slides[(idx - 1 + n) % n], nx = slides[(idx + 1) % n];
-              cards.forEach(function (el) { el.src = s.img; });
-              sidePrev.forEach(function (el) { el.src = p.img; });
-              sideNext.forEach(function (el) { el.src = nx.img; });
-              labels.forEach(function (el) { el.textContent = s.label; });
-              descs.forEach(function (el) { el.textContent = s.desc; });
-            }
-          });
-        })();
-
-        // ---------- "Abilities" carousel ----------
-        (function () {
-          var abil = [
-            { img: 'image/5.png',   name: 'PHASE BLAST',   desc: 'Unleash a burst of void energy that pierces armour and knocks foes off balance.' },
-            { img: 'image/6.png',   name: 'OVERGROWTH',    desc: 'Summon living vines that root enemies in place while healing nearby allies.' },
-            { img: 'image/7.png',   name: 'PULSE DASH',    desc: 'Blink through space in a shockwave, damaging every enemy along your path.' },
-            { img: 'image/8-1.png', name: 'TIME BUBBLE',   desc: 'Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.' },
-            { img: 'image/8.png',   name: 'EMBER STRIKE',  desc: 'Ignite your fists and hammer down a lingering trail of scorching flame.' },
-            { img: 'image/9.png',   name: 'CRIMSON WARD',  desc: 'Raise a barrier of hardened plasma that reflects incoming fire back at attackers.' },
-            { img: 'image/10.png',  name: 'STATIC SURGE',  desc: 'Charge the air with lightning, chaining bolts between every enemy in range.' }
-          ];
-          var n = abil.length, CENTER = 3;
-          var slotEls = q('[data-ac="slot"]');
-          var labels = q('[data-ac="label"]'), descs = q('[data-ac="desc"]');
-          if (!slotEls.length) return;
-          var fx = slotEls.concat(labels, descs);
-          fx.forEach(function (el) { el.style.transition = 'opacity ' + DUR + 'ms ease, transform ' + DUR + 'ms ease'; });
-
-          function titleCase(s) { return s.replace(/\w\S*/g, function (t) { return t.charAt(0) + t.slice(1).toLowerCase(); }); }
-          function draw(idx) {
-            slotEls.forEach(function (el) {
-              var slot = parseInt(el.getAttribute('data-slot'), 10);
-              el.src = abil[(idx + (slot - CENTER) + n * 2) % n].img;
-            });
-            var c = abil[idx];
-            labels.forEach(function (el) { el.textContent = el.hasAttribute('data-caps') ? c.name : titleCase(c.name); });
-            descs.forEach(function (el) { el.textContent = c.desc; });
-          }
-
-          carousel({
-            count: n, start: CENTER,
-            prev: '[data-ac="prev-btn"]', next: '[data-ac="next-btn"]',
-            fadeOut: function (dir) {
-              slotEls.forEach(function (el) { el.style.opacity = '.25'; el.style.transform = 'translateX(' + (dir > 0 ? -14 : 14) + 'px)'; });
-              labels.concat(descs).forEach(function (el) { el.style.opacity = '0'; });
-            },
-            fadeIn: function () {
-              slotEls.forEach(function (el) { el.style.opacity = ''; el.style.transform = 'translateX(0)'; });
-              labels.concat(descs).forEach(function (el) { el.style.opacity = '1'; });
-            },
-            render: draw
-          });
-        })();
+        build({
+          prev: '[data-ac="prev-btn"]', next: '[data-ac="next-btn"]',
+          labels: '[data-ac="label"]', descs: '[data-ac="desc"]',
+          mounts: [
+            { el: document.getElementById('acMount'),  widthPct: 0.172, gap: 24 },
+            { el: document.getElementById('acMountM'), widthPct: 0.40, gap: 12 }
+          ],
+          items: [
+            { img: 'image/8-1.png', label: 'TIME BUBBLE',   desc: 'Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.' },
+            { img: 'image/8.png',   label: 'EMBER STRIKE',  desc: 'Ignite your fists and hammer down a lingering trail of scorching flame.' },
+            { img: 'image/9.png',   label: 'CRIMSON WARD',  desc: 'Raise a barrier of hardened plasma that reflects incoming fire back at attackers.' },
+            { img: 'image/10.png',  label: 'STATIC SURGE',  desc: 'Charge the air with lightning, chaining bolts between every enemy in range.' },
+            { img: 'image/5.png',   label: 'PHASE BLAST',   desc: 'Unleash a burst of void energy that pierces armour and knocks foes off balance.' },
+            { img: 'image/6.png',   label: 'OVERGROWTH',    desc: 'Summon living vines that root enemies in place while healing nearby allies.' },
+            { img: 'image/7.png',   label: 'PULSE DASH',    desc: 'Blink through space in a shockwave, damaging every enemy along your path.' }
+          ]
+        });
       })();
 
       // ---- nav: active underline + smooth scroll ----
