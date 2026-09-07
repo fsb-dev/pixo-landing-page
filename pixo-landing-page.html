@@ -29,15 +29,16 @@
         display: block; width: 100%; max-width: 520px; margin: 0 auto;
         background: #091f34; color: #fff;
         font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+        --m-pad: 30px;   /* consistent left/right gutter for text on every section */
       }
     }
-    .m-wrap { padding: 0 22px; }
-    .m-sec { padding: 44px 0 8px; }
+    .m-wrap { padding-left: var(--m-pad, 30px); padding-right: var(--m-pad, 30px); }
+    .m-sec { padding-top: 44px; padding-bottom: 8px; }
     .m-img { display: block; width: 100%; height: auto; }
 
     /* Hero: copy on a dark panel, hero art bleeding up behind it (matches desktop feel). */
     .m-hero { position: relative; background: #091f34; overflow: hidden; }
-    .m-hero-content { position: relative; z-index: 2; padding: 26px 22px 34px; }
+    .m-hero-content { position: relative; z-index: 2; padding: 26px var(--m-pad, 30px) 34px; }
     .m-hero-logo { display: inline-block; margin-bottom: 26px; }
     .m-hero-logo img { height: 34px; width: auto; display: block; }
     .m-hero-art { position: relative; margin-top: -46px; }
@@ -58,6 +59,20 @@
     .m-flourish.c { justify-content: center; }
     .m-flourish .ln { height: 4px; width: 68px; }
     .m-flourish .dot { height: 22px; width: 22px; object-fit: contain; flex: none; }
+    /* title with a compact flourish tucked to its right */
+    .m-titlerow { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 14px; }
+    .m-fl-mini { display: flex; align-items: center; gap: 6px; padding-bottom: 8px; }
+    .m-fl-mini .ln { height: 3px; width: 34px; }
+    .m-fl-mini .dot { height: 16px; width: 16px; object-fit: contain; flex: none; }
+    /* standalone section photo that fades into the navy at top and bottom */
+    .m-photo { position: relative; margin-top: 4px; }
+    .m-photo img { display: block; width: 100%; height: auto; }
+    .m-photo::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background:
+        linear-gradient(180deg, #091f34 0%, rgba(9,31,52,.4) 12%, rgba(9,31,52,0) 30%),
+        linear-gradient(180deg, rgba(9,31,52,0) 72%, rgba(9,31,52,.55) 88%, #091f34 100%);
+    }
     .m-sub { color: #cdaa68; font-size: 13px; font-weight: 500; letter-spacing: 2.4px; text-transform: uppercase; margin: 0 0 12px; }
     .m-lead { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.9); margin: 0 0 22px; }
     .m-lead.c { text-align: center; }
@@ -95,7 +110,7 @@
     .m-gp .flank { position: absolute; bottom: 22px; width: 74px; height: auto; }
     .m-gp .flank.l { left: -10px; }
     .m-gp .flank.r { right: -10px; }
-    .m-footer { text-align: center; padding: 42px 22px 28px; }
+    .m-footer { text-align: center; padding: 42px var(--m-pad, 30px) 28px; }
     .m-footer .flogo { height: 52px; width: auto; margin: 0 auto 6px; display: block; }
     .m-social { display: flex; justify-content: center; gap: 16px; margin: 18px 0; }
     .m-social img { width: 44px; height: 44px; }
@@ -503,13 +518,15 @@
     <!-- THIS IS PIXO -->
     <section class="m-wrap m-sec">
       <div class="m-eyebrow"><img src="icon/line3.png" alt=""><span>Meet PIXO</span><img src="icon/line4.png" alt=""></div>
-      <h1 class="m-title">This Is PIXO</h1>
-      <div class="m-flourish"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></div>
+      <div class="m-titlerow">
+        <h1 class="m-title">This Is PIXO</h1>
+        <span class="m-fl-mini"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></span>
+      </div>
       <p class="m-sub">Every Adventure Needs A Hero</p>
       <p class="m-lead">Curious by nature, fearless by design. PIXO is ready to explore a world of mystery, challenge, and adventure.</p>
       <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>WATCH TRAILER</a>
     </section>
-    <img class="m-img" src="image/2.png" alt="">
+    <div class="m-photo"><img src="image/2.png" alt=""></div>
 
     <!-- THE WORLD -->
     <section class="m-wrap m-sec">
@@ -550,7 +567,7 @@
       <p class="m-lead">Dangerous machines and mysterious creatures stand between PIXO and the unknown. Learn their patterns, exploit their weaknesses, and fight your way forward.</p>
       <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>WATCH TRAILER</a>
     </section>
-    <img class="m-img" src="image/12.png" alt="">
+    <div class="m-photo"><img src="image/12.png" alt=""></div>
 
     <!-- GAMEPLAY -->
     <section class="m-wrap m-sec">
@@ -574,7 +591,7 @@
       <label class="m-field"><img src="icon/email.png" alt=""><input type="email" placeholder="Enter your mail"></label>
       <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>SUBSCRIBE</a>
     </section>
-    <img class="m-img" src="image/18.png" alt="">
+    <div class="m-photo"><img src="image/18.png" alt=""></div>
 
     <!-- FOOTER -->
     <footer class="m-footer">
