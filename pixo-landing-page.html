@@ -415,11 +415,11 @@
       var main = document.querySelector('main');
       var scale = 1;
 
-      // Scale the fixed 1920px design to fill the viewport width (never upscale past 1:1).
+      // Scale the fixed 1920px design to always fill the full viewport width (up or down).
       // <body> is sized to the scaled design so the browser produces exactly one scrollbar.
       function fit() {
         var vw = document.documentElement.clientWidth || window.innerWidth;
-        scale = Math.min(1, vw / DESIGN_W);
+        scale = vw / DESIGN_W;
         if (main) main.style.transform = 'scale(' + scale + ')';
         document.body.style.width = (DESIGN_W * scale) + 'px';
         document.body.style.height = (DESIGN_H * scale) + 'px';
