@@ -11,6 +11,9 @@
   <style>
     html, body { margin: 0; padding: 0; background: #091f34; overflow-x: auto; }
     * { box-sizing: border-box; }
+    .nav-link { color: #fff; cursor: pointer; transition: color .2s ease; }
+    .nav-link:hover { color: #9fe9ff; }
+    .nav-link.is-active { color: #4decfe; }
   </style>
 </head>
 <body>
@@ -278,31 +281,19 @@
     <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(66.67%+45px)] top-[621px]" src="icon/line2.png">
     <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(50%+8px)] top-[621px]" src="icon/line1.png">
     <nav class="contents" data-node-id="6118:23458">
-      <div class="absolute flex h-[48.985px] items-center justify-center left-[calc(33.33%+68.79px)] top-[40.01px] w-[1131.319px]" data-node-id="6118:23460">
-        <div class="-scale-y-100 flex-none rotate-180">
-          <div class="h-[48.985px] relative w-[1131.319px]">
-            <img alt="" class="absolute block inset-0 max-w-none size-full" height="48.984" src="assets/2f5b3ec8-1fd7-4ea4-8025-c61ac196c382.png" width="1131.314">
-          </div>
-        </div>
-      </div>
-      <p class="[word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(33.33%+105px)] text-[#4decfe] top-[55px]" data-node-id="6118:23462"> HOME </p>
-      <p class="[word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(50%+64px)] text-white top-[55px]" data-node-id="6118:23463"> WORLD </p>
-      <p class="[word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(41.67%+91px)] text-white top-[55px]" data-node-id="6118:23464"> PIXO </p>
-      <p class="[word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(58.33%+65px)] text-white top-[55px]" data-node-id="6118:23465"> ABILITIES </p>
-      <p class="[word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(66.67%+82px)] text-white top-[55px]" data-node-id="6118:23466"> ENEMIES </p>
-      <p class="[word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(75%+93px)] text-white top-[55px]" data-node-id="6118:23467"> GAME PLAY </p>
-      <p class="[word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(91.67%-30px)] text-white top-[55px]" data-node-id="6118:23468"> DEMO </p>
+      <div class="absolute h-[48.985px] left-[calc(33.33%+68.79px)] top-[40.01px] w-[1131.319px] rounded-full bg-[#01132C]/[0.47]" data-node-id="6118:23460"></div>
+      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(33.33%+105px)] top-[55px] is-active" data-scroll="0" data-node-id="6118:23462"> HOME </p>
+      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(50%+64px)] top-[55px]" data-scroll="2110" data-node-id="6118:23463"> WORLD </p>
+      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(41.67%+91px)] top-[55px]" data-scroll="1300" data-node-id="6118:23464"> PIXO </p>
+      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(58.33%+65px)] top-[55px]" data-scroll="3095" data-node-id="6118:23465"> ABILITIES </p>
+      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(66.67%+82px)] top-[55px]" data-scroll="4275" data-node-id="6118:23466"> ENEMIES </p>
+      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(75%+93px)] top-[55px]" data-scroll="5200" data-node-id="6118:23467"> GAME PLAY </p>
+      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(91.67%-30px)] top-[55px]" data-scroll="6410" data-node-id="6118:23468"> DEMO </p>
+      <div id="navUnderline" class="absolute h-[4px] top-[85px] rounded-full bg-[#05EAF9]" style="left:741px;width:68.58px;box-shadow:0 0 6px rgba(5,234,249,0.5);"></div>
       <div class="absolute bg-[rgba(0,44,91,0.63)] blur-[19.006px] h-[100px] left-[80px] top-[21.11px] w-[227px]" data-node-id="6118:23470"></div>
       <a href="#" aria-label="PIXO home" class="absolute block h-[73px] left-[88px] top-[35px] w-[212px]" data-node-id="6118:23471">
         <img alt="PIXO" class="block max-w-none size-full object-contain" src="image/logo.png">
       </a>
-      <div class="absolute flex h-[4px] items-center justify-center left-[calc(33.33%+101px)] top-[85px] w-[68.584px]" data-node-id="6118:23485">
-        <div class="-scale-y-100 flex-none">
-          <div class="h-[4px] relative w-[68.584px]">
-            <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/7b70cc0c-f212-4c9e-a6df-dbbb55a06288.svg">
-          </div>
-        </div>
-      </div>
     </nav>
     <div class="absolute h-[1080.574px] left-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-size-[1920px_1080.574px] opacity-25 top-[5214px] w-[1920px]" data-node-id="6118:22942" style="mask-image:url('assets/d1690dc1-d6ba-41b9-8fef-a58504b01f1d.svg')" data-name="image 945">
       <img alt="" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="assets/748f2bac-92db-4cd1-8651-3ae12fd09909.png">
@@ -413,5 +404,46 @@
       <img alt="" class="block max-w-none size-full" src="image/footer_bg.png">
     </div>
   </main>
+  <script>
+    (function () {
+      var links = Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
+      var bar = document.getElementById('navUnderline');
+      if (!bar || !links.length) return;
+
+      function moveBar(el) {
+        bar.style.left = el.offsetLeft + 'px';
+        bar.style.width = el.offsetWidth + 'px';
+      }
+      function activate(el) {
+        links.forEach(function (l) { l.classList.remove('is-active'); });
+        el.classList.add('is-active');
+        moveBar(el);
+      }
+
+      links.forEach(function (l) {
+        l.addEventListener('click', function () {
+          activate(l);
+          var y = parseInt(l.getAttribute('data-scroll'), 10);
+          if (!isNaN(y)) window.scrollTo({ top: y, behavior: 'smooth' });
+        });
+      });
+
+      // Initial placement: snap into position with no transition, then enable sliding.
+      var current = document.querySelector('.nav-link.is-active') || links[0];
+      moveBar(current);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          bar.style.transition = 'left .35s cubic-bezier(.4,0,.2,1), width .35s cubic-bezier(.4,0,.2,1)';
+        });
+      });
+
+      window.addEventListener('resize', function () {
+        var prev = bar.style.transition;
+        bar.style.transition = 'none';
+        moveBar(document.querySelector('.nav-link.is-active') || current);
+        requestAnimationFrame(function () { bar.style.transition = prev; });
+      });
+    })();
+  </script>
 </body>
 </html>
