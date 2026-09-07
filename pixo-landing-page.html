@@ -27,8 +27,7 @@
       display: flex; align-items: center; justify-content: center;
       transition: transform .55s cubic-bezier(.4,0,.2,1), opacity .55s ease, filter .55s ease; }
     .crsl-slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
-    .crsl-slide:not(.is-active) { opacity: .5; transform: scale(.8); filter: saturate(.85) brightness(.62); }
-    .crsl-slide.is-active { opacity: 1; transform: scale(1); z-index: 2; }
+    /* depth (scale / arc-drop / dim / z-index) is applied per-slide from JS by distance from centre */
 
     /* ================= MOBILE LAYOUT ( < 768px ) ================= */
     .mobile-site { display: none; }
@@ -599,6 +598,14 @@
             m.w = Math.max(40, Math.round(vw * m.widthPct));
             m.slides.forEach(function (s) { s.style.width = m.w + 'px'; s.style.marginRight = m.gap + 'px'; });
           }
+          // depth ramp by distance from the centre slide (index 0 = active)
+          var SCALE = cfg.scale || [1, 0.78, 0.6, 0.5];
+          var DROP  = cfg.drop  || [0, 0, 0, 0];      // arc sink per ring, as a fraction of slide width
+          var PULL  = cfg.pull  || 0;                 // pull toward centre per ring, fraction of slide width
+          var DIM   = cfg.dim   || [1, 0.82, 0.58, 0.5];
+          var FADE  = cfg.fade  || [1, 0.95, 0.62, 0];
+          var ramp = function (a, d) { return a[Math.min(d, a.length - 1)]; };
+
           function place(animate) {
             mounts.forEach(function (m) {
               var vw = m.vp.clientWidth;
@@ -610,7 +617,16 @@
                 void m.track.offsetHeight;
                 m.slides.forEach(function (s) { s.style.transition = ''; });
               }
-              m.slides.forEach(function (s, k) { s.classList.toggle('is-active', k === index); });
+              m.slides.forEach(function (s, k) {
+                var rel = k - index, d = Math.abs(rel), sc = ramp(SCALE, d);
+                var tx = rel === 0 ? 0 : (-Math.sign(rel) * Math.min(d, 3) * PULL * m.w);
+                var ty = ramp(DROP, d) * m.w;
+                s.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) scale(' + sc + ')';
+                s.style.opacity = ramp(FADE, d);
+                s.style.filter = d === 0 ? 'none' : 'saturate(.9) brightness(' + ramp(DIM, d) + ')';
+                s.style.zIndex = 20 - d;
+                s.classList.toggle('is-active', rel === 0);
+              });
             });
             var it = items[((index % n) + n) % n];
             labels.forEach(function (el) { el.textContent = it.label; });
@@ -651,6 +667,7 @@
         build({
           prev: '[data-wc="prev-btn"]', next: '[data-wc="next-btn"]',
           labels: '[data-wc="label"]', descs: '[data-wc="desc"]',
+          scale: [1, 0.82, 0.82, 0.8], dim: [1, 0.5, 0.5, 0.5], fade: [1, 0.9, 0.5, 0],
           mounts: [
             { el: document.getElementById('wcMount'),  widthPct: 0.345, gap: 44 },
             { el: document.getElementById('wcMountM'), widthPct: 0.74, gap: 10 }
@@ -665,9 +682,14 @@
         build({
           prev: '[data-ac="prev-btn"]', next: '[data-ac="next-btn"]',
           labels: '[data-ac="label"]', descs: '[data-ac="desc"]',
+          scale: [1, 0.9, 0.82, 0.72, 0.66],
+          drop:  [0, 0.08, 0.16, 0.2, 0.22],
+          pull:  0.02,
+          dim:   [1, 0.96, 0.84, 0.62, 0.5],
+          fade:  [1, 1, 0.9, 0.5, 0],
           mounts: [
-            { el: document.getElementById('acMount'),  widthPct: 0.172, gap: 24 },
-            { el: document.getElementById('acMountM'), widthPct: 0.40, gap: 12 }
+            { el: document.getElementById('acMount'),  widthPct: 0.158, gap: 14 },
+            { el: document.getElementById('acMountM'), widthPct: 0.4, gap: 2 }
           ],
           items: [
             { img: 'image/8-1.png', label: 'TIME BUBBLE',   desc: 'Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.' },
