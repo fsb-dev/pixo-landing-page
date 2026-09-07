@@ -9,15 +9,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Teko:wght@500;600&amp;display=swap" rel="stylesheet">
   <style>
-    html, body { margin: 0; padding: 0; background: #091f34; overflow-x: auto; }
     * { box-sizing: border-box; }
+    html { overflow-x: hidden; background: #091f34; }
+    /* <body> is the "stage": its size is the scaled design; the browser scrolls it (one scrollbar). */
+    body { margin: 0 auto; padding: 0; background: #091f34; position: relative; overflow: hidden; }
+    /* Fixed 1920px design, scaled by JS to fit the viewport width. */
+    body > main { position: absolute; top: 0; left: 0; transform-origin: top left; will-change: transform; }
     .nav-link { color: #fff; cursor: pointer; transition: color .2s ease; }
     .nav-link:hover { color: #9fe9ff; }
     .nav-link.is-active { color: #4decfe; }
   </style>
 </head>
 <body>
-  <main class="bg-[#091f34] relative w-[1920px] min-h-[7831px] mx-auto overflow-hidden" data-node-id="6118:22938" data-name="DESKTOP">
+  <main class="bg-[#091f34] w-[1920px] h-[7831px] overflow-hidden" data-node-id="6118:22938" data-name="DESKTOP">
     <div class="absolute h-[973px] left-[calc(25%+154px)] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-733.646px_63.354px] mask-size-[2131.91px_911.293px] top-[1091.77px] w-[1418px]" data-node-id="6269:172" style="mask-image:url('assets/818d7f66-7b95-48d7-ba5a-f830334cef9f.svg')" data-name="image 987">
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <img alt="" class="absolute h-[109.29%] left-[4.18%] max-w-none top-[-5.65%] w-[133.21%]" src="assets/6f6448b1-3264-4b7c-aedc-bcbc2eed3703.png">
@@ -406,6 +410,26 @@
   </main>
   <script>
     (function () {
+      var DESIGN_W = 1920;
+      var DESIGN_H = 7831;
+      var main = document.querySelector('main');
+      var scale = 1;
+
+      // Scale the fixed 1920px design to fill the viewport width (never upscale past 1:1).
+      // <body> is sized to the scaled design so the browser produces exactly one scrollbar.
+      function fit() {
+        var vw = document.documentElement.clientWidth || window.innerWidth;
+        scale = Math.min(1, vw / DESIGN_W);
+        if (main) main.style.transform = 'scale(' + scale + ')';
+        document.body.style.width = (DESIGN_W * scale) + 'px';
+        document.body.style.height = (DESIGN_H * scale) + 'px';
+      }
+      fit();
+      window.addEventListener('resize', fit);
+      window.addEventListener('orientationchange', fit);
+      window.addEventListener('load', fit);
+
+      // ---- nav: active underline + smooth scroll ----
       var links = Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
       var bar = document.getElementById('navUnderline');
       if (!bar || !links.length) return;
@@ -424,11 +448,10 @@
         l.addEventListener('click', function () {
           activate(l);
           var y = parseInt(l.getAttribute('data-scroll'), 10);
-          if (!isNaN(y)) window.scrollTo({ top: y, behavior: 'smooth' });
+          if (!isNaN(y)) window.scrollTo({ top: Math.round(y * scale), behavior: 'smooth' });
         });
       });
 
-      // Initial placement: snap into position with no transition, then enable sliding.
       var current = document.querySelector('.nav-link.is-active') || links[0];
       moveBar(current);
       requestAnimationFrame(function () {
