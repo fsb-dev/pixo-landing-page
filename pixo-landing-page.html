@@ -18,6 +18,88 @@
     .nav-link { color: #fff; cursor: pointer; transition: color .2s ease; }
     .nav-link:hover { color: #9fe9ff; }
     .nav-link.is-active { color: #4decfe; }
+
+    /* ================= MOBILE LAYOUT ( < 768px ) ================= */
+    .mobile-site { display: none; }
+    @media (max-width: 767px) {
+      html { overflow-x: hidden; }
+      body { position: static !important; overflow: visible !important; width: 100% !important; height: auto !important; margin: 0 !important; }
+      body > main { display: none !important; }
+      .mobile-site {
+        display: block; width: 100%; max-width: 520px; margin: 0 auto;
+        background: #091f34; color: #fff;
+        font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+      }
+    }
+    .m-wrap { padding: 0 22px; }
+    .m-sec { padding: 44px 0 8px; }
+    .m-img { display: block; width: 100%; height: auto; }
+
+    /* Hero: copy on a dark panel, hero art bleeding up behind it (matches desktop feel). */
+    .m-hero { position: relative; background: #091f34; overflow: hidden; }
+    .m-hero-content { position: relative; z-index: 2; padding: 26px 22px 34px; }
+    .m-hero-logo { display: inline-block; margin-bottom: 26px; }
+    .m-hero-logo img { height: 34px; width: auto; display: block; }
+    .m-hero-art { position: relative; margin-top: -46px; }
+    .m-hero-art img { display: block; width: 100%; height: 62vh; min-height: 380px; max-height: 560px; object-fit: cover; object-position: 16% center; }
+    .m-hero-art::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background:
+        linear-gradient(180deg, #091f34 0%, rgba(9,31,52,.45) 16%, rgba(9,31,52,0) 38%),
+        linear-gradient(180deg, rgba(9,31,52,0) 68%, rgba(9,31,52,.5) 86%, #091f34 100%);
+    }
+    .m-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .m-eyebrow.c { justify-content: center; }
+    .m-eyebrow span { color: #05eaf9; font-size: 12px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; }
+    .m-eyebrow img { height: 7px; width: 34px; object-fit: contain; flex: none; }
+    .m-title { font-family: 'Teko', sans-serif; font-weight: 500; font-size: 44px; line-height: .95; text-transform: uppercase; margin: 0; letter-spacing: .5px; }
+    .m-title.c { text-align: center; }
+    .m-flourish { display: flex; align-items: center; gap: 8px; margin: 16px 0; }
+    .m-flourish.c { justify-content: center; }
+    .m-flourish .ln { height: 4px; width: 68px; }
+    .m-flourish .dot { height: 22px; width: 22px; object-fit: contain; flex: none; }
+    .m-sub { color: #cdaa68; font-size: 13px; font-weight: 500; letter-spacing: 2.4px; text-transform: uppercase; margin: 0 0 12px; }
+    .m-lead { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.9); margin: 0 0 22px; }
+    .m-lead.c { text-align: center; }
+    .m-cardlabel { text-align: center; color: #cfb16d; font-weight: 600; letter-spacing: 1px; font-size: 14px; text-transform: uppercase; margin: 8px 0; }
+    .m-btn {
+      display: inline-flex; align-items: center; gap: 12px; height: 52px; padding: 0 26px 0 7px;
+      background: url('icon/button.png') center/100% 100% no-repeat;
+      color: #fff; font-weight: 600; font-size: 15px; letter-spacing: .8px; text-decoration: none;
+    }
+    .m-btn .ic {
+      width: 38px; height: 38px; border-radius: 999px; flex: none; display: grid; place-items: center;
+      background: conic-gradient(from 140deg, #eef2f6, #9aa4af, #f4f7fa, #828d9a, #dde3e9, #aab4bf, #eef2f6);
+      box-shadow: 0 2px 6px rgba(5,20,45,.5), inset 0 1px 1px rgba(255,255,255,.7);
+    }
+    .m-btn .ic > i {
+      width: 26px; height: 26px; border-radius: 999px; display: grid; place-items: center;
+      background: radial-gradient(circle at 42% 34%, #1a3b63, #0a1c33 68%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.6);
+    }
+    .m-carousel { display: flex; align-items: center; gap: 6px; margin: 22px 0 10px; }
+    .m-carousel .card { flex: 1; min-width: 0; border-radius: 6px; }
+    .m-carousel .arw { width: 32px; height: 32px; flex: none; }
+    .m-abil { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 26px 0 8px; }
+    .m-abil img { border-radius: 999px; object-fit: cover; }
+    .m-abil .side { width: 84px; height: 84px; opacity: .82; }
+    .m-abil .mid { width: 148px; height: 148px; }
+    .m-navrow { display: flex; justify-content: center; gap: 14px; margin-top: 16px; }
+    .m-navrow img { width: 40px; height: 40px; }
+    .m-field { display: flex; align-items: center; gap: 10px; height: 56px; padding: 0 16px; border: 1px solid rgba(255,255,255,.35); border-radius: 6px; margin-bottom: 18px; }
+    .m-field img { width: 22px; height: 22px; opacity: .7; flex: none; }
+    .m-field input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; }
+    .m-field input::placeholder { color: rgba(255,255,255,.45); }
+    .m-gp { position: relative; padding: 6px 14px 12px; }
+    .m-gp .m-img { border-radius: 8px; }
+    .m-gp .flank { position: absolute; bottom: 22px; width: 74px; height: auto; }
+    .m-gp .flank.l { left: -10px; }
+    .m-gp .flank.r { right: -10px; }
+    .m-footer { text-align: center; padding: 42px 22px 28px; }
+    .m-footer .flogo { height: 52px; width: auto; margin: 0 auto 6px; display: block; }
+    .m-social { display: flex; justify-content: center; gap: 16px; margin: 18px 0; }
+    .m-social img { width: 44px; height: 44px; }
+    .m-copy { font-size: 13px; color: rgba(255,255,255,.75); border-top: 1px solid rgba(255,255,255,.12); padding-top: 18px; margin-top: 4px; }
   </style>
 </head>
 <body>
@@ -402,6 +484,114 @@
     <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[7428px]" src="icon/line1.png">
     <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-1/2 text-[26px] text-center text-white top-[7708px] w-[696px]" data-node-id="6151:12670"> @ 2026 PIXO. All Rights Reserved. </p>
   </main>
+
+  <!-- ============================ MOBILE VERSION ============================ -->
+  <div class="mobile-site">
+    <!-- HERO -->
+    <section class="m-hero">
+      <div class="m-hero-content">
+        <a href="#" class="m-hero-logo"><img src="image/logo.png" alt="PIXO"></a>
+        <div class="m-eyebrow"><img src="icon/line3.png" alt=""><span>An Adventure Awaits</span><img src="icon/line4.png" alt=""></div>
+        <h1 class="m-title">Beyond<br>The Horizon</h1>
+        <div class="m-flourish"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></div>
+        <p class="m-lead">A world of discovery, danger, and unexpected challenges awaits. Follow PIXO beyond the horizon and uncover what lies ahead.</p>
+        <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>PLAY DEMO</a>
+      </div>
+      <div class="m-hero-art"><img src="image/1.png" alt=""></div>
+    </section>
+
+    <!-- THIS IS PIXO -->
+    <section class="m-wrap m-sec">
+      <div class="m-eyebrow"><img src="icon/line3.png" alt=""><span>Meet PIXO</span><img src="icon/line4.png" alt=""></div>
+      <h1 class="m-title">This Is PIXO</h1>
+      <div class="m-flourish"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></div>
+      <p class="m-sub">Every Adventure Needs A Hero</p>
+      <p class="m-lead">Curious by nature, fearless by design. PIXO is ready to explore a world of mystery, challenge, and adventure.</p>
+      <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>WATCH TRAILER</a>
+    </section>
+    <img class="m-img" src="image/2.png" alt="">
+
+    <!-- THE WORLD -->
+    <section class="m-wrap m-sec">
+      <div class="m-eyebrow c"><img src="icon/line3.png" alt=""><span>The World</span><img src="icon/line4.png" alt=""></div>
+      <h1 class="m-title c">A World Beyond<br>The Horizon</h1>
+      <div class="m-flourish c"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></div>
+      <p class="m-lead c">Curious by nature, fearless by design. PIXO is ready to explore a world of mystery, challenge, and adventure.</p>
+      <div class="m-carousel">
+        <img class="arw" src="icon/1.png" alt="Previous">
+        <img class="card" src="image/4.png" alt="Wild Frontiers">
+        <img class="arw" src="icon/2.png" alt="Next">
+      </div>
+      <p class="m-cardlabel">Wild Fronttiers</p>
+      <p class="m-lead c" style="margin-bottom:0;">Lush forests, floating island and untamed lands full of life and wonder.</p>
+    </section>
+
+    <!-- ABILITIES -->
+    <section class="m-wrap m-sec">
+      <div class="m-eyebrow c"><img src="icon/line3.png" alt=""><span>Abilities</span><img src="icon/line4.png" alt=""></div>
+      <h1 class="m-title c">Built To Break<br>The Rules</h1>
+      <div class="m-flourish c"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></div>
+      <p class="m-lead c">Master PIXO&rsquo;s unique abilities to move faster, fight smarter, and overcome challenges in unexpected ways.</p>
+      <div class="m-abil">
+        <img class="side" src="image/7.png" alt="">
+        <img class="mid" src="image/8-1.png" alt="">
+        <img class="side" src="image/8.png" alt="">
+      </div>
+      <p class="m-cardlabel">Time Bubble</p>
+      <p class="m-lead c" style="margin-bottom:0;">Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.</p>
+      <div class="m-navrow"><img src="icon/1.png" alt="Previous"><img src="icon/2.png" alt="Next"></div>
+    </section>
+
+    <!-- ENEMIES -->
+    <section class="m-wrap m-sec">
+      <div class="m-eyebrow"><img src="icon/line3.png" alt=""><span>Enemies</span><img src="icon/line4.png" alt=""></div>
+      <h1 class="m-title">Nothing Stays<br>Undefeated</h1>
+      <div class="m-flourish"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></div>
+      <p class="m-lead">Dangerous machines and mysterious creatures stand between PIXO and the unknown. Learn their patterns, exploit their weaknesses, and fight your way forward.</p>
+      <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>WATCH TRAILER</a>
+    </section>
+    <img class="m-img" src="image/12.png" alt="">
+
+    <!-- GAMEPLAY -->
+    <section class="m-wrap m-sec">
+      <div class="m-eyebrow c"><img src="icon/line3.png" alt=""><span>The Gameplay</span><img src="icon/line4.png" alt=""></div>
+      <h1 class="m-title c">Move. Fight.<br>Master.</h1>
+      <div class="m-flourish c"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></div>
+      <p class="m-lead c">Experience fast-paced action with movement, combat, and powerful abilities. Jump, dash, fight, and adapt to overcome every challenge.</p>
+    </section>
+    <div class="m-gp">
+      <img class="flank l" src="image/13.png" alt="">
+      <img class="m-img" src="image/14.png" alt="">
+      <img class="flank r" src="image/15.png" alt="">
+    </div>
+
+    <!-- NEWSLETTER -->
+    <section class="m-wrap m-sec">
+      <div class="m-eyebrow"><img src="icon/line3.png" alt=""><span>Stay Updated</span><img src="icon/line4.png" alt=""></div>
+      <h1 class="m-title">Newsletter</h1>
+      <div class="m-flourish"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></div>
+      <p class="m-lead">Subscribe to get the latest news, events, updates, and exclusive rewards reward&rsquo;s from PIXO.</p>
+      <label class="m-field"><img src="icon/email.png" alt=""><input type="email" placeholder="Enter your mail"></label>
+      <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>SUBSCRIBE</a>
+    </section>
+    <img class="m-img" src="image/18.png" alt="">
+
+    <!-- FOOTER -->
+    <footer class="m-footer">
+      <img class="flogo" src="image/logo.png" alt="PIXO">
+      <div class="m-flourish c" style="margin:6px 0 14px;"><img class="ln" src="icon/line2.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line1.png" alt=""></div>
+      <p class="m-lead c" style="margin-bottom:0;">PIXO is a fast-paced open-world adventure packed with exciting battles, unique abilities, and worlds waiting to be discovered.</p>
+      <div class="m-social">
+        <a href="#" aria-label="Instagram"><img src="icon/instagram.png" alt="Instagram"></a>
+        <a href="#" aria-label="LinkedIn"><img src="icon/linkedin.png" alt="LinkedIn"></a>
+        <a href="#" aria-label="Discord"><img src="icon/discord.png" alt="Discord"></a>
+        <a href="#" aria-label="WhatsApp"><img src="icon/whatsapp.png" alt="WhatsApp"></a>
+        <a href="#" aria-label="Facebook"><img src="icon/facebook.png" alt="Facebook"></a>
+      </div>
+      <p class="m-copy">&copy; 2026 PIXO. All Rights Reserved.</p>
+    </footer>
+  </div>
+
   <script>
     (function () {
       var DESIGN_W = 1920;
@@ -413,6 +603,13 @@
       // <body> is sized to the scaled design so the browser produces exactly one scrollbar.
       function fit() {
         var vw = document.documentElement.clientWidth || window.innerWidth;
+        // Below 768px the dedicated .mobile-site layout takes over (CSS media query).
+        if (vw < 768) {
+          if (main) main.style.transform = '';
+          document.body.style.width = '';
+          document.body.style.height = '';
+          return;
+        }
         scale = vw / DESIGN_W;
         if (main) main.style.transform = 'scale(' + scale + ')';
         document.body.style.width = (DESIGN_W * scale) + 'px';
