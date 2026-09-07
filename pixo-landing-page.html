@@ -1,746 +1,2367 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PIXO - Landing Page</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Teko:wght@500;600&amp;display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; }
-    html { overflow-x: hidden; background: #091f34; }
-    /* <body> is the "stage": its size is the scaled design; the browser scrolls it (one scrollbar). */
-    body { margin: 0 auto; padding: 0; background: #091f34; position: relative; overflow: hidden; }
-    /* Fixed 1920px design, scaled by JS to fit the viewport width. */
-    body > main { position: absolute; top: 0; left: 0; transform-origin: top left; will-change: transform; }
-    .nav-link { color: #fff; cursor: pointer; transition: color .2s ease; }
-    .nav-link:hover { color: #9fe9ff; }
-    .nav-link.is-active { color: #4decfe; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PIXO - Landing Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Teko:wght@500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        overflow-x: hidden;
+        background: #091f34;
+      }
+      /* <body> is the "stage": its size is the scaled design; the browser scrolls it (one scrollbar). */
+      body {
+        margin: 0 auto;
+        padding: 0;
+        background: #091f34;
+        position: relative;
+        overflow: hidden;
+      }
+      /* Fixed 1920px design, scaled by JS to fit the viewport width. */
+      body > main {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: top left;
+        will-change: transform;
+      }
+      .nav-link {
+        color: #fff;
+        cursor: pointer;
+        transition: color 0.2s ease;
+      }
+      .nav-link:hover {
+        color: #9fe9ff;
+      }
+      .nav-link.is-active {
+        color: #4decfe;
+      }
 
-    /* ---- real sliding carousel (a track of slides that translates) ---- */
-    /* mount keeps its own positioning (desktop: Tailwind .absolute, mobile: .m-crsl) */
-    .crsl-vp { position: absolute; inset: 0; overflow: hidden; }
-    .crsl-track { display: flex; align-items: center; height: 100%; will-change: transform; }
-    .crsl-slide { position: relative; flex: 0 0 auto; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform .55s cubic-bezier(.4,0,.2,1), opacity .55s ease, filter .55s ease; }
-    .crsl-slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
-    /* depth (scale / arc-drop / dim / z-index) is applied per-slide from JS by distance from centre */
+      /* ---- real sliding carousel (a track of slides that translates) ---- */
+      /* mount keeps its own positioning (desktop: Tailwind .absolute, mobile: .m-crsl) */
+      .crsl-vp {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .crsl-track {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        will-change: transform;
+      }
+      .crsl-slide {
+        position: relative;
+        flex: 0 0 auto;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.55s ease,
+          filter 0.55s ease;
+      }
+      .crsl-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      /* depth (scale / arc-drop / dim / z-index) is applied per-slide from JS by distance from centre */
 
-    /* ================= MOBILE LAYOUT ( < 768px ) ================= */
-    .mobile-site { display: none; }
-    @media (max-width: 767px) {
-      html { overflow-x: hidden; }
-      body { position: static !important; overflow: visible !important; width: 100% !important; height: auto !important; margin: 0 !important; }
-      body > main { display: none !important; }
+      /* ================= MOBILE LAYOUT ( < 768px ) ================= */
       .mobile-site {
-        display: block; width: 100%; max-width: 520px; margin: 0 auto;
-        background: #091f34; color: #fff;
-        font-family: 'Outfit', system-ui, -apple-system, sans-serif;
-        --m-pad: 30px;   /* consistent left/right gutter for text on every section */
+        display: none;
       }
-    }
-    .m-wrap { padding-left: var(--m-pad, 30px); padding-right: var(--m-pad, 30px); }
-    .m-sec { padding-top: 44px; padding-bottom: 8px; }
-    .m-img { display: block; width: 100%; height: auto; }
-
-    /* Hero: copy on a dark panel, hero art bleeding up behind it (matches desktop feel). */
-    .m-hero { position: relative; background: #091f34; overflow: hidden; }
-    .m-hero-content { position: relative; z-index: 2; padding: 26px var(--m-pad, 30px) 34px; }
-    .m-hero-logo { display: inline-block; margin-bottom: 26px; }
-    .m-hero-logo img { height: 34px; width: auto; display: block; }
-    .m-hero-art { position: relative; margin-top: -46px; }
-    .m-hero-art img { display: block; width: 100%; height: 62vh; min-height: 380px; max-height: 560px; object-fit: cover; object-position: 16% center; }
-    .m-hero-art::after {
-      content: ""; position: absolute; inset: 0; pointer-events: none;
-      background:
-        linear-gradient(180deg, #091f34 0%, rgba(9,31,52,.45) 16%, rgba(9,31,52,0) 38%),
-        linear-gradient(180deg, rgba(9,31,52,0) 68%, rgba(9,31,52,.5) 86%, #091f34 100%);
-    }
-    .m-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    .m-eyebrow.c { justify-content: center; }
-    .m-eyebrow span { color: #05eaf9; font-size: 12px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; }
-    .m-eyebrow img { height: 7px; width: 34px; object-fit: contain; flex: none; }
-    .m-title { font-family: 'Teko', sans-serif; font-weight: 500; font-size: 44px; line-height: .95; text-transform: uppercase; margin: 0; letter-spacing: .5px; }
-    .m-title.c { text-align: center; }
-    .m-flourish { display: flex; align-items: center; gap: 8px; margin: 16px 0; }
-    .m-flourish.c { justify-content: center; }
-    .m-flourish .ln { height: 4px; width: 68px; }
-    .m-flourish .dot { height: 22px; width: 22px; object-fit: contain; flex: none; }
-    /* title with a compact flourish tucked to its right */
-    .m-titlerow { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 14px; }
-    .m-fl-mini { display: flex; align-items: center; gap: 6px; padding-bottom: 8px; }
-    .m-fl-mini .ln { height: 3px; width: 34px; }
-    .m-fl-mini .dot { height: 16px; width: 16px; object-fit: contain; flex: none; }
-    /* standalone section photo that fades into the navy at top and bottom */
-    .m-photo { position: relative; margin-top: 4px; }
-    .m-photo img { display: block; width: 100%; height: auto; }
-    .m-photo::after {
-      content: ""; position: absolute; inset: 0; pointer-events: none;
-      background:
-        linear-gradient(180deg, #091f34 0%, rgba(9,31,52,.4) 12%, rgba(9,31,52,0) 30%),
-        linear-gradient(180deg, rgba(9,31,52,0) 72%, rgba(9,31,52,.55) 88%, #091f34 100%);
-    }
-    .m-sub { color: #cdaa68; font-size: 13px; font-weight: 500; letter-spacing: 2.4px; text-transform: uppercase; margin: 0 0 12px; }
-    .m-lead { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,.9); margin: 0 0 22px; }
-    .m-lead.c { text-align: center; }
-    .m-cardlabel { text-align: center; color: #cfb16d; font-weight: 600; letter-spacing: 1px; font-size: 14px; text-transform: uppercase; margin: 8px 0; }
-    .m-btn {
-      display: inline-flex; align-items: center; gap: 12px; height: 52px; padding: 0 26px 0 7px;
-      background: url('icon/button.png') center/100% 100% no-repeat;
-      color: #fff; font-weight: 600; font-size: 15px; letter-spacing: .8px; text-decoration: none;
-    }
-    .m-btn .ic {
-      width: 38px; height: 38px; border-radius: 999px; flex: none; display: grid; place-items: center;
-      background: conic-gradient(from 140deg, #eef2f6, #9aa4af, #f4f7fa, #828d9a, #dde3e9, #aab4bf, #eef2f6);
-      box-shadow: 0 2px 6px rgba(5,20,45,.5), inset 0 1px 1px rgba(255,255,255,.7);
-    }
-    .m-btn .ic > i {
-      width: 26px; height: 26px; border-radius: 999px; display: grid; place-items: center;
-      background: radial-gradient(circle at 42% 34%, #1a3b63, #0a1c33 68%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.6);
-    }
-    /* Mobile carousel: a sliding track, big centre slide, dim neighbours peeking at each edge */
-    .m-crsl {
-      position: relative;
-      margin: 18px calc(var(--m-pad, 30px) * -1) 10px;
-      height: 210px;
-    }
-    .m-crsl.abil { height: 168px; }
-    .m-crsl .crsl-arw {
-      position: absolute; z-index: 5; top: 50%; transform: translateY(-50%);
-      width: 38px; height: 38px; cursor: pointer;
-      filter: drop-shadow(0 2px 6px rgba(5,20,45,.55));
-    }
-    .m-crsl .crsl-arw.l { left: 2px; }
-    .m-crsl .crsl-arw.r { right: 2px; }
-    .m-navrow { display: flex; justify-content: center; gap: 14px; margin-top: 16px; }
-    .m-navrow img { width: 40px; height: 40px; }
-    .m-field { display: flex; align-items: center; gap: 10px; height: 56px; padding: 0 16px; border: 1px solid rgba(255,255,255,.35); border-radius: 6px; margin-bottom: 18px; }
-    .m-field img { width: 22px; height: 22px; opacity: .7; flex: none; }
-    .m-field input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #fff; font-size: 15px; font-family: inherit; }
-    .m-field input::placeholder { color: rgba(255,255,255,.45); }
-    .m-gp { position: relative; padding: 6px 14px 12px; }
-    .m-gp .m-img { border-radius: 8px; }
-    .m-gp .flank { position: absolute; bottom: 22px; width: 74px; height: auto; }
-    .m-gp .flank.l { left: -10px; }
-    .m-gp .flank.r { right: -10px; }
-    .m-footer { text-align: center; padding: 42px var(--m-pad, 30px) 28px; }
-    .m-footer .flogo { height: 52px; width: auto; margin: 0 auto 6px; display: block; }
-    .m-social { display: flex; justify-content: center; gap: 16px; margin: 18px 0; }
-    .m-social img { width: 44px; height: 44px; }
-    .m-copy { font-size: 13px; color: rgba(255,255,255,.75); border-top: 1px solid rgba(255,255,255,.12); padding-top: 18px; margin-top: 4px; }
-  </style>
-</head>
-<body>
-  <main class="bg-[#091f34] w-[1920px] h-[7831px] overflow-hidden" data-node-id="6118:22938" data-name="DESKTOP">
-    <div class="absolute h-[973px] left-[calc(25%+154px)] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-733.646px_63.354px] mask-size-[2131.91px_911.293px] top-[1091.77px] w-[1418px]" data-node-id="6269:172" style="mask-image:url('assets/818d7f66-7b95-48d7-ba5a-f830334cef9f.svg')" data-name="image 987">
-      <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <img alt="" class="absolute h-[109.29%] left-[4.18%] max-w-none top-[-5.65%] w-[133.21%]" src="assets/6f6448b1-3264-4b7c-aedc-bcbc2eed3703.png">
-      </div>
-    </div>
-    <div class="absolute h-[4.441px] left-[calc(16.67%+123.12px)] top-[1840.56px] w-[49.49px]" data-node-id="6118:23000">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/045096f1-9578-426f-bdf1-38e0723f6f5b.svg">
-    </div>
-    <div class="absolute h-[4.441px] left-[calc(8.33%+75.65px)] top-[1753px] w-[49.49px]" data-node-id="6118:23001">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/8ba97c8f-f86e-4eff-b464-931e909486ed.svg">
-    </div>
-    <div class="absolute flex h-[50.442px] items-center justify-center left-[calc(25%+63.37px)] top-[1774.25px] w-[3.49px]" data-node-id="6118:23002">
-      <div class="-scale-y-100 flex-none rotate-180">
-        <div class="h-[50.442px] relative w-[3.49px]">
-          <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/102cc0ec-500c-40b1-842e-48e26129f868.svg">
-        </div>
-      </div>
-    </div>
-    <a href="#" data-node-id="6118:23003" aria-label="Watch trailer" class="group absolute block no-underline h-[89.462px] left-[calc(8.33%+49px)] top-[1754.27px] w-[336.912px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
-      <img alt="" class="absolute inset-0 block max-w-none size-full object-fill" src="icon/button.png" data-node-id="6118:23005">
-      <div class="absolute flex items-center justify-center size-[50px] left-[36px] top-[19.73px] rounded-full" data-node-id="6118:23019" style="background:conic-gradient(from 140deg at 50% 50%,#eef2f6,#9aa4af,#f4f7fa,#828d9a,#dde3e9,#aab4bf,#eef2f6);box-shadow:0 2px 6px rgba(5,20,45,0.55), inset 0 1px 1px rgba(255,255,255,0.7), inset 0 -2px 3px rgba(40,60,90,0.5);">
-        <span class="flex items-center justify-center size-[36px] rounded-full" style="background:radial-gradient(circle at 42% 34%,#1a3b63 0%,#0a1c33 68%);box-shadow:inset 0 2px 5px rgba(0,0,0,0.65), inset 0 -1px 2px rgba(120,160,210,0.35), 0 0 0 1px rgba(10,20,40,0.6);">
-          <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left:2px;">
-            <path d="M1 1.3C1 0.5 1.9 0 2.6 0.5L12.5 7.2C13.1 7.6 13.1 8.4 12.5 8.8L2.6 15.5C1.9 16 1 15.5 1 14.7V1.3Z" fill="#ffffff"></path>
-          </svg>
-        </span>
-      </div>
-      <span class="absolute font-['Outfit'] font-semibold leading-[24px] text-[24px] text-white tracking-[0.96px] whitespace-nowrap left-[104px] top-[32.73px]" data-node-id="6118:23012" style="text-shadow:0 1px 3px rgba(5,20,45,0.55);">WATCH TRAILER</span>
-    </a>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-medium leading-[24px] left-[calc(8.33%+49px)] text-[#cdaa68] text-[24px] top-[1595px] tracking-[3.84px] whitespace-nowrap" data-node-id="6118:23024"> EVERY ADVENTURE NEEDS A HERO </p>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(8.33%+49px)] text-[26px] text-white top-[1639px] w-[628px]" data-node-id="6118:23025"> Curious by nature, fearless by design. PIXO is ready to explore a world of mystery, challenge, and adventure. </p>
-    <p class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[130px] left-[calc(8.33%+49px)] text-[120px] text-white top-[1409px] whitespace-nowrap" data-node-id="6118:23027"> THIS IS PIXO </p>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(8.33%+106px)] text-[#05eaf9] text-[24px] top-[1377px] tracking-[3.84px] whitespace-nowrap" data-node-id="6118:23029"> MEET PIXO </p>
-    <div class="absolute h-[9.451px] left-[calc(8.33%+39px)] top-[1384px] w-[47px]" data-node-id="6118:23030">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line3.png">
-    </div>
-    <div class="absolute flex h-[9.451px] items-center justify-center left-[calc(16.67%+120px)] top-[1384px] w-[47px]" data-node-id="6118:23031">
-      <img alt="" class="block max-w-none size-full object-contain" src="icon/line4.png">
-    </div>
-    <div class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(16.67%+74px)] top-[1539px]">
-      <img alt="" class="block max-w-none h-[34px] w-[34px] object-contain" src="icon/box.png">
-    </div>
-    <img alt="" class="absolute block h-[4px] w-[179px] left-[calc(16.67%+113px)] top-[1549px]" src="icon/line2.png">
-    <img alt="" class="absolute block h-[4px] w-[179px] left-[calc(8.33%+39px)] top-[1549px]" src="icon/line1.png">
-    <div class="absolute h-[903px] left-[calc(41.67%+93px)] top-[1195px] w-[1022.5px]" data-node-id="6269:211" data-name="image 1198">
-      <img alt="" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="image/2.png">
-    </div>
-    <div class="-translate-x-1/2 -translate-y-1/2 absolute h-[1132px] left-1/2 top-[calc(50%-3349.5px)] w-[1920px]" data-node-id="6118:22943" data-name="BG"></div>
-    <div class="absolute h-[1476.644px] left-[-121.23px] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[10.898px_214.557px] mask-size-[2131.91px_1048.62px] opacity-30 top-[2881.75px] w-[2152.505px]" data-node-id="6266:4" style="mask-image:url('assets/918af4eb-2886-40a0-b713-23c70e69a686.svg')" data-name="image 987">
-      <img alt="" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="assets/6f6448b1-3264-4b7c-aedc-bcbc2eed3703.png">
-    </div>
-    <div class="absolute h-[1476.644px] left-[-113.16px] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[10.9px_214.557px] mask-size-[2131.91px_1048.62px] opacity-30 top-[2881.75px] w-[2152.505px]" data-node-id="6266:15" style="mask-image:url('assets/04459a4d-9b9c-4deb-ba78-484a5efe7c00.svg')" data-name="image 987">
-      <img alt="" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="assets/6f6448b1-3264-4b7c-aedc-bcbc2eed3703.png">
-    </div>
-    <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%+0.5px)] text-[26px] text-center text-white top-[3403px] w-[741px]" data-node-id="6118:23050"> Master PIXO’s unique abilities to move faster, fight smarter, and overcome challenges in unexpected ways. </p>
-    <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%+0.5px)] text-[120px] text-center text-white top-[3227px] whitespace-nowrap" data-node-id="6118:23052"> BUILT TO BREAK THE RULES </p>
-    <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+160.5px)] text-[#05eaf9] text-[24px] text-center top-[3195px] tracking-[3.84px] whitespace-nowrap" data-node-id="6118:23054"> ABILITIES </p>
-    <div class="absolute h-[9.451px] left-[calc(41.67%+25px)] top-[3202px] w-[47px]" data-node-id="6118:23055">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line3.png">
-    </div>
-    <div class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+89px)] top-[3202px] w-[47px]" data-node-id="6118:23056">
-      <img alt="" class="block max-w-none size-full object-contain" src="icon/line4.png">
-    </div>
-    <div class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[3347px]">
-      <img alt="" class="block max-w-none h-[34px] w-[34px] object-contain" src="icon/box.png">
-    </div>
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[3357px]" src="icon/line2.png">
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[3357px]" src="icon/line1.png">
-    <div class="absolute left-1/2 -translate-x-1/2 top-[3500px] h-[380px] w-[1920px]" data-node-id="6118:23145" id="acMount"></div>
-    <a href="#" data-node-id="6118:23151" data-ac="next-btn" aria-label="Next ability" class="absolute flex items-center justify-center size-[58px] left-[calc(50%+26px)] top-[4022px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
-      <img alt="" class="block size-full" src="icon/2.png">
-    </a>
-    <a href="#" data-node-id="6118:23171" data-ac="prev-btn" aria-label="Previous ability" class="absolute flex items-center justify-center size-[58px] left-[calc(41.67%+88px)] top-[4022px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
-      <img alt="" class="block size-full" src="icon/1.png">
-    </a>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-semibold leading-[24px] left-[calc(50%-70px)] text-[#cfb16d] text-[24px] top-[3886px] whitespace-nowrap" data-node-id="6118:23192" data-ac="label" data-caps> TIME BUBBLE </p>
-    <p class="[word-break:break-word] -translate-x-1/2 absolute font-['Outfit'] font-normal leading-[30px] left-[calc(33.33%+325.5px)] text-[20px] text-center text-white top-[3926px] w-[495px]" data-node-id="6118:23193" data-ac="desc"> Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike. </p>
-    <div class="absolute h-[4.441px] left-[calc(66.67%+46.12px)] top-[4965.56px] w-[49.49px]" data-node-id="6118:23199">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/045096f1-9578-426f-bdf1-38e0723f6f5b.svg">
-    </div>
-    <div class="absolute h-[4.441px] left-[calc(58.33%-1.35px)] top-[4878px] w-[49.49px]" data-node-id="6118:23200">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/8ba97c8f-f86e-4eff-b464-931e909486ed.svg">
-    </div>
-    <div class="absolute flex h-[50.442px] items-center justify-center left-[calc(75%-13.63px)] top-[4899.25px] w-[3.49px]" data-node-id="6118:23201">
-      <div class="-scale-y-100 flex-none rotate-180">
-        <div class="h-[50.442px] relative w-[3.49px]">
-          <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/102cc0ec-500c-40b1-842e-48e26129f868.svg">
-        </div>
-      </div>
-    </div>
-    <a href="#" data-node-id="6118:23202" aria-label="Watch trailer" class="group absolute block no-underline h-[89.462px] left-[calc(50%+132px)] top-[4879.27px] w-[336.912px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
-      <img alt="" class="absolute inset-0 block max-w-none size-full object-fill" src="icon/button.png" data-node-id="6118:23204">
-      <div class="absolute flex items-center justify-center size-[50px] left-[36px] top-[19.73px] rounded-full" data-node-id="6118:23207" style="background:conic-gradient(from 140deg at 50% 50%,#eef2f6,#9aa4af,#f4f7fa,#828d9a,#dde3e9,#aab4bf,#eef2f6);box-shadow:0 2px 6px rgba(5,20,45,0.55), inset 0 1px 1px rgba(255,255,255,0.7), inset 0 -2px 3px rgba(40,60,90,0.5);">
-        <span class="flex items-center justify-center size-[36px] rounded-full" style="background:radial-gradient(circle at 42% 34%,#1a3b63 0%,#0a1c33 68%);box-shadow:inset 0 2px 5px rgba(0,0,0,0.65), inset 0 -1px 2px rgba(120,160,210,0.35), 0 0 0 1px rgba(10,20,40,0.6);">
-          <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left:2px;">
-            <path d="M1 1.3C1 0.5 1.9 0 2.6 0.5L12.5 7.2C13.1 7.6 13.1 8.4 12.5 8.8L2.6 15.5C1.9 16 1 15.5 1 14.7V1.3Z" fill="#ffffff"></path>
-          </svg>
-        </span>
-      </div>
-      <span class="absolute font-['Outfit'] font-semibold leading-[24px] text-[24px] text-white tracking-[0.96px] whitespace-nowrap left-[104px] top-[32.73px]" data-node-id="6118:23211" style="text-shadow:0 1px 3px rgba(5,20,45,0.55);">WATCH TRAILER</span>
-    </a>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%+132px)] text-[26px] text-white top-[4722px] w-[628px]" data-node-id="6118:23213"> Dangerous machines and mysterious creatures stand between PIXO and the unknown. Learn their patterns, exploit their weaknesses, and fight your way forward. </p>
-    <p class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[130px] left-[calc(50%+132px)] text-[120px] text-white top-[4406px] w-[616px]" data-node-id="6118:23215"> NOTHING STAYS UNDEFEATED </p>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(58.33%+29px)] text-[#05eaf9] text-[24px] top-[4374px] tracking-[3.84px] whitespace-nowrap" data-node-id="6118:23217"> ENEMIES </p>
-    <div class="absolute h-[9.451px] left-[calc(50%+122px)] top-[4381px] w-[47px]" data-node-id="6118:23218">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line3.png">
-    </div>
-    <div class="absolute flex h-[9.451px] items-center justify-center left-[calc(66.67%+11px)] top-[4381px] w-[47px]" data-node-id="6118:23219">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line4.png">
-    </div>
-    <div class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(66.67%-3px)] top-[4666px]">
-      <img alt="" class="block max-w-none h-[34px] w-[34px] object-contain" src="icon/box.png">
-    </div>
-    <img alt="" class="absolute block h-[4px] w-[179px] left-[calc(66.67%+36px)] top-[4676px]" src="icon/line2.png">
-    <img alt="" class="absolute block h-[4px] w-[179px] left-[calc(50%+122px)] top-[4676px]" src="icon/line1.png">
-    <div class="absolute bg-[#00152a] h-[609.652px] left-0 top-[4368.31px] w-[962px]" data-node-id="6118:23229"></div>
-    <div class="absolute h-[609.644px] left-[106.55px] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-19.547px_0.307px] mask-size-[914px_609.652px] mix-blend-plus-lighter top-[4368px] w-[870.255px]" data-node-id="6118:23233" style="mask-image:url('assets/e25401ae-a825-4d4d-a228-bc71b5f3e882.svg')" data-name="image 1174">
-      <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <img alt="" class="absolute h-[99.95%] left-[-2.25%] max-w-none top-[0.05%] w-[105.03%]" src="assets/ffdf642e-354d-4263-9105-f912730f01eb.png">
-      </div>
-    </div>
-    <div class="absolute h-[609.644px] left-0 top-[4368px] w-[962px]" data-node-id="6118:23234" data-name="image 1174">
-      <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <img alt="" class="absolute h-[99.95%] left-0 max-w-none top-[0.05%] w-full" src="image/12.png">
-      </div>
-    </div>
-    <div class="-translate-x-1/2 absolute h-[1013px] left-1/2 top-[2112px] w-[1920px]" data-node-id="6118:22992"></div>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(8.33%+181px)] text-[26px] text-white top-[2406px] whitespace-nowrap" data-node-id="6118:23246"> Curious by nature, fearless by design. PIXO is ready to explore a world of mystery, challenge, and adventure. </p>
-    <p class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%-593px)] text-[120px] text-white top-[2230px] whitespace-nowrap" data-node-id="6118:23248"> A WORLD BEYOND THE HORIZON </p>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+75px)] text-[#05eaf9] text-[24px] top-[2198px] tracking-[3.84px] whitespace-nowrap" data-node-id="6118:23250"> THE WORLD </p>
-    <div class="absolute h-[9.451px] left-[calc(41.67%+8px)] top-[2205px] w-[47px]" data-node-id="6118:23251">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line3.png">
-    </div>
-    <div class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+105px)] top-[2205px] w-[47px]" data-node-id="6118:23252">
-      <img alt="" class="block max-w-none size-full object-contain" src="icon/line4.png">
-    </div>
-    <div class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[2350px]">
-      <img alt="" class="block max-w-none h-[34px] w-[34px] object-contain" src="icon/box.png">
-    </div>
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[2360px]" src="icon/line2.png">
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[2360px]" src="icon/line1.png">
-    <div class="absolute left-1/2 -translate-x-1/2 top-[2506px] h-[400px] w-[1920px]" data-node-id="6118:23264" id="wcMount"></div>
-    <a href="#" data-node-id="6118:23279" data-wc="prev-btn" aria-label="Previous slide" class="absolute flex items-center justify-center size-[58px] left-[calc(25%+62px)] top-[2672px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
-      <img alt="" class="block size-full" src="icon/1.png">
-    </a>
-    <a href="#" data-node-id="6118:23299" data-wc="next-btn" aria-label="Next slide" class="absolute flex items-center justify-center size-[58px] left-[calc(66.67%+40px)] top-[2672px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
-      <img alt="" class="block size-full" src="icon/2.png">
-    </a>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-semibold leading-[24px] left-[calc(50%-106px)] text-[#cfb16d] text-[24px] top-[2927px] whitespace-nowrap" data-node-id="6118:23319" data-wc="label"> WILD FRONTTIERS </p>
-    <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[30px] left-[calc(33.33%+320px)] text-[20px] text-center text-white top-[2967px] w-[380px]" data-node-id="6118:23320" data-wc="desc"> Lush forests, floating island and untamed lands full of life and wonder. </p>
-    <div class="-translate-x-1/2 -translate-y-1/2 absolute h-[1241px] left-[calc(45.83%+32.5px)] top-[calc(50%-3404px)] w-[2105px]" data-node-id="6118:23411" data-name="BG">
-      <div aria-hidden="" class="absolute inset-0 pointer-events-none">
-        <img alt="" class="absolute inset-0 max-w-none object-cover size-full" src="image/1.png">
-        <div class="absolute inset-0" style="background-image:linear-gradient(-89.97873232796866deg, rgba(9, 31, 52, 0.66) 2.3857%, rgba(9, 31, 52, 0.66) 23.633%, rgba(9, 31, 52, 0.66) 41.847%, rgba(9, 31, 52, 0) 66.374%)"></div>
-        <div class="absolute bottom-0 left-0 right-0 h-[260px]" style="background-image:linear-gradient(180deg, rgba(9, 31, 52, 0) 0%, #091f34 92%)"></div>
-      </div>
-    </div>
-    <div class="absolute h-[4.441px] left-[calc(58.33%+82.13px)] top-[855.58px] w-[49.49px]" data-node-id="6118:23419">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/045096f1-9578-426f-bdf1-38e0723f6f5b.svg">
-    </div>
-    <div class="absolute h-[4.441px] left-[calc(50%+34.65px)] top-[768.03px] w-[49.49px]" data-node-id="6118:23420">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/8ba97c8f-f86e-4eff-b464-931e909486ed.svg">
-    </div>
-    <div class="absolute flex h-[50.442px] items-center justify-center left-[calc(66.67%+22.37px)] top-[789.28px] w-[3.49px]" data-node-id="6118:23421">
-      <div class="-scale-y-100 flex-none rotate-180">
-        <div class="h-[50.442px] relative w-[3.49px]">
-          <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/102cc0ec-500c-40b1-842e-48e26129f868.svg">
-        </div>
-      </div>
-    </div>
-    <a href="#" data-node-id="6118:23422" aria-label="Play demo" class="group absolute block no-underline h-[89.462px] left-[calc(50%+8px)] top-[769.29px] w-[336.912px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
-      <img alt="" class="absolute inset-0 block max-w-none size-full object-fill" src="icon/button.png" data-node-id="6118:23424">
-      <div class="absolute flex items-center justify-center size-[50px] left-[36px] top-[19.71px] rounded-full" data-node-id="6118:23438" style="background:conic-gradient(from 140deg at 50% 50%,#eef2f6,#9aa4af,#f4f7fa,#828d9a,#dde3e9,#aab4bf,#eef2f6);box-shadow:0 2px 6px rgba(5,20,45,0.55), inset 0 1px 1px rgba(255,255,255,0.7), inset 0 -2px 3px rgba(40,60,90,0.5);">
-        <span class="flex items-center justify-center size-[36px] rounded-full" style="background:radial-gradient(circle at 42% 34%,#1a3b63 0%,#0a1c33 68%);box-shadow:inset 0 2px 5px rgba(0,0,0,0.65), inset 0 -1px 2px rgba(120,160,210,0.35), 0 0 0 1px rgba(10,20,40,0.6);">
-          <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left:2px;">
-            <path d="M1 1.3C1 0.5 1.9 0 2.6 0.5L12.5 7.2C13.1 7.6 13.1 8.4 12.5 8.8L2.6 15.5C1.9 16 1 15.5 1 14.7V1.3Z" fill="#ffffff"></path>
-          </svg>
-        </span>
-      </div>
-      <span class="absolute font-['Outfit'] font-semibold leading-[24px] text-[24px] text-white tracking-[0.96px] whitespace-nowrap left-[104px] top-[32.71px]" data-node-id="6118:23431" style="text-shadow:0 1px 3px rgba(5,20,45,0.55);">PLAY DEMO</span>
-    </a>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%+8px)] text-[26px] text-white top-[654.03px] w-[821px]" data-node-id="6118:23443"> A world of discovery, danger, and unexpected challenges awaits. Follow PIXO beyond the horizon and uncover what lies ahead. </p>
-    <div class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[0] left-[calc(50%+8px)] text-[185.401px] text-white top-[271px] whitespace-nowrap" data-node-id="6118:23445">
-      <p class="leading-[157.591px] mb-0 whitespace-pre">BEYOND </p>
-      <p class="leading-[157.591px] whitespace-pre">THE HORIZON</p>
-    </div>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(50%+66px)] text-[#05eaf9] text-[24px] top-[222px] tracking-[3.84px] whitespace-nowrap" data-node-id="6118:23447"> AN ADVENTURE AWAITS </p>
-    <div class="absolute h-[9.451px] left-[calc(50%-2px)] top-[229px] w-[47px]" data-node-id="6118:23448">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line3.png">
-    </div>
-    <div class="absolute flex h-[9.451px] items-center justify-center left-[calc(66.67%+107px)] top-[229px] w-[47px]" data-node-id="6118:23449">
-      <img alt="" class="block max-w-none size-full object-contain" src="icon/line4.png">
-    </div>
-    <div class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(66.67%+3px)] top-[611px]">
-      <img alt="" class="block max-w-none h-[34px] w-[34px] object-contain" src="icon/box.png">
-    </div>
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(66.67%+45px)] top-[621px]" src="icon/line2.png">
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(50%+8px)] top-[621px]" src="icon/line1.png">
-    <nav class="contents" data-node-id="6118:23458">
-      <div class="absolute h-[48.985px] left-[calc(33.33%+68.79px)] top-[40.01px] w-[1131.319px] bg-[#01132C]/[0.47]" data-node-id="6118:23460" style="clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);"></div>
-      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(33.33%+105px)] top-[55px] is-active" data-scroll="0" data-node-id="6118:23462"> HOME </p>
-      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(50%+64px)] top-[55px]" data-scroll="2110" data-node-id="6118:23463"> WORLD </p>
-      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(41.67%+91px)] top-[55px]" data-scroll="1300" data-node-id="6118:23464"> PIXO </p>
-      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(58.33%+65px)] top-[55px]" data-scroll="3095" data-node-id="6118:23465"> ABILITIES </p>
-      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(66.67%+82px)] top-[55px]" data-scroll="4275" data-node-id="6118:23466"> ENEMIES </p>
-      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(75%+93px)] top-[55px]" data-scroll="5200" data-node-id="6118:23467"> GAME PLAY </p>
-      <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(91.67%-30px)] top-[55px]" data-scroll="6410" data-node-id="6118:23468"> DEMO </p>
-      <div id="navUnderline" class="absolute h-[4px] top-[85px] rounded-[2px] bg-[#05EAF9]" style="left:741px;width:68.58px;"></div>
-      <div class="absolute bg-[rgba(0,44,91,0.63)] blur-[19.006px] h-[100px] left-[80px] top-[21.11px] w-[227px]" data-node-id="6118:23470"></div>
-      <a href="#" aria-label="PIXO home" class="absolute block h-[73px] left-[88px] top-[35px] w-[212px]" data-node-id="6118:23471">
-        <img alt="PIXO" class="block max-w-none size-full object-contain" src="image/logo.png">
-      </a>
-    </nav>
-    <div class="absolute h-[1080.574px] left-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-size-[1920px_1080.574px] opacity-25 top-[5214px] w-[1920px]" data-node-id="6118:22942" style="mask-image:url('assets/d1690dc1-d6ba-41b9-8fef-a58504b01f1d.svg')" data-name="image 945">
-      <img alt="" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="assets/748f2bac-92db-4cd1-8651-3ae12fd09909.png">
-    </div>
-    <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%-0.23px)] text-[26px] text-center text-white top-[5504px] w-[903px]" data-node-id="6118:23331"> Experience fast-paced action with movement, combat, and powerful abilities. Jump, dash, fight, and adapt to overcome every challenge. </p>
-    <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%+0.27px)] text-[120px] text-center text-white top-[5328px] whitespace-nowrap" data-node-id="6118:23333"> MOVE. FIGHT. MASTER. </p>
-    <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+161.27px)] text-[#05eaf9] text-[24px] text-center top-[5296px] tracking-[3.84px] whitespace-nowrap" data-node-id="6118:23335"> THE GAMEPLAY </p>
-    <div class="absolute h-[9.451px] left-[calc(33.33%+144.27px)] top-[5303px] w-[47px]" data-node-id="6118:23336">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line3.png">
-    </div>
-    <div class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+131.27px)] top-[5303px] w-[47px]" data-node-id="6118:23337">
-      <img alt="" class="block max-w-none size-full object-contain" src="icon/line4.png">
-    </div>
-    <div class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11.73px)] top-[5448px]">
-      <img alt="" class="block max-w-none h-[34px] w-[34px] object-contain" src="icon/box.png">
-    </div>
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(50%+30.27px)] top-[5458px]" src="icon/line2.png">
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(25%+153.27px)] top-[5458px]" src="icon/line1.png">
-    <div class="-translate-x-1/2 absolute h-[519px] left-[calc(50%+0.27px)] top-[5616px] w-[966.956px]" data-node-id="6126:8624">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" height="519" src="image/14.png" width="966.956">
-    </div>
-    <div class="absolute left-[calc(41.67%+136.91px)] size-[46.122px] top-[5852.1px]" data-node-id="6118:23374">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="assets/c878a407-aa97-49ac-9495-20ccf49d34b3.svg">
-    </div>
-    <div class="absolute h-[403px] left-[calc(66.67%+26px)] top-[5788px] w-[435px]" data-node-id="6126:8618" data-name="image 1184">
-      <img alt="" class="absolute inset-0 max-w-none object-contain pointer-events-none size-full" src="image/15.png">
-    </div>
-    <div class="absolute h-[403px] left-[144px] top-[5788px] w-[435px]" data-node-id="6126:8623" data-name="image 1184">
-      <img alt="" class="absolute inset-0 max-w-none object-contain pointer-events-none size-full" src="image/13.png">
-    </div>
-    <div class="absolute h-[614px] left-[calc(58.33%+96px)] top-[6361px] w-[510px]" data-node-id="6151:11431" data-name="image 1195">
-      <img alt="" class="absolute inset-0 max-w-none object-bottom pointer-events-none size-full" src="image/18.png">
-    </div>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(8.33%+79px)] text-[26px] text-white top-[6721px] w-[628px]" data-node-id="6151:11386">Subscribe to get the latest news, events, updates, and exclusive rewards reward's from PIXO.</p>
-    <p class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[130px] left-[calc(8.33%+79px)] text-[120px] text-white top-[6535px] w-[616px]" data-node-id="6151:11388"> NEWSLETTER </p>
-    <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(8.33%+136px)] text-[#05eaf9] text-[24px] top-[6503px] tracking-[3.84px] whitespace-nowrap" data-node-id="6151:11390"> STAY UPDATED </p>
-    <div class="absolute h-[9.451px] left-[calc(8.33%+69px)] top-[6510px] w-[47px]" data-node-id="6151:11391">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line3.png">
-    </div>
-    <div class="absolute flex h-[9.451px] items-center justify-center left-[calc(25%+48px)] top-[6510px] w-[47px]" data-node-id="6151:11392">
-      <img alt="" class="block max-w-none size-full object-contain" src="icon/line4.png">
-    </div>
-    <div class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(16.67%+104px)] top-[6665px]">
-      <img alt="" class="block max-w-none h-[34px] w-[34px] object-contain" src="icon/box.png">
-    </div>
-    <img alt="" class="absolute block h-[4px] w-[179px] left-[calc(16.67%+143px)] top-[6675px]" src="icon/line2.png">
-    <img alt="" class="absolute block h-[4px] w-[179px] left-[calc(8.33%+69px)] top-[6675px]" src="icon/line1.png">
-    <div class="-translate-x-1/2 absolute h-[634.96px] left-[calc(50%-0.05px)] top-[7196px] w-[1920.108px]" data-node-id="6151:12660">
-      <img alt="" class="absolute block inset-0 max-w-none size-full" height="634.96" src="image/footer.png" width="1920.108">
-    </div>
-    <a href="#" aria-label="PIXO home" class="absolute block h-[112px] left-[calc(33.33%+143px)] top-[7283px] w-[326px]" data-node-id="6151:11434">
-      <img alt="PIXO" class="block max-w-none size-full object-contain" src="image/logo.png">
-    </a>
-    <div class="-translate-x-1/2 absolute h-0 left-[calc(50%+0.5px)] top-[7689px] w-[1319px]" data-node-id="6151:12664">
-      <div class="absolute inset-[-1.5px_0_0_0]">
-        <img alt="" class="block max-w-none size-full" src="assets/125166e4-2b16-4f0a-a772-b490fa33df0c.svg">
-      </div>
-    </div>
-    <a href="#" aria-label="Facebook" class="absolute left-[calc(58.33%-21.34px)] size-[61.012px] top-[7577.99px]" data-node-id="6151:11450" data-name="3d icon facebook">
-      <img alt="Facebook" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="icon/facebook.png">
-    </a>
-    <a href="#" aria-label="Discord" class="absolute left-[calc(41.67%+129.25px)] size-[61.012px] top-[7577.99px]" data-node-id="6151:11452" data-name="3d icon discord">
-      <img alt="Discord" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="icon/discord.png">
-    </a>
-    <a href="#" aria-label="WhatsApp" class="absolute left-[calc(50%+53.96px)] size-[61.012px] top-[7577.99px]" data-node-id="6151:11453" data-name="3d icon whatsapp">
-      <img alt="WhatsApp" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="icon/whatsapp.png">
-    </a>
-    <a href="#" aria-label="Instagram" class="absolute left-[calc(33.33%+119.84px)] size-[61.012px] top-[7577.99px]" data-node-id="6151:11454" data-name="instagram">
-      <img alt="Instagram" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="icon/instagram.png">
-    </a>
-    <a href="#" aria-label="LinkedIn" class="absolute left-[calc(41.67%+44.55px)] size-[61.012px] top-[7577.99px]" data-node-id="6151:11455" data-name="linkedin">
-      <img alt="LinkedIn" class="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src="icon/linkedin.png">
-    </a>
-    <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-1/2 text-[26px] text-center text-white top-[7471px] w-[894px]" data-node-id="6151:11465"> PIXO is a fast-paced open-world adventure packed with exciting battles, unique abilities, and worlds waiting to be discovered. </p>
-    <div class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[7418px]">
-      <img alt="" class="block max-w-none h-[34px] w-[34px] object-contain" src="icon/box.png">
-    </div>
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[7428px]" src="icon/line2.png">
-    <img alt="" class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[7428px]" src="icon/line1.png">
-    <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-1/2 text-[26px] text-center text-white top-[7708px] w-[696px]" data-node-id="6151:12670"> @ 2026 PIXO. All Rights Reserved. </p>
-  </main>
-
-  <!-- ============================ MOBILE VERSION ============================ -->
-  <div class="mobile-site">
-    <!-- HERO -->
-    <section class="m-hero">
-      <div class="m-hero-content">
-        <a href="#" class="m-hero-logo"><img src="image/logo.png" alt="PIXO"></a>
-        <div class="m-eyebrow"><img src="icon/line3.png" alt=""><span>An Adventure Awaits</span><img src="icon/line4.png" alt=""></div>
-        <h1 class="m-title">Beyond<br>The Horizon</h1>
-        <div class="m-flourish"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></div>
-        <p class="m-lead">A world of discovery, danger, and unexpected challenges awaits. Follow PIXO beyond the horizon and uncover what lies ahead.</p>
-        <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>PLAY DEMO</a>
-      </div>
-      <div class="m-hero-art"><img src="image/1.png" alt=""></div>
-    </section>
-
-    <!-- THIS IS PIXO -->
-    <section class="m-wrap m-sec">
-      <div class="m-eyebrow"><img src="icon/line3.png" alt=""><span>Meet PIXO</span><img src="icon/line4.png" alt=""></div>
-      <div class="m-titlerow">
-        <h1 class="m-title">This Is PIXO</h1>
-      </div>
-        <span class="m-fl-mini"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></span>
-
-      <p class="m-sub">Every Adventure Needs A Hero</p>
-      <p class="m-lead">Curious by nature, fearless by design. PIXO is ready to explore a world of mystery, challenge, and adventure.</p>
-      <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>WATCH TRAILER</a>
-    </section>
-    <div class="m-photo"><img src="image/2.png" alt=""></div>
-
-    <!-- THE WORLD -->
-    <section class="m-wrap m-sec">
-      <div class="m-eyebrow c"><img src="icon/line3.png" alt=""><span>The World</span><img src="icon/line4.png" alt=""></div>
-      <h1 class="m-title c">A World Beyond<br>The Horizon</h1>
-      <div class="m-flourish c"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></div>
-      <p class="m-lead c">Curious by nature, fearless by design. PIXO is ready to explore a world of mystery, challenge, and adventure.</p>
-      <div class="m-crsl" id="wcMountM">
-        <img class="crsl-arw l" data-wc="prev-btn" src="icon/1.png" alt="Previous" role="button" tabindex="0">
-        <img class="crsl-arw r" data-wc="next-btn" src="icon/2.png" alt="Next" role="button" tabindex="0">
-      </div>
-      <p class="m-cardlabel" data-wc="label">Wild Fronttiers</p>
-      <p class="m-lead c" style="margin-bottom:0;" data-wc="desc">Lush forests, floating island and untamed lands full of life and wonder.</p>
-    </section>
-
-    <!-- ABILITIES -->
-    <section class="m-wrap m-sec">
-      <div class="m-eyebrow c"><img src="icon/line3.png" alt=""><span>Abilities</span><img src="icon/line4.png" alt=""></div>
-      <h1 class="m-title c">Built To Break<br>The Rules</h1>
-      <div class="m-flourish c"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></div>
-      <p class="m-lead c">Master PIXO&rsquo;s unique abilities to move faster, fight smarter, and overcome challenges in unexpected ways.</p>
-      <div class="m-crsl abil" id="acMountM">
-        <img class="crsl-arw l" data-ac="prev-btn" src="icon/1.png" alt="Previous" role="button" tabindex="0">
-        <img class="crsl-arw r" data-ac="next-btn" src="icon/2.png" alt="Next" role="button" tabindex="0">
-      </div>
-      <p class="m-cardlabel" data-ac="label">Time Bubble</p>
-      <p class="m-lead c" style="margin-bottom:0;" data-ac="desc">Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.</p>
-    </section>
-
-    <!-- ENEMIES -->
-    <section class="m-wrap m-sec">
-      <div class="m-eyebrow"><img src="icon/line3.png" alt=""><span>Enemies</span><img src="icon/line4.png" alt=""></div>
-      <h1 class="m-title">Nothing Stays<br>Undefeated</h1>
-      <div class="m-flourish"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></div>
-      <p class="m-lead">Dangerous machines and mysterious creatures stand between PIXO and the unknown. Learn their patterns, exploit their weaknesses, and fight your way forward.</p>
-      <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>WATCH TRAILER</a>
-    </section>
-    <div class="m-photo"><img src="image/12.png" alt=""></div>
-
-    <!-- GAMEPLAY -->
-    <section class="m-wrap m-sec">
-      <div class="m-eyebrow c"><img src="icon/line3.png" alt=""><span>The Gameplay</span><img src="icon/line4.png" alt=""></div>
-      <h1 class="m-title c">Move. Fight.<br>Master.</h1>
-      <div class="m-flourish c"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></div>
-      <p class="m-lead c">Experience fast-paced action with movement, combat, and powerful abilities. Jump, dash, fight, and adapt to overcome every challenge.</p>
-    </section>
-    <div class="m-gp">
-      <img class="flank l" src="image/13.png" alt="">
-      <img class="m-img" src="image/14.png" alt="">
-      <img class="flank r" src="image/15.png" alt="">
-    </div>
-
-    <!-- NEWSLETTER -->
-    <section class="m-wrap m-sec">
-      <div class="m-eyebrow"><img src="icon/line3.png" alt=""><span>Stay Updated</span><img src="icon/line4.png" alt=""></div>
-      <h1 class="m-title">Newsletter</h1>
-      <div class="m-flourish"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></div>
-      <p class="m-lead">Subscribe to get the latest news, events, updates, and exclusive rewards reward&rsquo;s from PIXO.</p>
-      <label class="m-field"><img src="icon/email.png" alt=""><input type="email" placeholder="Enter your mail"></label>
-      <a href="#" class="m-btn"><span class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z" fill="#fff"/></svg></i></span>SUBSCRIBE</a>
-    </section>
-    <div class="m-photo"><img src="image/18.png" alt=""></div>
-
-    <!-- FOOTER -->
-    <footer class="m-footer">
-      <img class="flogo" src="image/logo.png" alt="PIXO">
-      <div class="m-flourish c" style="margin:6px 0 14px;"><img class="ln" src="icon/line1.png" alt=""><img class="dot" src="icon/box.png" alt=""><img class="ln" src="icon/line2.png" alt=""></div>
-      <p class="m-lead c" style="margin-bottom:0;">PIXO is a fast-paced open-world adventure packed with exciting battles, unique abilities, and worlds waiting to be discovered.</p>
-      <div class="m-social">
-        <a href="#" aria-label="Instagram"><img src="icon/instagram.png" alt="Instagram"></a>
-        <a href="#" aria-label="LinkedIn"><img src="icon/linkedin.png" alt="LinkedIn"></a>
-        <a href="#" aria-label="Discord"><img src="icon/discord.png" alt="Discord"></a>
-        <a href="#" aria-label="WhatsApp"><img src="icon/whatsapp.png" alt="WhatsApp"></a>
-        <a href="#" aria-label="Facebook"><img src="icon/facebook.png" alt="Facebook"></a>
-      </div>
-      <p class="m-copy">&copy; 2026 PIXO. All Rights Reserved.</p>
-    </footer>
-  </div>
-
-  <script>
-    (function () {
-      var DESIGN_W = 1920;
-      var DESIGN_H = 7831;
-      var main = document.querySelector('main');
-      var scale = 1;
-
-      // Scale the fixed 1920px design to always fill the full viewport width (up or down).
-      // <body> is sized to the scaled design so the browser produces exactly one scrollbar.
-      function fit() {
-        var vw = document.documentElement.clientWidth || window.innerWidth;
-        // Below 768px the dedicated .mobile-site layout takes over (CSS media query).
-        if (vw < 768) {
-          if (main) main.style.transform = '';
-          document.body.style.width = '';
-          document.body.style.height = '';
-          return;
+      @media (max-width: 767px) {
+        html {
+          overflow-x: hidden;
         }
-        scale = vw / DESIGN_W;
-        if (main) main.style.transform = 'scale(' + scale + ')';
-        document.body.style.width = (DESIGN_W * scale) + 'px';
-        document.body.style.height = (DESIGN_H * scale) + 'px';
+        body {
+          position: static !important;
+          overflow: visible !important;
+          width: 100% !important;
+          height: auto !important;
+          margin: 0 !important;
+        }
+        body > main {
+          display: none !important;
+        }
+        .mobile-site {
+          display: block;
+          width: 100%;
+          max-width: 520px;
+          margin: 0 auto;
+          background: #091f34;
+          color: #fff;
+          font-family:
+            "Outfit",
+            system-ui,
+            -apple-system,
+            sans-serif;
+          --m-pad: 30px; /* consistent left/right gutter for text on every section */
+        }
       }
-      fit();
-      window.addEventListener('resize', fit);
-      window.addEventListener('orientationchange', fit);
-      window.addEventListener('load', fit);
+      .m-wrap {
+        padding-left: var(--m-pad, 30px);
+        padding-right: var(--m-pad, 30px);
+      }
+      .m-sec {
+        padding-top: 44px;
+        padding-bottom: 8px;
+      }
+      .m-img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
 
-      // ================= real sliding carousels (a track that translates) =================
+      /* Hero: copy on a dark panel, hero art bleeding up behind it (matches desktop feel). */
+      .m-hero {
+        position: relative;
+        background: #091f34;
+        overflow: hidden;
+      }
+      .m-hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 26px var(--m-pad, 30px) 34px;
+      }
+      .m-hero-logo {
+        display: inline-block;
+        margin-bottom: 26px;
+      }
+      .m-hero-logo img {
+        height: 34px;
+        width: auto;
+        display: block;
+      }
+      .m-hero-art {
+        position: relative;
+        margin-top: -46px;
+      }
+      .m-hero-art img {
+        display: block;
+        width: 100%;
+        height: 62vh;
+        min-height: 380px;
+        max-height: 560px;
+        object-fit: cover;
+        object-position: 16% center;
+      }
+      .m-hero-art::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(
+            180deg,
+            #091f34 0%,
+            rgba(9, 31, 52, 0.45) 16%,
+            rgba(9, 31, 52, 0) 38%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(9, 31, 52, 0) 68%,
+            rgba(9, 31, 52, 0.5) 86%,
+            #091f34 100%
+          );
+      }
+      .m-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .m-eyebrow.c {
+        justify-content: center;
+      }
+      .m-eyebrow span {
+        color: #05eaf9;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .m-eyebrow img {
+        height: 7px;
+        width: 34px;
+        object-fit: contain;
+        flex: none;
+      }
+      .m-title {
+        font-family: "Teko", sans-serif;
+        font-weight: 500;
+        font-size: 44px;
+        line-height: 0.95;
+        text-transform: uppercase;
+        margin: 0;
+        letter-spacing: 0.5px;
+      }
+      .m-title.c {
+        text-align: center;
+      }
+      .m-flourish {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 16px 0;
+      }
+      .m-flourish.c {
+        justify-content: center;
+      }
+      .m-flourish .ln {
+        height: 4px;
+        width: 68px;
+      }
+      .m-flourish .dot {
+        height: 22px;
+        width: 22px;
+        object-fit: contain;
+        flex: none;
+      }
+      /* title with a compact flourish tucked to its right */
+      .m-titlerow {
+        display: flex;
+        align-items: flex-end;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+      .m-fl-mini {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding-bottom: 8px;
+      }
+      .m-fl-mini .ln {
+        height: 3px;
+        width: 34px;
+      }
+      .m-fl-mini .dot {
+        height: 16px;
+        width: 16px;
+        object-fit: contain;
+        flex: none;
+      }
+      /* standalone section photo that fades into the navy at top and bottom */
+      .m-photo {
+        position: relative;
+        margin-top: 4px;
+      }
+      .m-photo img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .m-photo::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(
+            180deg,
+            #091f34 0%,
+            rgba(9, 31, 52, 0.4) 12%,
+            rgba(9, 31, 52, 0) 30%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(9, 31, 52, 0) 72%,
+            rgba(9, 31, 52, 0.55) 88%,
+            #091f34 100%
+          );
+      }
+      .m-sub {
+        color: #cdaa68;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 2.4px;
+        text-transform: uppercase;
+        margin: 0 0 12px;
+      }
+      .m-lead {
+        font-size: 15px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0 0 22px;
+      }
+      .m-lead.c {
+        text-align: center;
+      }
+      .m-cardlabel {
+        text-align: center;
+        color: #cfb16d;
+        font-weight: 600;
+        letter-spacing: 1px;
+        font-size: 14px;
+        text-transform: uppercase;
+        margin: 8px 0;
+      }
+      .m-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        height: 52px;
+        padding: 0 26px 0 7px;
+        background: url("icon/button.png") center/100% 100% no-repeat;
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        letter-spacing: 0.8px;
+        text-decoration: none;
+      }
+      .m-btn .ic {
+        width: 38px;
+        height: 38px;
+        border-radius: 999px;
+        flex: none;
+        display: grid;
+        place-items: center;
+        background: conic-gradient(
+          from 140deg,
+          #eef2f6,
+          #9aa4af,
+          #f4f7fa,
+          #828d9a,
+          #dde3e9,
+          #aab4bf,
+          #eef2f6
+        );
+        box-shadow:
+          0 2px 6px rgba(5, 20, 45, 0.5),
+          inset 0 1px 1px rgba(255, 255, 255, 0.7);
+      }
+      .m-btn .ic > i {
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 42% 34%, #1a3b63, #0a1c33 68%);
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+      }
+      /* Mobile carousel: a sliding track, big centre slide, dim neighbours peeking at each edge */
+      .m-crsl {
+        position: relative;
+        margin: 18px calc(var(--m-pad, 30px) * -1) 10px;
+        height: 210px;
+      }
+      .m-crsl.abil {
+        height: 168px;
+      }
+      .m-crsl .crsl-arw {
+        position: absolute;
+        z-index: 5;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 38px;
+        height: 38px;
+        cursor: pointer;
+        filter: drop-shadow(0 2px 6px rgba(5, 20, 45, 0.55));
+      }
+      .m-crsl .crsl-arw.l {
+        left: 2px;
+      }
+      .m-crsl .crsl-arw.r {
+        right: 2px;
+      }
+      .m-navrow {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 16px;
+      }
+      .m-navrow img {
+        width: 40px;
+        height: 40px;
+      }
+      .m-field {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 56px;
+        padding: 0 16px;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 6px;
+        margin-bottom: 18px;
+      }
+      .m-field img {
+        width: 22px;
+        height: 22px;
+        opacity: 0.7;
+        flex: none;
+      }
+      .m-field input {
+        flex: 1;
+        min-width: 0;
+        background: none;
+        border: 0;
+        outline: 0;
+        color: #fff;
+        font-size: 15px;
+        font-family: inherit;
+      }
+      .m-field input::placeholder {
+        color: rgba(255, 255, 255, 0.45);
+      }
+      .m-gp {
+        position: relative;
+        padding: 6px 14px 12px;
+      }
+      .m-gp .m-img {
+        border-radius: 8px;
+      }
+      .m-gp .flank {
+        position: absolute;
+        bottom: 22px;
+        width: 74px;
+        height: auto;
+      }
+      .m-gp .flank.l {
+        left: -10px;
+      }
+      .m-gp .flank.r {
+        right: -10px;
+      }
+      .m-footer {
+        text-align: center;
+        padding: 42px var(--m-pad, 30px) 28px;
+      }
+      .m-footer .flogo {
+        height: 52px;
+        width: auto;
+        margin: 0 auto 6px;
+        display: block;
+      }
+      .m-social {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin: 18px 0;
+      }
+      .m-social img {
+        width: 44px;
+        height: 44px;
+      }
+      .m-copy {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        padding-top: 18px;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      class="bg-[#091f34] w-[1920px] overflow-hidden relative"
+      data-node-id="6118:22938"
+      data-name="DESKTOP"
+    >
+      <!-- ==================== HERO  ·  "AN ADVENTURE AWAITS"  (nav lives here) ==================== -->
+      <section
+        class="sec sec-hero"
+        style="position: relative; width: 1920px; height: 1092px"
+      >
+        <div
+          class="absolute h-[973px] left-[calc(25%+154px)] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-733.646px_63.354px] mask-size-[2131.91px_911.293px] top-[1091.77px] w-[1418px]"
+          data-node-id="6269:172"
+          style="
+            mask-image: url(&quot;assets/818d7f66-7b95-48d7-ba5a-f830334cef9f.svg&quot;);
+          "
+          data-name="image 987"
+        >
+          <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <img
+              alt=""
+              class="absolute h-[109.29%] left-[4.18%] max-w-none top-[-5.65%] w-[133.21%]"
+              src="assets/6f6448b1-3264-4b7c-aedc-bcbc2eed3703.png"
+            />
+          </div>
+        </div>
+        <div
+          class="-translate-x-1/2 -translate-y-1/2 absolute h-[1132px] left-1/2 top-[566px] w-[1920px]"
+          data-node-id="6118:22943"
+          data-name="BG"
+        ></div>
+        <div
+          class="-translate-x-1/2 -translate-y-1/2 absolute h-[1241px] left-[calc(45.83%+32.5px)] top-[511.5px] w-[2105px]"
+          data-node-id="6118:23411"
+          data-name="BG"
+        >
+          <div aria-hidden="" class="absolute inset-0 pointer-events-none">
+            <img
+              alt=""
+              class="absolute inset-0 max-w-none object-cover size-full"
+              src="image/1.png"
+            />
+            <div
+              class="absolute inset-0"
+              style="
+                background-image: linear-gradient(
+                  -89.97873232796866deg,
+                  rgba(9, 31, 52, 0.66) 2.3857%,
+                  rgba(9, 31, 52, 0.66) 23.633%,
+                  rgba(9, 31, 52, 0.66) 41.847%,
+                  rgba(9, 31, 52, 0) 66.374%
+                );
+              "
+            ></div>
+            <div
+              class="absolute bottom-0 left-0 right-0 h-[260px]"
+              style="
+                background-image: linear-gradient(
+                  180deg,
+                  rgba(9, 31, 52, 0) 0%,
+                  #091f34 92%
+                );
+              "
+            ></div>
+          </div>
+        </div>
+        <div
+          class="absolute h-[4.441px] left-[calc(58.33%+82.13px)] top-[855.58px] w-[49.49px]"
+          data-node-id="6118:23419"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="assets/045096f1-9578-426f-bdf1-38e0723f6f5b.svg"
+          />
+        </div>
+        <div
+          class="absolute h-[4.441px] left-[calc(50%+34.65px)] top-[768.03px] w-[49.49px]"
+          data-node-id="6118:23420"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="assets/8ba97c8f-f86e-4eff-b464-931e909486ed.svg"
+          />
+        </div>
+        <div
+          class="absolute flex h-[50.442px] items-center justify-center left-[calc(66.67%+22.37px)] top-[789.28px] w-[3.49px]"
+          data-node-id="6118:23421"
+        >
+          <div class="-scale-y-100 flex-none rotate-180">
+            <div class="h-[50.442px] relative w-[3.49px]">
+              <img
+                alt=""
+                class="absolute block inset-0 max-w-none size-full"
+                src="assets/102cc0ec-500c-40b1-842e-48e26129f868.svg"
+              />
+            </div>
+          </div>
+        </div>
+        <a
+          href="#"
+          data-node-id="6118:23422"
+          aria-label="Play demo"
+          class="group absolute block no-underline h-[89.462px] left-[calc(50%+8px)] top-[769.29px] w-[336.912px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 block max-w-none size-full object-fill"
+            src="icon/button.png"
+            data-node-id="6118:23424"
+          />
+          <div
+            class="absolute flex items-center justify-center size-[50px] left-[36px] top-[19.71px] rounded-full"
+            data-node-id="6118:23438"
+            style="
+              background: conic-gradient(
+                from 140deg at 50% 50%,
+                #eef2f6,
+                #9aa4af,
+                #f4f7fa,
+                #828d9a,
+                #dde3e9,
+                #aab4bf,
+                #eef2f6
+              );
+              box-shadow:
+                0 2px 6px rgba(5, 20, 45, 0.55),
+                inset 0 1px 1px rgba(255, 255, 255, 0.7),
+                inset 0 -2px 3px rgba(40, 60, 90, 0.5);
+            "
+          >
+            <span
+              class="flex items-center justify-center size-[36px] rounded-full"
+              style="
+                background: radial-gradient(
+                  circle at 42% 34%,
+                  #1a3b63 0%,
+                  #0a1c33 68%
+                );
+                box-shadow:
+                  inset 0 2px 5px rgba(0, 0, 0, 0.65),
+                  inset 0 -1px 2px rgba(120, 160, 210, 0.35),
+                  0 0 0 1px rgba(10, 20, 40, 0.6);
+              "
+            >
+              <svg
+                width="14"
+                height="16"
+                viewBox="0 0 14 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style="margin-left: 2px"
+              >
+                <path
+                  d="M1 1.3C1 0.5 1.9 0 2.6 0.5L12.5 7.2C13.1 7.6 13.1 8.4 12.5 8.8L2.6 15.5C1.9 16 1 15.5 1 14.7V1.3Z"
+                  fill="#ffffff"
+                ></path>
+              </svg>
+            </span>
+          </div>
+          <span
+            class="absolute font-['Outfit'] font-semibold leading-[24px] text-[24px] text-white tracking-[0.96px] whitespace-nowrap left-[104px] top-[32.71px]"
+            data-node-id="6118:23431"
+            style="text-shadow: 0 1px 3px rgba(5, 20, 45, 0.55)"
+            >PLAY DEMO</span
+          >
+        </a>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%+8px)] text-[26px] text-white top-[654.03px] w-[821px]"
+          data-node-id="6118:23443"
+        >
+          A world of discovery, danger, and unexpected challenges awaits. Follow
+          PIXO beyond the horizon and uncover what lies ahead.
+        </p>
+        <div
+          class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[0] left-[calc(50%+8px)] text-[185.401px] text-white top-[271px] whitespace-nowrap"
+          data-node-id="6118:23445"
+        >
+          <p class="leading-[157.591px] mb-0 whitespace-pre">BEYOND</p>
+          <p class="leading-[157.591px] whitespace-pre">THE HORIZON</p>
+        </div>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(50%+66px)] text-[#05eaf9] text-[24px] top-[222px] tracking-[3.84px] whitespace-nowrap"
+          data-node-id="6118:23447"
+        >
+          AN ADVENTURE AWAITS
+        </p>
+        <div
+          class="absolute h-[9.451px] left-[calc(50%-2px)] top-[229px] w-[47px]"
+          data-node-id="6118:23448"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="icon/line3.png"
+          />
+        </div>
+        <div
+          class="absolute flex h-[9.451px] items-center justify-center left-[calc(66.67%+107px)] top-[229px] w-[47px]"
+          data-node-id="6118:23449"
+        >
+          <img
+            alt=""
+            class="block max-w-none size-full object-contain"
+            src="icon/line4.png"
+          />
+        </div>
+        <div
+          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(66.67%+3px)] top-[611px]"
+        >
+          <img
+            alt=""
+            class="block max-w-none h-[34px] w-[34px] object-contain"
+            src="icon/box.png"
+          />
+        </div>
+        <img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(66.67%+45px)] top-[621px]"
+          src="icon/line2.png"
+        /><img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(50%+8px)] top-[621px]"
+          src="icon/line1.png"
+        />
+        <nav class="contents" data-node-id="6118:23458">
+          <div
+            class="absolute h-[48.985px] left-[calc(33.33%+68.79px)] top-[40.01px] w-[1131.319px] bg-[#01132C]/[0.47]"
+            data-node-id="6118:23460"
+            style="
+              clip-path: polygon(
+                8px 0,
+                calc(100% - 8px) 0,
+                100% 8px,
+                100% calc(100% - 8px),
+                calc(100% - 8px) 100%,
+                8px 100%,
+                0 calc(100% - 8px),
+                0 8px
+              );
+            "
+          ></div>
+          <p
+            class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(33.33%+105px)] top-[55px] is-active"
+            data-scroll="0"
+            data-node-id="6118:23462"
+          >
+            HOME
+          </p>
+          <p
+            class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(50%+64px)] top-[55px]"
+            data-scroll="2110"
+            data-node-id="6118:23463"
+          >
+            WORLD
+          </p>
+          <p
+            class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(41.67%+91px)] top-[55px]"
+            data-scroll="1300"
+            data-node-id="6118:23464"
+          >
+            PIXO
+          </p>
+          <p
+            class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(58.33%+65px)] top-[55px]"
+            data-scroll="3095"
+            data-node-id="6118:23465"
+          >
+            ABILITIES
+          </p>
+          <p
+            class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(66.67%+82px)] top-[55px]"
+            data-scroll="4275"
+            data-node-id="6118:23466"
+          >
+            ENEMIES
+          </p>
+          <p
+            class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(75%+93px)] top-[55px]"
+            data-scroll="5200"
+            data-node-id="6118:23467"
+          >
+            GAME PLAY
+          </p>
+          <p
+            class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(91.67%-30px)] top-[55px]"
+            data-scroll="6410"
+            data-node-id="6118:23468"
+          >
+            DEMO
+          </p>
+          <div
+            id="navUnderline"
+            class="absolute h-[4px] top-[85px] rounded-[2px] bg-[#05EAF9]"
+            style="left: 741px; width: 68.58px"
+          ></div>
+          <div
+            class="absolute bg-[rgba(0,44,91,0.63)] blur-[19.006px] h-[100px] left-[80px] top-[21.11px] w-[227px]"
+            data-node-id="6118:23470"
+          ></div>
+          <a
+            href="#"
+            aria-label="PIXO home"
+            class="absolute block h-[73px] left-[88px] top-[35px] w-[212px]"
+            data-node-id="6118:23471"
+          >
+            <img
+              alt="PIXO"
+              class="block max-w-none size-full object-contain"
+              src="image/logo.png"
+            />
+          </a>
+        </nav>
+      </section>
+      <!-- ==================== MEET PIXO  ·  "THIS IS PIXO" ==================== -->
+      <section
+        class="sec sec-meet"
+        style="position: relative; width: 1920px; height: 1020px"
+      >
+        <div
+          class="absolute h-[4.441px] left-[calc(16.67%+123.12px)] top-[748.56px] w-[49.49px]"
+          data-node-id="6118:23000"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="assets/045096f1-9578-426f-bdf1-38e0723f6f5b.svg"
+          />
+        </div>
+        <div
+          class="absolute h-[4.441px] left-[calc(8.33%+75.65px)] top-[661px] w-[49.49px]"
+          data-node-id="6118:23001"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="assets/8ba97c8f-f86e-4eff-b464-931e909486ed.svg"
+          />
+        </div>
+        <div
+          class="absolute flex h-[50.442px] items-center justify-center left-[calc(25%+63.37px)] top-[682.25px] w-[3.49px]"
+          data-node-id="6118:23002"
+        >
+          <div class="-scale-y-100 flex-none rotate-180">
+            <div class="h-[50.442px] relative w-[3.49px]">
+              <img
+                alt=""
+                class="absolute block inset-0 max-w-none size-full"
+                src="assets/102cc0ec-500c-40b1-842e-48e26129f868.svg"
+              />
+            </div>
+          </div>
+        </div>
+        <a
+          href="#"
+          data-node-id="6118:23003"
+          aria-label="Watch trailer"
+          class="group absolute block no-underline h-[89.462px] left-[calc(8.33%+49px)] top-[662.27px] w-[336.912px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 block max-w-none size-full object-fill"
+            src="icon/button.png"
+            data-node-id="6118:23005"
+          />
+          <div
+            class="absolute flex items-center justify-center size-[50px] left-[36px] top-[19.73px] rounded-full"
+            data-node-id="6118:23019"
+            style="
+              background: conic-gradient(
+                from 140deg at 50% 50%,
+                #eef2f6,
+                #9aa4af,
+                #f4f7fa,
+                #828d9a,
+                #dde3e9,
+                #aab4bf,
+                #eef2f6
+              );
+              box-shadow:
+                0 2px 6px rgba(5, 20, 45, 0.55),
+                inset 0 1px 1px rgba(255, 255, 255, 0.7),
+                inset 0 -2px 3px rgba(40, 60, 90, 0.5);
+            "
+          >
+            <span
+              class="flex items-center justify-center size-[36px] rounded-full"
+              style="
+                background: radial-gradient(
+                  circle at 42% 34%,
+                  #1a3b63 0%,
+                  #0a1c33 68%
+                );
+                box-shadow:
+                  inset 0 2px 5px rgba(0, 0, 0, 0.65),
+                  inset 0 -1px 2px rgba(120, 160, 210, 0.35),
+                  0 0 0 1px rgba(10, 20, 40, 0.6);
+              "
+            >
+              <svg
+                width="14"
+                height="16"
+                viewBox="0 0 14 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style="margin-left: 2px"
+              >
+                <path
+                  d="M1 1.3C1 0.5 1.9 0 2.6 0.5L12.5 7.2C13.1 7.6 13.1 8.4 12.5 8.8L2.6 15.5C1.9 16 1 15.5 1 14.7V1.3Z"
+                  fill="#ffffff"
+                ></path>
+              </svg>
+            </span>
+          </div>
+          <span
+            class="absolute font-['Outfit'] font-semibold leading-[24px] text-[24px] text-white tracking-[0.96px] whitespace-nowrap left-[104px] top-[32.73px]"
+            data-node-id="6118:23012"
+            style="text-shadow: 0 1px 3px rgba(5, 20, 45, 0.55)"
+            >WATCH TRAILER</span
+          >
+        </a>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-medium leading-[24px] left-[calc(8.33%+49px)] text-[#cdaa68] text-[24px] top-[503px] tracking-[3.84px] whitespace-nowrap"
+          data-node-id="6118:23024"
+        >
+          EVERY ADVENTURE NEEDS A HERO
+        </p>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(8.33%+49px)] text-[26px] text-white top-[547px] w-[628px]"
+          data-node-id="6118:23025"
+        >
+          Curious by nature, fearless by design. PIXO is ready to explore a
+          world of mystery, challenge, and adventure.
+        </p>
+        <p
+          class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[130px] left-[calc(8.33%+49px)] text-[120px] text-white top-[317px] whitespace-nowrap"
+          data-node-id="6118:23027"
+        >
+          THIS IS PIXO
+        </p>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(8.33%+106px)] text-[#05eaf9] text-[24px] top-[285px] tracking-[3.84px] whitespace-nowrap"
+          data-node-id="6118:23029"
+        >
+          MEET PIXO
+        </p>
+        <div
+          class="absolute h-[9.451px] left-[calc(8.33%+39px)] top-[292px] w-[47px]"
+          data-node-id="6118:23030"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="icon/line3.png"
+          />
+        </div>
+        <div
+          class="absolute flex h-[9.451px] items-center justify-center left-[calc(16.67%+120px)] top-[292px] w-[47px]"
+          data-node-id="6118:23031"
+        >
+          <img
+            alt=""
+            class="block max-w-none size-full object-contain"
+            src="icon/line4.png"
+          />
+        </div>
+        <div
+          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(16.67%+74px)] top-[447px]"
+        >
+          <img
+            alt=""
+            class="block max-w-none h-[34px] w-[34px] object-contain"
+            src="icon/box.png"
+          />
+        </div>
+        <img
+          alt=""
+          class="absolute block h-[4px] w-[179px] left-[calc(16.67%+113px)] top-[457px]"
+          src="icon/line2.png"
+        /><img
+          alt=""
+          class="absolute block h-[4px] w-[179px] left-[calc(8.33%+39px)] top-[457px]"
+          src="icon/line1.png"
+        />
+        <div
+          class="absolute h-[903px] left-[calc(41.67%+93px)] top-[103px] w-[1022.5px]"
+          data-node-id="6269:211"
+          data-name="image 1198"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+            src="image/2.png"
+          />
+        </div>
+      </section>
+      <!-- ==================== THE WORLD  ·  "A WORLD BEYOND THE HORIZON"  (world carousel: #wcMount) ==================== -->
+      <section
+        class="sec sec-world"
+        style="position: relative; width: 1920px; height: 1083px"
+      >
+        <div
+          class="absolute h-[1476.644px] left-[-121.23px] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[10.898px_214.557px] mask-size-[2131.91px_1048.62px] opacity-30 top-[769.75px] w-[2152.505px]"
+          data-node-id="6266:4"
+          style="
+            mask-image: url(&quot;assets/918af4eb-2886-40a0-b713-23c70e69a686.svg&quot;);
+          "
+          data-name="image 987"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+            src="assets/6f6448b1-3264-4b7c-aedc-bcbc2eed3703.png"
+          />
+        </div>
+        <div
+          class="absolute h-[1476.644px] left-[-113.16px] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[10.9px_214.557px] mask-size-[2131.91px_1048.62px] opacity-30 top-[769.75px] w-[2152.505px]"
+          data-node-id="6266:15"
+          style="
+            mask-image: url(&quot;assets/04459a4d-9b9c-4deb-ba78-484a5efe7c00.svg&quot;);
+          "
+          data-name="image 987"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+            src="assets/6f6448b1-3264-4b7c-aedc-bcbc2eed3703.png"
+          />
+        </div>
+        <div
+          class="-translate-x-1/2 absolute h-[1013px] left-1/2 top-[0px] w-[1920px]"
+          data-node-id="6118:22992"
+        ></div>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(8.33%+181px)] text-[26px] text-white top-[294px] whitespace-nowrap"
+          data-node-id="6118:23246"
+        >
+          Curious by nature, fearless by design. PIXO is ready to explore a
+          world of mystery, challenge, and adventure.
+        </p>
+        <p
+          class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%-593px)] text-[120px] text-white top-[118px] whitespace-nowrap"
+          data-node-id="6118:23248"
+        >
+          A WORLD BEYOND THE HORIZON
+        </p>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+75px)] text-[#05eaf9] text-[24px] top-[86px] tracking-[3.84px] whitespace-nowrap"
+          data-node-id="6118:23250"
+        >
+          THE WORLD
+        </p>
+        <div
+          class="absolute h-[9.451px] left-[calc(41.67%+8px)] top-[93px] w-[47px]"
+          data-node-id="6118:23251"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="icon/line3.png"
+          />
+        </div>
+        <div
+          class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+105px)] top-[93px] w-[47px]"
+          data-node-id="6118:23252"
+        >
+          <img
+            alt=""
+            class="block max-w-none size-full object-contain"
+            src="icon/line4.png"
+          />
+        </div>
+        <div
+          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[238px]"
+        >
+          <img
+            alt=""
+            class="block max-w-none h-[34px] w-[34px] object-contain"
+            src="icon/box.png"
+          />
+        </div>
+        <img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[248px]"
+          src="icon/line2.png"
+        /><img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[248px]"
+          src="icon/line1.png"
+        />
+        <div
+          class="absolute left-1/2 -translate-x-1/2 top-[394px] h-[400px] w-[1920px]"
+          data-node-id="6118:23264"
+          id="wcMount"
+        ></div>
+        <a
+          href="#"
+          data-node-id="6118:23279"
+          data-wc="prev-btn"
+          aria-label="Previous slide"
+          class="absolute flex items-center justify-center size-[58px] left-[calc(25%+62px)] top-[560px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
+        >
+          <img alt="" class="block size-full" src="icon/1.png" /> </a
+        ><a
+          href="#"
+          data-node-id="6118:23299"
+          data-wc="next-btn"
+          aria-label="Next slide"
+          class="absolute flex items-center justify-center size-[58px] left-[calc(66.67%+40px)] top-[560px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
+        >
+          <img alt="" class="block size-full" src="icon/2.png" />
+        </a>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-semibold leading-[24px] left-[calc(50%-106px)] text-[#cfb16d] text-[24px] top-[815px] whitespace-nowrap"
+          data-node-id="6118:23319"
+          data-wc="label"
+        >
+          WILD FRONTTIERS
+        </p>
+        <p
+          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[30px] left-[calc(33.33%+320px)] text-[20px] text-center text-white top-[855px] w-[380px]"
+          data-node-id="6118:23320"
+          data-wc="desc"
+        >
+          Lush forests, floating island and untamed lands full of life and
+          wonder.
+        </p>
+      </section>
+      <!-- ==================== ABILITIES  ·  "BUILT TO BREAK THE RULES"  (abilities carousel: #acMount) ==================== -->
+      <section
+        class="sec sec-abilities"
+        style="position: relative; width: 1920px; height: 1163px"
+      >
+        <p
+          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%+0.5px)] text-[26px] text-center text-white top-[208px] w-[741px]"
+          data-node-id="6118:23050"
+        >
+          Master PIXO’s unique abilities to move faster, fight smarter, and
+          overcome challenges in unexpected ways.
+        </p>
+        <p
+          class="-translate-x-1/2 [word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%+0.5px)] text-[120px] text-center text-white top-[32px] whitespace-nowrap"
+          data-node-id="6118:23052"
+        >
+          BUILT TO BREAK THE RULES
+        </p>
+        <p
+          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+160.5px)] text-[#05eaf9] text-[24px] text-center top-[0px] tracking-[3.84px] whitespace-nowrap"
+          data-node-id="6118:23054"
+        >
+          ABILITIES
+        </p>
+        <div
+          class="absolute h-[9.451px] left-[calc(41.67%+25px)] top-[7px] w-[47px]"
+          data-node-id="6118:23055"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="icon/line3.png"
+          />
+        </div>
+        <div
+          class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+89px)] top-[7px] w-[47px]"
+          data-node-id="6118:23056"
+        >
+          <img
+            alt=""
+            class="block max-w-none size-full object-contain"
+            src="icon/line4.png"
+          />
+        </div>
+        <div
+          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[152px]"
+        >
+          <img
+            alt=""
+            class="block max-w-none h-[34px] w-[34px] object-contain"
+            src="icon/box.png"
+          />
+        </div>
+        <img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[162px]"
+          src="icon/line2.png"
+        /><img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[162px]"
+          src="icon/line1.png"
+        />
+        <div
+          class="absolute left-1/2 -translate-x-1/2 top-[305px] h-[380px] w-[1920px]"
+          data-node-id="6118:23145"
+          id="acMount"
+        ></div>
+        <a
+          href="#"
+          data-node-id="6118:23151"
+          data-ac="next-btn"
+          aria-label="Next ability"
+          class="absolute flex items-center justify-center size-[58px] left-[calc(50%+26px)] top-[827px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
+        >
+          <img alt="" class="block size-full" src="icon/2.png" /> </a
+        ><a
+          href="#"
+          data-node-id="6118:23171"
+          data-ac="prev-btn"
+          aria-label="Previous ability"
+          class="absolute flex items-center justify-center size-[58px] left-[calc(41.67%+88px)] top-[827px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
+        >
+          <img alt="" class="block size-full" src="icon/1.png" />
+        </a>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-semibold leading-[24px] left-[calc(50%-70px)] text-[#cfb16d] text-[24px] top-[691px] whitespace-nowrap"
+          data-node-id="6118:23192"
+          data-ac="label"
+          data-caps=""
+        >
+          TIME BUBBLE
+        </p>
+        <p
+          class="[word-break:break-word] -translate-x-1/2 absolute font-['Outfit'] font-normal leading-[30px] left-[calc(33.33%+325.5px)] text-[20px] text-center text-white top-[731px] w-[495px]"
+          data-node-id="6118:23193"
+          data-ac="desc"
+        >
+          Freeze time within a localized bubble, slowing enemies and creating
+          the perfect moment to strike.
+        </p>
+      </section>
+      <!-- ==================== ENEMIES  ·  "NOTHING STAYS UNDEFEATED" ==================== -->
+      <section
+        class="sec sec-enemies"
+        style="position: relative; width: 1920px; height: 856px"
+      >
+        <div
+          class="absolute h-[4.441px] left-[calc(66.67%+46.12px)] top-[607.56px] w-[49.49px]"
+          data-node-id="6118:23199"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="assets/045096f1-9578-426f-bdf1-38e0723f6f5b.svg"
+          />
+        </div>
+        <div
+          class="absolute h-[4.441px] left-[calc(58.33%-1.35px)] top-[520px] w-[49.49px]"
+          data-node-id="6118:23200"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="assets/8ba97c8f-f86e-4eff-b464-931e909486ed.svg"
+          />
+        </div>
+        <div
+          class="absolute flex h-[50.442px] items-center justify-center left-[calc(75%-13.63px)] top-[541.25px] w-[3.49px]"
+          data-node-id="6118:23201"
+        >
+          <div class="-scale-y-100 flex-none rotate-180">
+            <div class="h-[50.442px] relative w-[3.49px]">
+              <img
+                alt=""
+                class="absolute block inset-0 max-w-none size-full"
+                src="assets/102cc0ec-500c-40b1-842e-48e26129f868.svg"
+              />
+            </div>
+          </div>
+        </div>
+        <a
+          href="#"
+          data-node-id="6118:23202"
+          aria-label="Watch trailer"
+          class="group absolute block no-underline h-[89.462px] left-[calc(50%+132px)] top-[521.27px] w-[336.912px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 block max-w-none size-full object-fill"
+            src="icon/button.png"
+            data-node-id="6118:23204"
+          />
+          <div
+            class="absolute flex items-center justify-center size-[50px] left-[36px] top-[19.73px] rounded-full"
+            data-node-id="6118:23207"
+            style="
+              background: conic-gradient(
+                from 140deg at 50% 50%,
+                #eef2f6,
+                #9aa4af,
+                #f4f7fa,
+                #828d9a,
+                #dde3e9,
+                #aab4bf,
+                #eef2f6
+              );
+              box-shadow:
+                0 2px 6px rgba(5, 20, 45, 0.55),
+                inset 0 1px 1px rgba(255, 255, 255, 0.7),
+                inset 0 -2px 3px rgba(40, 60, 90, 0.5);
+            "
+          >
+            <span
+              class="flex items-center justify-center size-[36px] rounded-full"
+              style="
+                background: radial-gradient(
+                  circle at 42% 34%,
+                  #1a3b63 0%,
+                  #0a1c33 68%
+                );
+                box-shadow:
+                  inset 0 2px 5px rgba(0, 0, 0, 0.65),
+                  inset 0 -1px 2px rgba(120, 160, 210, 0.35),
+                  0 0 0 1px rgba(10, 20, 40, 0.6);
+              "
+            >
+              <svg
+                width="14"
+                height="16"
+                viewBox="0 0 14 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style="margin-left: 2px"
+              >
+                <path
+                  d="M1 1.3C1 0.5 1.9 0 2.6 0.5L12.5 7.2C13.1 7.6 13.1 8.4 12.5 8.8L2.6 15.5C1.9 16 1 15.5 1 14.7V1.3Z"
+                  fill="#ffffff"
+                ></path>
+              </svg>
+            </span>
+          </div>
+          <span
+            class="absolute font-['Outfit'] font-semibold leading-[24px] text-[24px] text-white tracking-[0.96px] whitespace-nowrap left-[104px] top-[32.73px]"
+            data-node-id="6118:23211"
+            style="text-shadow: 0 1px 3px rgba(5, 20, 45, 0.55)"
+            >WATCH TRAILER</span
+          >
+        </a>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%+132px)] text-[26px] text-white top-[364px] w-[628px]"
+          data-node-id="6118:23213"
+        >
+          Dangerous machines and mysterious creatures stand between PIXO and the
+          unknown. Learn their patterns, exploit their weaknesses, and fight
+          your way forward.
+        </p>
+        <p
+          class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[130px] left-[calc(50%+132px)] text-[120px] text-white top-[48px] w-[616px]"
+          data-node-id="6118:23215"
+        >
+          NOTHING STAYS UNDEFEATED
+        </p>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(58.33%+29px)] text-[#05eaf9] text-[24px] top-[16px] tracking-[3.84px] whitespace-nowrap"
+          data-node-id="6118:23217"
+        >
+          ENEMIES
+        </p>
+        <div
+          class="absolute h-[9.451px] left-[calc(50%+122px)] top-[23px] w-[47px]"
+          data-node-id="6118:23218"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="icon/line3.png"
+          />
+        </div>
+        <div
+          class="absolute flex h-[9.451px] items-center justify-center left-[calc(66.67%+11px)] top-[23px] w-[47px]"
+          data-node-id="6118:23219"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="icon/line4.png"
+          />
+        </div>
+        <div
+          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(66.67%-3px)] top-[308px]"
+        >
+          <img
+            alt=""
+            class="block max-w-none h-[34px] w-[34px] object-contain"
+            src="icon/box.png"
+          />
+        </div>
+        <img
+          alt=""
+          class="absolute block h-[4px] w-[179px] left-[calc(66.67%+36px)] top-[318px]"
+          src="icon/line2.png"
+        /><img
+          alt=""
+          class="absolute block h-[4px] w-[179px] left-[calc(50%+122px)] top-[318px]"
+          src="icon/line1.png"
+        />
+        <div
+          class="absolute bg-[#00152a] h-[609.652px] left-0 top-[10.31px] w-[962px]"
+          data-node-id="6118:23229"
+        ></div>
+        <div
+          class="absolute h-[609.644px] left-[106.55px] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-19.547px_0.307px] mask-size-[914px_609.652px] mix-blend-plus-lighter top-[10px] w-[870.255px]"
+          data-node-id="6118:23233"
+          style="
+            mask-image: url(&quot;assets/e25401ae-a825-4d4d-a228-bc71b5f3e882.svg&quot;);
+          "
+          data-name="image 1174"
+        >
+          <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <img
+              alt=""
+              class="absolute h-[99.95%] left-[-2.25%] max-w-none top-[0.05%] w-[105.03%]"
+              src="assets/ffdf642e-354d-4263-9105-f912730f01eb.png"
+            />
+          </div>
+        </div>
+        <div
+          class="absolute h-[609.644px] left-0 top-[10px] w-[962px]"
+          data-node-id="6118:23234"
+          data-name="image 1174"
+        >
+          <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <img
+              alt=""
+              class="absolute h-[99.95%] left-0 max-w-none top-[0.05%] w-full"
+              src="image/12.png"
+            />
+          </div>
+        </div>
+      </section>
+      <!-- ==================== THE GAMEPLAY  ·  "MOVE. FIGHT. MASTER." ==================== -->
+      <section
+        class="sec sec-gameplay"
+        style="position: relative; width: 1920px; height: 1147px"
+      >
+        <div
+          class="absolute h-[1080.574px] left-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-size-[1920px_1080.574px] opacity-25 top-[0px] w-[1920px]"
+          data-node-id="6118:22942"
+          style="
+            mask-image: url(&quot;assets/d1690dc1-d6ba-41b9-8fef-a58504b01f1d.svg&quot;);
+          "
+          data-name="image 945"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+            src="assets/748f2bac-92db-4cd1-8651-3ae12fd09909.png"
+          />
+        </div>
+        <p
+          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%-0.23px)] text-[26px] text-center text-white top-[290px] w-[903px]"
+          data-node-id="6118:23331"
+        >
+          Experience fast-paced action with movement, combat, and powerful
+          abilities. Jump, dash, fight, and adapt to overcome every challenge.
+        </p>
+        <p
+          class="-translate-x-1/2 [word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%+0.27px)] text-[120px] text-center text-white top-[114px] whitespace-nowrap"
+          data-node-id="6118:23333"
+        >
+          MOVE. FIGHT. MASTER.
+        </p>
+        <p
+          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+161.27px)] text-[#05eaf9] text-[24px] text-center top-[82px] tracking-[3.84px] whitespace-nowrap"
+          data-node-id="6118:23335"
+        >
+          THE GAMEPLAY
+        </p>
+        <div
+          class="absolute h-[9.451px] left-[calc(33.33%+144.27px)] top-[89px] w-[47px]"
+          data-node-id="6118:23336"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="icon/line3.png"
+          />
+        </div>
+        <div
+          class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+131.27px)] top-[89px] w-[47px]"
+          data-node-id="6118:23337"
+        >
+          <img
+            alt=""
+            class="block max-w-none size-full object-contain"
+            src="icon/line4.png"
+          />
+        </div>
+        <div
+          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11.73px)] top-[234px]"
+        >
+          <img
+            alt=""
+            class="block max-w-none h-[34px] w-[34px] object-contain"
+            src="icon/box.png"
+          />
+        </div>
+        <img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(50%+30.27px)] top-[244px]"
+          src="icon/line2.png"
+        /><img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(25%+153.27px)] top-[244px]"
+          src="icon/line1.png"
+        />
+        <div
+          class="-translate-x-1/2 absolute h-[519px] left-[calc(50%+0.27px)] top-[402px] w-[966.956px]"
+          data-node-id="6126:8624"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            height="519"
+            src="image/14.png"
+            width="966.956"
+          />
+        </div>
+        <div
+          class="absolute left-[calc(41.67%+136.91px)] size-[46.122px] top-[638.1px]"
+          data-node-id="6118:23374"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="assets/c878a407-aa97-49ac-9495-20ccf49d34b3.svg"
+          />
+        </div>
+        <div
+          class="absolute h-[403px] left-[calc(66.67%+26px)] top-[574px] w-[435px]"
+          data-node-id="6126:8618"
+          data-name="image 1184"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 max-w-none object-contain pointer-events-none size-full"
+            src="image/15.png"
+          />
+        </div>
+        <div
+          class="absolute h-[403px] left-[144px] top-[574px] w-[435px]"
+          data-node-id="6126:8623"
+          data-name="image 1184"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 max-w-none object-contain pointer-events-none size-full"
+            src="image/13.png"
+          />
+        </div>
+      </section>
+      <!-- ==================== NEWSLETTER  ·  "STAY UPDATED" / "NEWSLETTER" ==================== -->
+      <section
+        class="sec sec-newsletter"
+        style="position: relative; width: 1920px; height: 835px"
+      >
+        <div
+          class="absolute h-[614px] left-[calc(58.33%+96px)] top-[0px] w-[510px]"
+          data-node-id="6151:11431"
+          data-name="image 1195"
+        >
+          <img
+            alt=""
+            class="absolute inset-0 max-w-none object-bottom pointer-events-none size-full"
+            src="image/18.png"
+          />
+        </div>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(8.33%+79px)] text-[26px] text-white top-[360px] w-[628px]"
+          data-node-id="6151:11386"
+        >
+          Subscribe to get the latest news, events, updates, and exclusive
+          rewards reward's from PIXO.
+        </p>
+        <p
+          class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[130px] left-[calc(8.33%+79px)] text-[120px] text-white top-[174px] w-[616px]"
+          data-node-id="6151:11388"
+        >
+          NEWSLETTER
+        </p>
+        <p
+          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(8.33%+136px)] text-[#05eaf9] text-[24px] top-[142px] tracking-[3.84px] whitespace-nowrap"
+          data-node-id="6151:11390"
+        >
+          STAY UPDATED
+        </p>
+        <div
+          class="absolute h-[9.451px] left-[calc(8.33%+69px)] top-[149px] w-[47px]"
+          data-node-id="6151:11391"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            src="icon/line3.png"
+          />
+        </div>
+        <div
+          class="absolute flex h-[9.451px] items-center justify-center left-[calc(25%+48px)] top-[149px] w-[47px]"
+          data-node-id="6151:11392"
+        >
+          <img
+            alt=""
+            class="block max-w-none size-full object-contain"
+            src="icon/line4.png"
+          />
+        </div>
+        <div
+          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(16.67%+104px)] top-[304px]"
+        >
+          <img
+            alt=""
+            class="block max-w-none h-[34px] w-[34px] object-contain"
+            src="icon/box.png"
+          />
+        </div>
+        <img
+          alt=""
+          class="absolute block h-[4px] w-[179px] left-[calc(16.67%+143px)] top-[314px]"
+          src="icon/line2.png"
+        /><img
+          alt=""
+          class="absolute block h-[4px] w-[179px] left-[calc(8.33%+69px)] top-[314px]"
+          src="icon/line1.png"
+        />
+      </section>
+      <!-- ==================== FOOTER  ·  socials + copyright ==================== -->
+      <section
+        class="sec sec-footer"
+        style="position: relative; width: 1920px; height: 635px"
+      >
+        <div
+          class="-translate-x-1/2 absolute h-[634.96px] left-[calc(50%-0.05px)] top-[0px] w-[1920.108px]"
+          data-node-id="6151:12660"
+        >
+          <img
+            alt=""
+            class="absolute block inset-0 max-w-none size-full"
+            height="634.96"
+            src="image/footer.png"
+            width="1920.108"
+          />
+        </div>
+        <a
+          href="#"
+          aria-label="PIXO home"
+          class="absolute block h-[112px] left-[calc(33.33%+143px)] top-[87px] w-[326px]"
+          data-node-id="6151:11434"
+        >
+          <img
+            alt="PIXO"
+            class="block max-w-none size-full object-contain"
+            src="image/logo.png"
+          />
+        </a>
+        <div
+          class="-translate-x-1/2 absolute h-0 left-[calc(50%+0.5px)] top-[493px] w-[1319px]"
+          data-node-id="6151:12664"
+        >
+          <div class="absolute inset-[-1.5px_0_0_0]">
+            <img
+              alt=""
+              class="block max-w-none size-full"
+              src="assets/125166e4-2b16-4f0a-a772-b490fa33df0c.svg"
+            />
+          </div>
+        </div>
+        <a
+          href="#"
+          aria-label="Facebook"
+          class="absolute left-[calc(58.33%-21.34px)] size-[61.012px] top-[381.99px]"
+          data-node-id="6151:11450"
+          data-name="3d icon facebook"
+        >
+          <img
+            alt="Facebook"
+            class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+            src="icon/facebook.png"
+          /> </a
+        ><a
+          href="#"
+          aria-label="Discord"
+          class="absolute left-[calc(41.67%+129.25px)] size-[61.012px] top-[381.99px]"
+          data-node-id="6151:11452"
+          data-name="3d icon discord"
+        >
+          <img
+            alt="Discord"
+            class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+            src="icon/discord.png"
+          /> </a
+        ><a
+          href="#"
+          aria-label="WhatsApp"
+          class="absolute left-[calc(50%+53.96px)] size-[61.012px] top-[381.99px]"
+          data-node-id="6151:11453"
+          data-name="3d icon whatsapp"
+        >
+          <img
+            alt="WhatsApp"
+            class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+            src="icon/whatsapp.png"
+          /> </a
+        ><a
+          href="#"
+          aria-label="Instagram"
+          class="absolute left-[calc(33.33%+119.84px)] size-[61.012px] top-[381.99px]"
+          data-node-id="6151:11454"
+          data-name="instagram"
+        >
+          <img
+            alt="Instagram"
+            class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+            src="icon/instagram.png"
+          /> </a
+        ><a
+          href="#"
+          aria-label="LinkedIn"
+          class="absolute left-[calc(41.67%+44.55px)] size-[61.012px] top-[381.99px]"
+          data-node-id="6151:11455"
+          data-name="linkedin"
+        >
+          <img
+            alt="LinkedIn"
+            class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+            src="icon/linkedin.png"
+          />
+        </a>
+        <p
+          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-1/2 text-[26px] text-center text-white top-[275px] w-[894px]"
+          data-node-id="6151:11465"
+        >
+          PIXO is a fast-paced open-world adventure packed with exciting
+          battles, unique abilities, and worlds waiting to be discovered.
+        </p>
+        <div
+          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[222px]"
+        >
+          <img
+            alt=""
+            class="block max-w-none h-[34px] w-[34px] object-contain"
+            src="icon/box.png"
+          />
+        </div>
+        <img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[232px]"
+          src="icon/line2.png"
+        /><img
+          alt=""
+          class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[232px]"
+          src="icon/line1.png"
+        />
+        <p
+          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-1/2 text-[26px] text-center text-white top-[512px] w-[696px]"
+          data-node-id="6151:12670"
+        >
+          @ 2026 PIXO. All Rights Reserved.
+        </p>
+      </section>
+    </main>
+
+    <!-- ============================ MOBILE VERSION ============================ -->
+    <div class="mobile-site">
+      <!-- HERO -->
+      <section class="m-hero">
+        <div class="m-hero-content">
+          <a href="#" class="m-hero-logo"
+            ><img src="image/logo.png" alt="PIXO"
+          /></a>
+          <div class="m-eyebrow">
+            <img src="icon/line3.png" alt="" /><span>An Adventure Awaits</span
+            ><img src="icon/line4.png" alt="" />
+          </div>
+          <h1 class="m-title">Beyond<br />The Horizon</h1>
+          <div class="m-flourish">
+            <img class="ln" src="icon/line1.png" alt="" /><img
+              class="dot"
+              src="icon/box.png"
+              alt=""
+            /><img class="ln" src="icon/line2.png" alt="" />
+          </div>
+          <p class="m-lead">
+            A world of discovery, danger, and unexpected challenges awaits.
+            Follow PIXO beyond the horizon and uncover what lies ahead.
+          </p>
+          <a href="#" class="m-btn"
+            ><span class="ic"
+              ><i
+                ><svg width="12" height="14" viewBox="0 0 12 14" fill="none">
+                  <path
+                    d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z"
+                    fill="#fff"
+                  ></path></svg></i></span
+            >PLAY DEMO</a
+          >
+        </div>
+        <div class="m-hero-art"><img src="image/1.png" alt="" /></div>
+      </section>
+
+      <!-- THIS IS PIXO -->
+      <section class="m-wrap m-sec">
+        <div class="m-eyebrow">
+          <img src="icon/line3.png" alt="" /><span>Meet PIXO</span
+          ><img src="icon/line4.png" alt="" />
+        </div>
+        <div class="m-titlerow">
+          <h1 class="m-title">This Is PIXO</h1>
+        </div>
+        <span class="m-fl-mini"
+          ><img class="ln" src="icon/line1.png" alt="" /><img
+            class="dot"
+            src="icon/box.png"
+            alt="" /><img class="ln" src="icon/line2.png" alt=""
+        /></span>
+
+        <p class="m-sub">Every Adventure Needs A Hero</p>
+        <p class="m-lead">
+          Curious by nature, fearless by design. PIXO is ready to explore a
+          world of mystery, challenge, and adventure.
+        </p>
+        <a href="#" class="m-btn"
+          ><span class="ic"
+            ><i
+              ><svg width="12" height="14" viewBox="0 0 12 14" fill="none">
+                <path
+                  d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z"
+                  fill="#fff"
+                ></path></svg></i></span
+          >WATCH TRAILER</a
+        >
+      </section>
+      <div class="m-photo"><img src="image/2.png" alt="" /></div>
+
+      <!-- THE WORLD -->
+      <section class="m-wrap m-sec">
+        <div class="m-eyebrow c">
+          <img src="icon/line3.png" alt="" /><span>The World</span
+          ><img src="icon/line4.png" alt="" />
+        </div>
+        <h1 class="m-title c">A World Beyond<br />The Horizon</h1>
+        <div class="m-flourish c">
+          <img class="ln" src="icon/line1.png" alt="" /><img
+            class="dot"
+            src="icon/box.png"
+            alt=""
+          /><img class="ln" src="icon/line2.png" alt="" />
+        </div>
+        <p class="m-lead c">
+          Curious by nature, fearless by design. PIXO is ready to explore a
+          world of mystery, challenge, and adventure.
+        </p>
+        <div class="m-crsl" id="wcMountM">
+          <img
+            class="crsl-arw l"
+            data-wc="prev-btn"
+            src="icon/1.png"
+            alt="Previous"
+            role="button"
+            tabindex="0"
+          />
+          <img
+            class="crsl-arw r"
+            data-wc="next-btn"
+            src="icon/2.png"
+            alt="Next"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+        <p class="m-cardlabel" data-wc="label">Wild Fronttiers</p>
+        <p class="m-lead c" style="margin-bottom: 0" data-wc="desc">
+          Lush forests, floating island and untamed lands full of life and
+          wonder.
+        </p>
+      </section>
+
+      <!-- ABILITIES -->
+      <section class="m-wrap m-sec">
+        <div class="m-eyebrow c">
+          <img src="icon/line3.png" alt="" /><span>Abilities</span
+          ><img src="icon/line4.png" alt="" />
+        </div>
+        <h1 class="m-title c">Built To Break<br />The Rules</h1>
+        <div class="m-flourish c">
+          <img class="ln" src="icon/line1.png" alt="" /><img
+            class="dot"
+            src="icon/box.png"
+            alt=""
+          /><img class="ln" src="icon/line2.png" alt="" />
+        </div>
+        <p class="m-lead c">
+          Master PIXO’s unique abilities to move faster, fight smarter, and
+          overcome challenges in unexpected ways.
+        </p>
+        <div class="m-crsl abil" id="acMountM">
+          <img
+            class="crsl-arw l"
+            data-ac="prev-btn"
+            src="icon/1.png"
+            alt="Previous"
+            role="button"
+            tabindex="0"
+          />
+          <img
+            class="crsl-arw r"
+            data-ac="next-btn"
+            src="icon/2.png"
+            alt="Next"
+            role="button"
+            tabindex="0"
+          />
+        </div>
+        <p class="m-cardlabel" data-ac="label">Time Bubble</p>
+        <p class="m-lead c" style="margin-bottom: 0" data-ac="desc">
+          Freeze time within a localized bubble, slowing enemies and creating
+          the perfect moment to strike.
+        </p>
+      </section>
+
+      <!-- ENEMIES -->
+      <section class="m-wrap m-sec">
+        <div class="m-eyebrow">
+          <img src="icon/line3.png" alt="" /><span>Enemies</span
+          ><img src="icon/line4.png" alt="" />
+        </div>
+        <h1 class="m-title">Nothing Stays<br />Undefeated</h1>
+        <div class="m-flourish">
+          <img class="ln" src="icon/line1.png" alt="" /><img
+            class="dot"
+            src="icon/box.png"
+            alt=""
+          /><img class="ln" src="icon/line2.png" alt="" />
+        </div>
+        <p class="m-lead">
+          Dangerous machines and mysterious creatures stand between PIXO and the
+          unknown. Learn their patterns, exploit their weaknesses, and fight
+          your way forward.
+        </p>
+        <a href="#" class="m-btn"
+          ><span class="ic"
+            ><i
+              ><svg width="12" height="14" viewBox="0 0 12 14" fill="none">
+                <path
+                  d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z"
+                  fill="#fff"
+                ></path></svg></i></span
+          >WATCH TRAILER</a
+        >
+      </section>
+      <div class="m-photo"><img src="image/12.png" alt="" /></div>
+
+      <!-- GAMEPLAY -->
+      <section class="m-wrap m-sec">
+        <div class="m-eyebrow c">
+          <img src="icon/line3.png" alt="" /><span>The Gameplay</span
+          ><img src="icon/line4.png" alt="" />
+        </div>
+        <h1 class="m-title c">Move. Fight.<br />Master.</h1>
+        <div class="m-flourish c">
+          <img class="ln" src="icon/line1.png" alt="" /><img
+            class="dot"
+            src="icon/box.png"
+            alt=""
+          /><img class="ln" src="icon/line2.png" alt="" />
+        </div>
+        <p class="m-lead c">
+          Experience fast-paced action with movement, combat, and powerful
+          abilities. Jump, dash, fight, and adapt to overcome every challenge.
+        </p>
+      </section>
+      <div class="m-gp">
+        <img class="flank l" src="image/13.png" alt="" />
+        <img class="m-img" src="image/14.png" alt="" />
+        <img class="flank r" src="image/15.png" alt="" />
+      </div>
+
+      <!-- NEWSLETTER -->
+      <section class="m-wrap m-sec">
+        <div class="m-eyebrow">
+          <img src="icon/line3.png" alt="" /><span>Stay Updated</span
+          ><img src="icon/line4.png" alt="" />
+        </div>
+        <h1 class="m-title">Newsletter</h1>
+        <div class="m-flourish">
+          <img class="ln" src="icon/line1.png" alt="" /><img
+            class="dot"
+            src="icon/box.png"
+            alt=""
+          /><img class="ln" src="icon/line2.png" alt="" />
+        </div>
+        <p class="m-lead">
+          Subscribe to get the latest news, events, updates, and exclusive
+          rewards reward’s from PIXO.
+        </p>
+        <label class="m-field"
+          ><img src="icon/email.png" alt="" /><input
+            type="email"
+            placeholder="Enter your mail"
+        /></label>
+        <a href="#" class="m-btn"
+          ><span class="ic"
+            ><i
+              ><svg width="12" height="14" viewBox="0 0 12 14" fill="none">
+                <path
+                  d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z"
+                  fill="#fff"
+                ></path></svg></i></span
+          >SUBSCRIBE</a
+        >
+      </section>
+      <div class="m-photo"><img src="image/18.png" alt="" /></div>
+
+      <!-- FOOTER -->
+      <footer class="m-footer">
+        <img class="flogo" src="image/logo.png" alt="PIXO" />
+        <div class="m-flourish c" style="margin: 6px 0 14px">
+          <img class="ln" src="icon/line1.png" alt="" /><img
+            class="dot"
+            src="icon/box.png"
+            alt=""
+          /><img class="ln" src="icon/line2.png" alt="" />
+        </div>
+        <p class="m-lead c" style="margin-bottom: 0">
+          PIXO is a fast-paced open-world adventure packed with exciting
+          battles, unique abilities, and worlds waiting to be discovered.
+        </p>
+        <div class="m-social">
+          <a href="#" aria-label="Instagram"
+            ><img src="icon/instagram.png" alt="Instagram"
+          /></a>
+          <a href="#" aria-label="LinkedIn"
+            ><img src="icon/linkedin.png" alt="LinkedIn"
+          /></a>
+          <a href="#" aria-label="Discord"
+            ><img src="icon/discord.png" alt="Discord"
+          /></a>
+          <a href="#" aria-label="WhatsApp"
+            ><img src="icon/whatsapp.png" alt="WhatsApp"
+          /></a>
+          <a href="#" aria-label="Facebook"
+            ><img src="icon/facebook.png" alt="Facebook"
+          /></a>
+        </div>
+        <p class="m-copy">© 2026 PIXO. All Rights Reserved.</p>
+      </footer>
+    </div>
+
+    <script>
       (function () {
-        var q = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
-        var SLIDE_MS = 550, EASE = 'cubic-bezier(.4,0,.2,1)';
+        var DESIGN_W = 1920;
+        var main = document.querySelector("main");
+        var scale = 1;
+        // total design height = sum of the stacked <section> blocks (measured, so editing a
+        // section's height never needs a constant updated here)
+        function designH() {
+          return main ? main.offsetHeight : 7831;
+        }
 
-        // items: [{img,label,desc}]. mounts: [{el, widthPct, gap}]. All mounts + labels + descs
-        // stay in sync off one shared index. The track holds 3 copies of the items so it can
-        // slide forever; after each move it snaps (no transition) back into the middle copy.
-        function build(cfg) {
-          var items = cfg.items, n = items.length;
-          if (n < 2) return;
-          var mounts = cfg.mounts.filter(function (m) { return m.el; });
-          if (!mounts.length) return;
-          var labels = q(cfg.labels), descs = q(cfg.descs);
-          var index = n, busy = false;
+        // Scale the fixed 1920px design to always fill the full viewport width (up or down).
+        // <body> is sized to the scaled design so the browser produces exactly one scrollbar.
+        function fit() {
+          var vw = document.documentElement.clientWidth || window.innerWidth;
+          // Below 768px the dedicated .mobile-site layout takes over (CSS media query).
+          if (vw < 768) {
+            if (main) main.style.transform = "";
+            document.body.style.width = "";
+            document.body.style.height = "";
+            return;
+          }
+          scale = vw / DESIGN_W;
+          var h = designH();
+          if (main) main.style.transform = "scale(" + scale + ")";
+          document.body.style.width = DESIGN_W * scale + "px";
+          document.body.style.height = h * scale + "px";
+        }
+        fit();
+        window.addEventListener("resize", fit);
+        window.addEventListener("orientationchange", fit);
+        window.addEventListener("load", fit);
 
-          mounts.forEach(function (m) {
-            var vp = document.createElement('div'); vp.className = 'crsl-vp';
-            var track = document.createElement('div'); track.className = 'crsl-track';
-            items.concat(items, items).forEach(function (it) {
-              var s = document.createElement('div'); s.className = 'crsl-slide';
-              var im = document.createElement('img'); im.src = it.img; im.alt = it.label || '';
-              s.appendChild(im); track.appendChild(s);
+        // ================= real sliding carousels (a track that translates) =================
+        (function () {
+          var q = function (sel, root) {
+            return Array.prototype.slice.call(
+              (root || document).querySelectorAll(sel),
+            );
+          };
+          var SLIDE_MS = 550,
+            EASE = "cubic-bezier(.4,0,.2,1)";
+
+          // items: [{img,label,desc}]. mounts: [{el, widthPct, gap}]. All mounts + labels + descs
+          // stay in sync off one shared index. The track holds 3 copies of the items so it can
+          // slide forever; after each move it snaps (no transition) back into the middle copy.
+          function build(cfg) {
+            var items = cfg.items,
+              n = items.length;
+            if (n < 2) return;
+            var mounts = cfg.mounts.filter(function (m) {
+              return m.el;
             });
-            vp.appendChild(track); m.el.appendChild(vp);
-            m.vp = vp; m.track = track; m.slides = q('.crsl-slide', track);
+            if (!mounts.length) return;
+            var labels = q(cfg.labels),
+              descs = q(cfg.descs);
+            var index = n,
+              busy = false;
+
+            mounts.forEach(function (m) {
+              var vp = document.createElement("div");
+              vp.className = "crsl-vp";
+              var track = document.createElement("div");
+              track.className = "crsl-track";
+              items.concat(items, items).forEach(function (it) {
+                var s = document.createElement("div");
+                s.className = "crsl-slide";
+                var im = document.createElement("img");
+                im.src = it.img;
+                im.alt = it.label || "";
+                s.appendChild(im);
+                track.appendChild(s);
+              });
+              vp.appendChild(track);
+              m.el.appendChild(vp);
+              m.vp = vp;
+              m.track = track;
+              m.slides = q(".crsl-slide", track);
+            });
+
+            function layout(m) {
+              var vw = m.vp.clientWidth || 1;
+              m.w = Math.max(40, Math.round(vw * m.widthPct));
+              m.slides.forEach(function (s) {
+                s.style.width = m.w + "px";
+                s.style.marginRight = m.gap + "px";
+              });
+            }
+            // depth ramp by distance from the centre slide (index 0 = active)
+            var SCALE = cfg.scale || [1, 0.78, 0.6, 0.5];
+            var DROP = cfg.drop || [0, 0, 0, 0]; // arc sink per ring, as a fraction of slide width
+            var PULL = cfg.pull || 0; // pull toward centre per ring, fraction of slide width
+            var DIM = cfg.dim || [1, 0.82, 0.58, 0.5];
+            var FADE = cfg.fade || [1, 0.95, 0.62, 0];
+            var ramp = function (a, d) {
+              return a[Math.min(d, a.length - 1)];
+            };
+
+            function place(animate) {
+              mounts.forEach(function (m) {
+                var vw = m.vp.clientWidth;
+                var x = Math.round(vw / 2 - m.w / 2 - index * (m.w + m.gap));
+                m.track.style.transition = animate
+                  ? "transform " + SLIDE_MS + "ms " + EASE
+                  : "none";
+                m.track.style.transform = "translate3d(" + x + "px,0,0)";
+                if (!animate) {
+                  m.slides.forEach(function (s) {
+                    s.style.transition = "none";
+                  });
+                  void m.track.offsetHeight;
+                  m.slides.forEach(function (s) {
+                    s.style.transition = "";
+                  });
+                }
+                m.slides.forEach(function (s, k) {
+                  var rel = k - index,
+                    d = Math.abs(rel),
+                    sc = ramp(SCALE, d);
+                  var tx =
+                    rel === 0
+                      ? 0
+                      : -Math.sign(rel) * Math.min(d, 3) * PULL * m.w;
+                  var ty = ramp(DROP, d) * m.w;
+                  s.style.transform =
+                    "translate(" +
+                    tx.toFixed(1) +
+                    "px," +
+                    ty.toFixed(1) +
+                    "px) scale(" +
+                    sc +
+                    ")";
+                  s.style.opacity = ramp(FADE, d);
+                  s.style.filter =
+                    d === 0
+                      ? "none"
+                      : "saturate(.9) brightness(" + ramp(DIM, d) + ")";
+                  s.style.zIndex = 20 - d;
+                  s.classList.toggle("is-active", rel === 0);
+                });
+              });
+              var it = items[((index % n) + n) % n];
+              labels.forEach(function (el) {
+                el.textContent = it.label;
+              });
+              descs.forEach(function (el) {
+                el.textContent = it.desc;
+              });
+            }
+            function go(dir) {
+              if (busy) return;
+              busy = true;
+              index += dir;
+              place(true);
+              var t = mounts[0].track,
+                fired = false;
+              function done(e) {
+                if (fired || (e && e.target !== t)) return;
+                fired = true;
+                t.removeEventListener("transitionend", done);
+                if (index < n) index += n;
+                else if (index >= 2 * n) index -= n;
+                place(false);
+                busy = false;
+              }
+              t.addEventListener("transitionend", done);
+              setTimeout(function () {
+                done();
+              }, SLIDE_MS + 120);
+            }
+            function bind(sel, dir) {
+              q(sel).forEach(function (b) {
+                b.addEventListener("click", function (e) {
+                  e.preventDefault();
+                  go(dir);
+                });
+                b.addEventListener("keydown", function (e) {
+                  if (
+                    e.key === "Enter" ||
+                    e.key === " " ||
+                    e.key === "Spacebar"
+                  ) {
+                    e.preventDefault();
+                    go(dir);
+                  }
+                });
+              });
+            }
+            function relayout() {
+              mounts.forEach(layout);
+              place(false);
+            }
+            bind(cfg.prev, -1);
+            bind(cfg.next, 1);
+            relayout();
+            window.addEventListener("resize", relayout);
+            window.addEventListener("load", relayout);
+          }
+
+          build({
+            prev: '[data-wc="prev-btn"]',
+            next: '[data-wc="next-btn"]',
+            labels: '[data-wc="label"]',
+            descs: '[data-wc="desc"]',
+            scale: [1, 0.82, 0.82, 0.8],
+            dim: [1, 0.5, 0.5, 0.5],
+            fade: [1, 0.9, 0.5, 0],
+            mounts: [
+              {
+                el: document.getElementById("wcMount"),
+                widthPct: 0.345,
+                gap: 44,
+              },
+              {
+                el: document.getElementById("wcMountM"),
+                widthPct: 0.74,
+                gap: 10,
+              },
+            ],
+            items: [
+              {
+                img: "image/4.png",
+                label: "WILD FRONTTIERS",
+                desc: "Lush forests, floating island and untamed lands full of life and wonder.",
+              },
+              {
+                img: "image/3.png",
+                label: "COMING SOON",
+                desc: "A new realm is being forged — explore what lies beyond, very soon.",
+              },
+              {
+                img: "image/3.png",
+                label: "COMING SOON",
+                desc: "More worlds await discovery. Stay tuned for the next frontier.",
+              },
+            ],
           });
 
-          function layout(m) {
-            var vw = m.vp.clientWidth || 1;
-            m.w = Math.max(40, Math.round(vw * m.widthPct));
-            m.slides.forEach(function (s) { s.style.width = m.w + 'px'; s.style.marginRight = m.gap + 'px'; });
-          }
-          // depth ramp by distance from the centre slide (index 0 = active)
-          var SCALE = cfg.scale || [1, 0.78, 0.6, 0.5];
-          var DROP  = cfg.drop  || [0, 0, 0, 0];      // arc sink per ring, as a fraction of slide width
-          var PULL  = cfg.pull  || 0;                 // pull toward centre per ring, fraction of slide width
-          var DIM   = cfg.dim   || [1, 0.82, 0.58, 0.5];
-          var FADE  = cfg.fade  || [1, 0.95, 0.62, 0];
-          var ramp = function (a, d) { return a[Math.min(d, a.length - 1)]; };
+          build({
+            prev: '[data-ac="prev-btn"]',
+            next: '[data-ac="next-btn"]',
+            labels: '[data-ac="label"]',
+            descs: '[data-ac="desc"]',
+            scale: [1, 0.9, 0.82, 0.72, 0.66],
+            drop: [0, 0.08, 0.16, 0.2, 0.22],
+            pull: 0.02,
+            dim: [1, 0.96, 0.84, 0.62, 0.5],
+            fade: [1, 1, 0.9, 0.5, 0],
+            mounts: [
+              {
+                el: document.getElementById("acMount"),
+                widthPct: 0.145,
+                gap: 24,
+              },
+              {
+                el: document.getElementById("acMountM"),
+                widthPct: 0.4,
+                gap: 2,
+              },
+            ],
+            items: [
+              {
+                img: "image/8-1.png",
+                label: "TIME BUBBLE",
+                desc: "Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.",
+              },
+              {
+                img: "image/8.png",
+                label: "EMBER STRIKE",
+                desc: "Ignite your fists and hammer down a lingering trail of scorching flame.",
+              },
+              {
+                img: "image/9.png",
+                label: "CRIMSON WARD",
+                desc: "Raise a barrier of hardened plasma that reflects incoming fire back at attackers.",
+              },
+              {
+                img: "image/10.png",
+                label: "STATIC SURGE",
+                desc: "Charge the air with lightning, chaining bolts between every enemy in range.",
+              },
+              {
+                img: "image/5.png",
+                label: "PHASE BLAST",
+                desc: "Unleash a burst of void energy that pierces armour and knocks foes off balance.",
+              },
+              {
+                img: "image/6.png",
+                label: "OVERGROWTH",
+                desc: "Summon living vines that root enemies in place while healing nearby allies.",
+              },
+              {
+                img: "image/7.png",
+                label: "PULSE DASH",
+                desc: "Blink through space in a shockwave, damaging every enemy along your path.",
+              },
+            ],
+          });
+        })();
 
-          function place(animate) {
-            mounts.forEach(function (m) {
-              var vw = m.vp.clientWidth;
-              var x = Math.round(vw / 2 - m.w / 2 - index * (m.w + m.gap));
-              m.track.style.transition = animate ? ('transform ' + SLIDE_MS + 'ms ' + EASE) : 'none';
-              m.track.style.transform = 'translate3d(' + x + 'px,0,0)';
-              if (!animate) {
-                m.slides.forEach(function (s) { s.style.transition = 'none'; });
-                void m.track.offsetHeight;
-                m.slides.forEach(function (s) { s.style.transition = ''; });
-              }
-              m.slides.forEach(function (s, k) {
-                var rel = k - index, d = Math.abs(rel), sc = ramp(SCALE, d);
-                var tx = rel === 0 ? 0 : (-Math.sign(rel) * Math.min(d, 3) * PULL * m.w);
-                var ty = ramp(DROP, d) * m.w;
-                s.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) scale(' + sc + ')';
-                s.style.opacity = ramp(FADE, d);
-                s.style.filter = d === 0 ? 'none' : 'saturate(.9) brightness(' + ramp(DIM, d) + ')';
-                s.style.zIndex = 20 - d;
-                s.classList.toggle('is-active', rel === 0);
-              });
-            });
-            var it = items[((index % n) + n) % n];
-            labels.forEach(function (el) { el.textContent = it.label; });
-            descs.forEach(function (el) { el.textContent = it.desc; });
-          }
-          function go(dir) {
-            if (busy) return;
-            busy = true;
-            index += dir;
-            place(true);
-            var t = mounts[0].track, fired = false;
-            function done(e) {
-              if (fired || (e && e.target !== t)) return;
-              fired = true;
-              t.removeEventListener('transitionend', done);
-              if (index < n) index += n; else if (index >= 2 * n) index -= n;
-              place(false);
-              busy = false;
-            }
-            t.addEventListener('transitionend', done);
-            setTimeout(function () { done(); }, SLIDE_MS + 120);
-          }
-          function bind(sel, dir) {
-            q(sel).forEach(function (b) {
-              b.addEventListener('click', function (e) { e.preventDefault(); go(dir); });
-              b.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); go(dir); }
-              });
-            });
-          }
-          function relayout() { mounts.forEach(layout); place(false); }
-          bind(cfg.prev, -1); bind(cfg.next, 1);
-          relayout();
-          window.addEventListener('resize', relayout);
-          window.addEventListener('load', relayout);
+        // ---- nav: active underline + smooth scroll ----
+        var links = Array.prototype.slice.call(
+          document.querySelectorAll(".nav-link"),
+        );
+        var bar = document.getElementById("navUnderline");
+        if (!bar || !links.length) return;
+
+        function moveBar(el) {
+          bar.style.left = el.offsetLeft + "px";
+          bar.style.width = el.offsetWidth + "px";
+        }
+        function activate(el) {
+          links.forEach(function (l) {
+            l.classList.remove("is-active");
+          });
+          el.classList.add("is-active");
+          moveBar(el);
         }
 
-        build({
-          prev: '[data-wc="prev-btn"]', next: '[data-wc="next-btn"]',
-          labels: '[data-wc="label"]', descs: '[data-wc="desc"]',
-          scale: [1, 0.82, 0.82, 0.8], dim: [1, 0.5, 0.5, 0.5], fade: [1, 0.9, 0.5, 0],
-          mounts: [
-            { el: document.getElementById('wcMount'),  widthPct: 0.345, gap: 44 },
-            { el: document.getElementById('wcMountM'), widthPct: 0.74, gap: 10 }
-          ],
-          items: [
-            { img: 'image/4.png', label: 'WILD FRONTTIERS', desc: 'Lush forests, floating island and untamed lands full of life and wonder.' },
-            { img: 'image/3.png', label: 'COMING SOON', desc: 'A new realm is being forged — explore what lies beyond, very soon.' },
-            { img: 'image/3.png', label: 'COMING SOON', desc: 'More worlds await discovery. Stay tuned for the next frontier.' }
-          ]
+        links.forEach(function (l) {
+          l.addEventListener("click", function () {
+            activate(l);
+            var y = parseInt(l.getAttribute("data-scroll"), 10);
+            if (!isNaN(y))
+              window.scrollTo({
+                top: Math.round(y * scale),
+                behavior: "smooth",
+              });
+          });
         });
 
-        build({
-          prev: '[data-ac="prev-btn"]', next: '[data-ac="next-btn"]',
-          labels: '[data-ac="label"]', descs: '[data-ac="desc"]',
-          scale: [1, 0.9, 0.82, 0.72, 0.66],
-          drop:  [0, 0.08, 0.16, 0.2, 0.22],
-          pull:  0.02,
-          dim:   [1, 0.96, 0.84, 0.62, 0.5],
-          fade:  [1, 1, 0.9, 0.5, 0],
-          mounts: [
-            { el: document.getElementById('acMount'),  widthPct: 0.145, gap: 24 },
-            { el: document.getElementById('acMountM'), widthPct: 0.4, gap: 2 }
-          ],
-          items: [
-            { img: 'image/8-1.png', label: 'TIME BUBBLE',   desc: 'Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.' },
-            { img: 'image/8.png',   label: 'EMBER STRIKE',  desc: 'Ignite your fists and hammer down a lingering trail of scorching flame.' },
-            { img: 'image/9.png',   label: 'CRIMSON WARD',  desc: 'Raise a barrier of hardened plasma that reflects incoming fire back at attackers.' },
-            { img: 'image/10.png',  label: 'STATIC SURGE',  desc: 'Charge the air with lightning, chaining bolts between every enemy in range.' },
-            { img: 'image/5.png',   label: 'PHASE BLAST',   desc: 'Unleash a burst of void energy that pierces armour and knocks foes off balance.' },
-            { img: 'image/6.png',   label: 'OVERGROWTH',    desc: 'Summon living vines that root enemies in place while healing nearby allies.' },
-            { img: 'image/7.png',   label: 'PULSE DASH',    desc: 'Blink through space in a shockwave, damaging every enemy along your path.' }
-          ]
+        var current = document.querySelector(".nav-link.is-active") || links[0];
+        moveBar(current);
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            bar.style.transition =
+              "left .35s cubic-bezier(.4,0,.2,1), width .35s cubic-bezier(.4,0,.2,1)";
+          });
+        });
+
+        window.addEventListener("resize", function () {
+          var prev = bar.style.transition;
+          bar.style.transition = "none";
+          moveBar(document.querySelector(".nav-link.is-active") || current);
+          requestAnimationFrame(function () {
+            bar.style.transition = prev;
+          });
         });
       })();
-
-      // ---- nav: active underline + smooth scroll ----
-      var links = Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
-      var bar = document.getElementById('navUnderline');
-      if (!bar || !links.length) return;
-
-      function moveBar(el) {
-        bar.style.left = el.offsetLeft + 'px';
-        bar.style.width = el.offsetWidth + 'px';
-      }
-      function activate(el) {
-        links.forEach(function (l) { l.classList.remove('is-active'); });
-        el.classList.add('is-active');
-        moveBar(el);
-      }
-
-      links.forEach(function (l) {
-        l.addEventListener('click', function () {
-          activate(l);
-          var y = parseInt(l.getAttribute('data-scroll'), 10);
-          if (!isNaN(y)) window.scrollTo({ top: Math.round(y * scale), behavior: 'smooth' });
-        });
-      });
-
-      var current = document.querySelector('.nav-link.is-active') || links[0];
-      moveBar(current);
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          bar.style.transition = 'left .35s cubic-bezier(.4,0,.2,1), width .35s cubic-bezier(.4,0,.2,1)';
-        });
-      });
-
-      window.addEventListener('resize', function () {
-        var prev = bar.style.transition;
-        bar.style.transition = 'none';
-        moveBar(document.querySelector('.nav-link.is-active') || current);
-        requestAnimationFrame(function () { bar.style.transition = prev; });
-      });
-    })();
-  </script>
-</body>
+    </script>
+  </body>
 </html>
