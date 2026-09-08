@@ -80,12 +80,12 @@
 
       /* ---- section-divider mark (replaces icon/box.png + icon/line1.png + icon/line2.png) ---- */
       .hr-box {
-        width: 13px;
-        height: 13px;
+        width: 16px;
+        height: 16px;
+        transform: rotate(45deg); /* diamond — 16px square ≈ 23px across the points */
         background: #f8b751;
-        mix-blend-mode: plus-lighter;
-        backdrop-filter: blur(1.35px);
-        -webkit-backdrop-filter: blur(1.35px);
+        backdrop-filter: blur(2.44px);
+        -webkit-backdrop-filter: blur(2.44px);
         box-shadow: 0 0 9px 1px rgba(248, 183, 81, 0.55);
       }
       .hr-line-r {
@@ -774,7 +774,7 @@
         flex: 1 1 auto;
         min-width: 0;
         max-width: 157px;
-        height: 0.8px;
+        height: 1.5px; /* 0.8px renders as nothing on 1x screens */
       }
       /* hero keeps the original short left-aligned accent */
       .m-hero .m-flourish .ln {
@@ -787,6 +787,7 @@
         height: 11px;
         width: 11px;
         flex: none;
+        transform: rotate(45deg); /* diamond, same as .hr-box */
         background: #f8b751;
         box-shadow: 0 0 7px 1px rgba(248, 183, 81, 0.55);
       }
@@ -808,13 +809,14 @@
         flex: 1 1 auto;
         min-width: 0;
         max-width: 157px;
-        height: 0.8px;
+        height: 1.5px; /* 0.8px renders as nothing on 1x screens */
       }
       .m-fl-mini .dot {
         display: block;
         height: 11px;
         width: 11px;
         flex: none;
+        transform: rotate(45deg); /* diamond, same as .hr-box */
         background: #f8b751;
         box-shadow: 0 0 7px 1px rgba(248, 183, 81, 0.55);
       }
