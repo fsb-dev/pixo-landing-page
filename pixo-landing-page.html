@@ -740,19 +740,24 @@
       }
       .m-flourish .ln {
         display: block;
-        height: 2px;
-        width: 68px;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 157px;
+        height: 0.8px;
       }
+      /* hero keeps the original short left-aligned accent */
       .m-hero .m-flourish .ln {
+        flex: none;
         width: 75px;
+        height: 2px;
       }
       .m-flourish .dot {
         display: block;
-        height: 13px;
-        width: 13px;
+        height: 11px;
+        width: 11px;
         flex: none;
         background: #f8b751;
-        box-shadow: 0 0 9px 1px rgba(248, 183, 81, 0.55);
+        box-shadow: 0 0 7px 1px rgba(248, 183, 81, 0.55);
       }
       /* title with a compact flourish tucked to its right */
       .m-titlerow {
@@ -769,8 +774,10 @@
       }
       .m-fl-mini .ln {
         display: block;
-        height: 2px;
-        width: 75px;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 157px;
+        height: 0.8px;
       }
       .m-fl-mini .dot {
         display: block;
@@ -1116,16 +1123,18 @@
               "
             >
               <svg
-                width="14"
+                width="16"
                 height="16"
-                viewBox="0 0 14 16"
+                viewBox="0 0 16 16"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                style="margin-left: 2px"
               >
                 <path
-                  d="M1 1.3C1 0.5 1.9 0 2.6 0.5L12.5 7.2C13.1 7.6 13.1 8.4 12.5 8.8L2.6 15.5C1.9 16 1 15.5 1 14.7V1.3Z"
-                  fill="#ffffff"
+                  d="M8 1.5V10M8 10L11 7M8 10L5 7M3 13.5H13"
+                  stroke="#ffffff"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 ></path>
               </svg>
             </span>

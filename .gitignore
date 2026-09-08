@@ -1,0 +1,16 @@
+# Large game build archives — keep out of git (use external storage / LFS)
+*.zip
+PixoGame.zip
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.vscode/
+.idea/
+
+# Temp / scratch
+/tmp/
+*.log
