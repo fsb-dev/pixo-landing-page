@@ -175,6 +175,135 @@
         color: #fff;
       }
 
+      /* ================= ABILITIES section ================= */
+      /* three blocks: the heading (.a-head), the carousel stage (#acMount), the caption (.a-caption) */
+      .sec-abilities .a-head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .sec-abilities .a-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+        font-size: 24px;
+        line-height: 24px;
+        letter-spacing: 3.84px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: #05eaf9;
+      }
+      .sec-abilities .a-eyebrow img {
+        display: block;
+        flex: none;
+        width: 47px;
+        height: 9.451px;
+        object-fit: contain;
+      }
+      .sec-abilities .a-title {
+        margin: 8px 0 0;
+        font-family: "Teko", sans-serif;
+        font-weight: 500;
+        font-size: 120px;
+        line-height: 120px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: #fff;
+      }
+      .sec-abilities .a-divider {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin: 0;
+      }
+      .sec-abilities .a-divider .hr-box {
+        flex: none;
+      }
+      .sec-abilities .a-divider .hr-line-l,
+      .sec-abilities .a-divider .hr-line-r {
+        width: 296px;
+        height: 2px;
+      }
+      .sec-abilities .a-intro {
+        margin: 43px 0 0;
+        max-width: 741px;
+        font-family: "Outfit", sans-serif;
+        font-size: 26px;
+        line-height: 36px;
+        color: #fff;
+      }
+      .sec-abilities .a-stage {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 305px;
+        width: 1920px;
+        height: 380px;
+      }
+      /* the outer circles are pushed down by drop[] — let them spill below the
+         stage instead of being clipped, while still hiding slides at the L/R edges */
+      .sec-abilities .a-stage .crsl-vp {
+        overflow: visible;
+        clip-path: inset(-40px 0 -280px 0);
+      }
+      .sec-abilities .a-caption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 752px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .sec-abilities .a-label {
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 24px;
+        color: #cfb16d;
+      }
+      .sec-abilities .a-desc {
+        margin: 14px 0 0;
+        max-width: 495px;
+        font-family: "Outfit", sans-serif;
+        font-size: 20px;
+        line-height: 30px;
+        color: #fff;
+      }
+      .sec-abilities .a-nav {
+        display: flex;
+        gap: 40px;
+        margin: 32px 0 0;
+      }
+      .sec-abilities .a-nav a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 58px;
+        height: 58px;
+        transition: transform 0.15s ease;
+      }
+      .sec-abilities .a-nav a:hover {
+        transform: translateY(-1px);
+      }
+      .sec-abilities .a-nav a:active {
+        transform: translateY(0);
+      }
+      .sec-abilities .a-nav img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
       /* ---- real sliding carousel (a track of slides that translates) ---- */
       /* mount keeps its own positioning (desktop: Tailwind .absolute, mobile: .m-crsl) */
       .crsl-vp {
@@ -1126,93 +1255,41 @@
         class="sec sec-abilities"
         style="position: relative; width: 1920px; height: 1163px"
       >
-        <p
-          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%+0.5px)] text-[26px] text-center text-white top-[208px] w-[741px]"
-          data-node-id="6118:23050"
-        >
-          Master PIXO’s unique abilities to move faster, fight smarter, and
-          overcome challenges in unexpected ways.
-        </p>
-        <p
-          class="-translate-x-1/2 [word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%+0.5px)] text-[120px] text-center text-white top-[32px] whitespace-nowrap"
-          data-node-id="6118:23052"
-        >
-          BUILT TO BREAK THE RULES
-        </p>
-        <p
-          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+160.5px)] text-[#05eaf9] text-[24px] text-center top-[0px] tracking-[3.84px] whitespace-nowrap"
-          data-node-id="6118:23054"
-        >
-          ABILITIES
-        </p>
-        <div
-          class="absolute h-[9.451px] left-[calc(41.67%+25px)] top-[7px] w-[47px]"
-          data-node-id="6118:23055"
-        >
-          <img
-            alt=""
-            class="absolute block inset-0 max-w-none size-full"
-            src="icon/line3.png"
-          />
+        <div class="a-head">
+          <p class="a-eyebrow">
+            <img src="icon/line3.png" alt="" />
+            ABILITIES
+            <img src="icon/line4.png" alt="" />
+          </p>
+          <h2 class="a-title">Built To Break The Rules</h2>
+          <div class="a-divider">
+            <span class="hr-line-l"></span>
+            <span class="hr-box"></span>
+            <span class="hr-line-r"></span>
+          </div>
+          <p class="a-intro">
+            Master PIXO’s unique abilities to move faster, fight smarter, and
+            overcome challenges in unexpected ways.
+          </p>
         </div>
-        <div
-          class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+89px)] top-[7px] w-[47px]"
-          data-node-id="6118:23056"
-        >
-          <img
-            alt=""
-            class="block max-w-none size-full object-contain"
-            src="icon/line4.png"
-          />
+
+        <div class="a-stage" id="acMount"></div>
+
+        <div class="a-caption">
+          <p class="a-label" data-ac="label">TIME BUBBLE</p>
+          <p class="a-desc" data-ac="desc">
+            Freeze time within a localized bubble, slowing enemies and creating
+            the perfect moment to strike.
+          </p>
+          <div class="a-nav">
+            <a href="#" data-ac="prev-btn" aria-label="Previous ability">
+              <img src="icon/1.png" alt="" />
+            </a>
+            <a href="#" data-ac="next-btn" aria-label="Next ability">
+              <img src="icon/2.png" alt="" />
+            </a>
+          </div>
         </div>
-        <div
-          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[152px]"
-        >
-          <div class="hr-box"></div>
-        </div>
-        <div
-          class="absolute h-[2px] w-[296px] left-[calc(50%+31px)] top-[162px] hr-line-r"
-        ></div><div
-          class="absolute h-[2px] w-[296px] left-[calc(25%+154px)] top-[162px] hr-line-l"
-        ></div>
-        <div
-          class="absolute left-1/2 -translate-x-1/2 top-[305px] h-[380px] w-[1920px]"
-          data-node-id="6118:23145"
-          id="acMount"
-        ></div>
-        <a
-          href="#"
-          data-node-id="6118:23151"
-          data-ac="next-btn"
-          aria-label="Next ability"
-          class="absolute flex items-center justify-center size-[58px] left-[calc(50%+26px)] top-[827px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
-        >
-          <img alt="" class="block size-full" src="icon/2.png" /> </a
-        ><a
-          href="#"
-          data-node-id="6118:23171"
-          data-ac="prev-btn"
-          aria-label="Previous ability"
-          class="absolute flex items-center justify-center size-[58px] left-[calc(41.67%+88px)] top-[827px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
-        >
-          <img alt="" class="block size-full" src="icon/1.png" />
-        </a>
-        <p
-          class="[word-break:break-word] absolute font-['Outfit'] font-semibold leading-[24px] left-[calc(50%-70px)] text-[#cfb16d] text-[24px] top-[691px] whitespace-nowrap"
-          data-node-id="6118:23192"
-          data-ac="label"
-          data-caps=""
-        >
-          TIME BUBBLE
-        </p>
-        <p
-          class="[word-break:break-word] -translate-x-1/2 absolute font-['Outfit'] font-normal leading-[30px] left-[calc(33.33%+325.5px)] text-[20px] text-center text-white top-[731px] w-[495px]"
-          data-node-id="6118:23193"
-          data-ac="desc"
-        >
-          Freeze time within a localized bubble, slowing enemies and creating
-          the perfect moment to strike.
-        </p>
       </section>
       <!-- ==================== ENEMIES  ·  "NOTHING STAYS UNDEFEATED" ==================== -->
       <section
@@ -1760,7 +1837,7 @@
             }
             // depth ramp by distance from the centre slide (index 0 = active)
             var SCALE = cfg.scale || [1, 0.78, 0.6, 0.5];
-            var DROP = cfg.drop || [0, 0, 0, 0]; // arc sink per ring, as a fraction of slide width
+            var DROP = cfg.drop || [0, 0, 0, 0]; // per-ring vertical offset (see cfg.drop): fraction of slide width, + = down
             var PULL = cfg.pull || 0; // pull toward centre per ring, fraction of slide width
             var DIM = cfg.dim || [1, 0.82, 0.58, 0.5];
             var FADE = cfg.fade || [1, 0.95, 0.62, 0];
@@ -1916,7 +1993,11 @@
             labels: '[data-ac="label"]',
             descs: '[data-ac="desc"]',
             scale: [1, 0.9, 0.82, 0.72, 0.66],
-            drop: [0, 0.08, 0.16, 0.2, 0.22],
+            // ▼▲ VERTICAL POSITION of each ability circle, by how far it sits from the centre one.
+            //    drop[0] = centre · drop[1] = the pair beside it · drop[2] = next pair · drop[3] = next · drop[4] = furthest.
+            //    each number is a fraction of the circle's width:  BIGGER = that ring sits LOWER,  0 = level with the centre.
+            //    (e.g. raise drop[3] / drop[4] to push the outer circles further down.)
+            drop: [0, 0.08, 0.2, 0.42, 0.58],
             pull: 0.02,
             dim: [1, 0.96, 0.84, 0.62, 0.5],
             fade: [1, 1, 0.9, 0.5, 0],
