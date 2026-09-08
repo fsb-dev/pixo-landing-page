@@ -42,7 +42,7 @@
         top: 0;
         left: 0;
         width: 1920px;
-        height: 120px;
+        height: 96px;
         transform-origin: top left;
         z-index: 1000;
         pointer-events: none;
@@ -51,15 +51,36 @@
       .site-nav .nav-link {
         pointer-events: auto;
       }
-      /* the rounded bar behind the links — a touch more opaque now that it floats over every section */
+      /* full-width glass header that fades in once the page is scrolled */
+      .site-nav::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 96px;
+        background: rgba(1, 19, 44, 0);
+        border-bottom: 1px solid transparent;
+        pointer-events: none;
+        transition:
+          background 0.3s ease,
+          border-color 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .site-nav.scrolled::before {
+        background: rgba(1, 19, 44, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom-color: rgba(120, 205, 245, 0.18);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+      /* the rounded pill: visible while floating over the hero, hands off to the glass header on scroll */
       #navBar {
         background: rgba(1, 19, 44, 0.62);
-        transition: background 0.25s ease;
+        transition: background 0.3s ease;
       }
       .site-nav.scrolled #navBar {
-        background: rgba(1, 19, 44, 0.92);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: transparent;
       }
       @media (max-width: 767px) {
         .site-nav {
@@ -1045,7 +1066,7 @@
     <nav class="site-nav" data-node-id="6118:23458" aria-label="Primary">
       <div
         id="navBar"
-        class="absolute h-[48.985px] left-[calc(33.33%+68.79px)] top-[40.01px] w-[1131.319px]"
+        class="absolute h-[48.985px] left-[calc(33.33%+68.79px)] top-[23px] w-[1131.319px]"
         data-node-id="6118:23460"
         style="
           clip-path: polygon(
@@ -1061,49 +1082,49 @@
         "
       ></div>
       <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(33.33%+105px)] top-[55px] is-active"
+        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(33.33%+105px)] top-[38px] is-active"
         data-scroll="0"
         data-node-id="6118:23462"
       >
         HOME
       </p>
       <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(50%+64px)] top-[55px]"
+        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(50%+64px)] top-[38px]"
         data-scroll="2110"
         data-node-id="6118:23463"
       >
         WORLD
       </p>
       <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(41.67%+91px)] top-[55px]"
+        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(41.67%+91px)] top-[38px]"
         data-scroll="1300"
         data-node-id="6118:23464"
       >
         PIXO
       </p>
       <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(58.33%+65px)] top-[55px]"
+        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(58.33%+65px)] top-[38px]"
         data-scroll="3095"
         data-node-id="6118:23465"
       >
         ABILITIES
       </p>
       <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(66.67%+82px)] top-[55px]"
+        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(66.67%+82px)] top-[38px]"
         data-scroll="4275"
         data-node-id="6118:23466"
       >
         ENEMIES
       </p>
       <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(75%+93px)] top-[55px]"
+        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(75%+93px)] top-[38px]"
         data-scroll="5200"
         data-node-id="6118:23467"
       >
         GAME PLAY
       </p>
       <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(91.67%-30px)] top-[55px]"
+        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(91.67%-30px)] top-[38px]"
         data-scroll="6410"
         data-node-id="6118:23468"
       >
@@ -1111,17 +1132,17 @@
       </p>
       <div
         id="navUnderline"
-        class="absolute h-[4px] top-[85px] rounded-[2px] bg-[#05EAF9]"
+        class="absolute h-[4px] top-[68px] rounded-[2px] bg-[#05EAF9]"
         style="left: 741px; width: 68.58px"
       ></div>
       <div
-        class="absolute bg-[rgba(0,44,91,0.63)] blur-[19.006px] h-[100px] left-[80px] top-[21.11px] w-[227px]"
+        class="absolute bg-[rgba(0,44,91,0.63)] blur-[19.006px] h-[100px] left-[80px] top-[-2px] w-[227px]"
         data-node-id="6118:23470"
       ></div>
       <a
         href="#"
         aria-label="PIXO home"
-        class="absolute block h-[73px] left-[88px] top-[35px] w-[212px]"
+        class="absolute block h-[73px] left-[88px] top-[11px] w-[212px]"
         data-node-id="6118:23471"
       >
         <img
@@ -2299,7 +2320,7 @@
             if (!isNaN(y))
               window.scrollTo({
                 // offset for the fixed nav so the section top clears it
-                top: Math.max(0, Math.round((y - 95) * scale)),
+                top: Math.max(0, Math.round((y - 90) * scale)),
                 behavior: "smooth",
               });
           });
