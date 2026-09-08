@@ -440,6 +440,133 @@
         text-shadow: 0 1px 3px rgba(5, 20, 45, 0.55);
       }
 
+      /* ================= THE WORLD section ================= */
+      /* centred layout (matches the mobile ".c" variant): heading, carousel stage,
+         side arrows, and a centred caption */
+      .sec-world .w-head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 86px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .sec-world .w-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+        font-size: 24px;
+        line-height: 24px;
+        letter-spacing: 3.84px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: #05eaf9;
+      }
+      .sec-world .w-eyebrow img {
+        display: block;
+        flex: none;
+        width: 47px;
+        height: 9.451px;
+        object-fit: contain;
+      }
+      .sec-world .w-title {
+        margin: 8px 0 0;
+        font-family: "Teko", sans-serif;
+        font-weight: 500;
+        font-size: 120px;
+        line-height: 120px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: #fff;
+      }
+      .sec-world .w-divider {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin: 0;
+      }
+      .sec-world .w-divider .hr-box {
+        flex: none;
+      }
+      .sec-world .w-divider .hr-line-l,
+      .sec-world .w-divider .hr-line-r {
+        width: 296px;
+        height: 2px;
+      }
+      .sec-world .w-intro {
+        margin: 43px 0 0;
+        max-width: 900px;
+        font-family: "Outfit", sans-serif;
+        font-size: 26px;
+        line-height: 36px;
+        color: #fff;
+      }
+      .sec-world .w-stage {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 394px;
+        width: 1920px;
+        height: 400px;
+      }
+      .sec-world .w-arrow {
+        position: absolute;
+        top: 560px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 58px;
+        height: 58px;
+        transition: transform 0.15s ease;
+      }
+      .sec-world .w-arrow:hover {
+        transform: translateY(-1px);
+      }
+      .sec-world .w-arrow:active {
+        transform: translateY(0);
+      }
+      .sec-world .w-arrow img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .sec-world .w-arrow-prev {
+        left: 542px;
+      }
+      .sec-world .w-arrow-next {
+        left: 1320px;
+      }
+      .sec-world .w-caption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 815px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .sec-world .w-label {
+        margin: 0;
+        font-family: "Outfit", sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 24px;
+        color: #cfb16d;
+      }
+      .sec-world .w-desc {
+        margin: 16px 0 0;
+        max-width: 420px;
+        font-family: "Outfit", sans-serif;
+        font-size: 20px;
+        line-height: 30px;
+        color: #fff;
+      }
+
       /* ---- real sliding carousel (a track of slides that translates) ---- */
       /* mount keeps its own positioning (desktop: Tailwind .absolute, mobile: .m-crsl) */
       .crsl-vp {
@@ -704,6 +831,16 @@
       }
       .m-lead.c {
         text-align: center;
+      }
+      /* centre an entire mobile section (eyebrow row, title, flourish, sub, lead, button) */
+      .m-sec.m-c {
+        text-align: center;
+      }
+      .m-sec.m-c .m-eyebrow,
+      .m-sec.m-c .m-titlerow,
+      .m-sec.m-c .m-flourish,
+      .m-sec.m-c .m-fl-mini {
+        justify-content: center;
       }
       .m-cardlabel {
         text-align: center;
@@ -1237,96 +1374,50 @@
       >
         
         
-        <div
-          class="-translate-x-1/2 absolute h-[1013px] left-1/2 top-[0px] w-[1920px]"
-          data-node-id="6118:22992"
-        ></div>
-        <p
-          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(8.33%+181px)] text-[26px] text-white top-[294px] whitespace-nowrap"
-          data-node-id="6118:23246"
-        >
-          Curious by nature, fearless by design. PIXO is ready to explore a
-          world of mystery, challenge, and adventure.
-        </p>
-        <p
-          class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%-593px)] text-[120px] text-white top-[118px] whitespace-nowrap"
-          data-node-id="6118:23248"
-        >
-          A WORLD BEYOND THE HORIZON
-        </p>
-        <p
-          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+75px)] text-[#05eaf9] text-[24px] top-[86px] tracking-[3.84px] whitespace-nowrap"
-          data-node-id="6118:23250"
-        >
-          THE WORLD
-        </p>
-        <div
-          class="absolute h-[9.451px] left-[calc(41.67%+8px)] top-[93px] w-[47px]"
-          data-node-id="6118:23251"
-        >
-          <img
-            alt=""
-            class="absolute block inset-0 max-w-none size-full"
-            src="icon/line3.png"
-          />
+        <div class="w-head">
+          <p class="w-eyebrow">
+            <img src="icon/line3.png" alt="" />
+            THE WORLD
+            <img src="icon/line4.png" alt="" />
+          </p>
+          <h2 class="w-title">A World Beyond The Horizon</h2>
+          <div class="w-divider">
+            <span class="hr-line-l"></span>
+            <span class="hr-box"></span>
+            <span class="hr-line-r"></span>
+          </div>
+          <p class="w-intro">
+            Curious by nature, fearless by design. PIXO is ready to explore a
+            world of mystery, challenge, and adventure.
+          </p>
         </div>
-        <div
-          class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+105px)] top-[93px] w-[47px]"
-          data-node-id="6118:23252"
-        >
-          <img
-            alt=""
-            class="block max-w-none size-full object-contain"
-            src="icon/line4.png"
-          />
-        </div>
-        <div
-          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[238px]"
-        >
-          <div class="hr-box"></div>
-        </div>
-        <div
-          class="absolute h-[2px] w-[296px] left-[calc(50%+31px)] top-[248px] hr-line-r"
-        ></div><div
-          class="absolute h-[2px] w-[296px] left-[calc(25%+154px)] top-[248px] hr-line-l"
-        ></div>
-        <div
-          class="absolute left-1/2 -translate-x-1/2 top-[394px] h-[400px] w-[1920px]"
-          data-node-id="6118:23264"
-          id="wcMount"
-        ></div>
+
+        <div class="w-stage" id="wcMount"></div>
+
         <a
           href="#"
-          data-node-id="6118:23279"
           data-wc="prev-btn"
           aria-label="Previous slide"
-          class="absolute flex items-center justify-center size-[58px] left-[calc(25%+62px)] top-[560px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
+          class="w-arrow w-arrow-prev transition-transform duration-150"
         >
-          <img alt="" class="block size-full" src="icon/1.png" /> </a
-        ><a
+          <img alt="" src="icon/1.png" />
+        </a>
+        <a
           href="#"
-          data-node-id="6118:23299"
           data-wc="next-btn"
           aria-label="Next slide"
-          class="absolute flex items-center justify-center size-[58px] left-[calc(66.67%+40px)] top-[560px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
+          class="w-arrow w-arrow-next transition-transform duration-150"
         >
-          <img alt="" class="block size-full" src="icon/2.png" />
+          <img alt="" src="icon/2.png" />
         </a>
-        <p
-          class="[word-break:break-word] absolute font-['Outfit'] font-semibold leading-[24px] left-[calc(50%-106px)] text-[#cfb16d] text-[24px] top-[815px] whitespace-nowrap"
-          data-node-id="6118:23319"
-          data-wc="label"
-        >
-          WILD FRONTTIERS
-        </p>
-        <p
-          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[30px] left-[calc(33.33%+320px)] text-[20px] text-center text-white top-[855px] w-[380px]"
-          data-node-id="6118:23320"
-          data-wc="desc"
-        >
-          Lush forests, floating island and untamed lands full of life and
-          wonder.
-        </p>
+
+        <div class="w-caption">
+          <p class="w-label" data-wc="label">WILD FRONTTIERS</p>
+          <p class="w-desc" data-wc="desc">
+            Lush forests, floating island and untamed lands full of life and
+            wonder.
+          </p>
+        </div>
       </section>
       <!-- ==================== ABILITIES  ·  "BUILT TO BREAK THE RULES"  (abilities carousel: #acMount) ==================== -->
       <section
@@ -1641,7 +1732,7 @@
       </section>
 
       <!-- THIS IS PIXO -->
-      <section class="m-wrap m-sec">
+      <section class="m-wrap m-sec m-c">
         <div class="m-eyebrow">
           <img src="icon/line3.png" alt="" /><span>Meet PIXO</span
           ><img src="icon/line4.png" alt="" />
