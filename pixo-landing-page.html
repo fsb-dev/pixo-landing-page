@@ -16,7 +16,8 @@
         box-sizing: border-box;
       }
       html {
-        overflow-x: hidden;
+        /* auto (not hidden) so Ctrl +/- zoom can scroll to content wider than the window */
+        overflow-x: auto;
         background: #091f34;
       }
       /* <body> is the "stage": its size is the scaled design; the browser scrolls it (one scrollbar). */
@@ -1918,6 +1919,8 @@
         var DESIGN_W = 1920;
         var main = document.querySelector("main");
         var scale = 1;
+        // devicePixelRatio at load = the user's "100% zoom" baseline (accounts for OS display scaling).
+        var DPR0 = window.devicePixelRatio || 1;
         // total design height = sum of the stacked <section> blocks (measured, so editing a
         // section's height never needs a constant updated here)
         function designH() {
@@ -1928,14 +1931,20 @@
         // <body> is sized to the scaled design so the browser produces exactly one scrollbar.
         function fit() {
           var vw = document.documentElement.clientWidth || window.innerWidth;
-          // Below 768px the dedicated .mobile-site layout takes over (CSS media query).
-          if (vw < 768) {
+          // Factor out browser zoom: Ctrl +/- shrinks clientWidth and raises devicePixelRatio
+          // together. Multiplying back by that ratio gives the width at the user's baseline
+          // zoom, so the design's fitted size stays stable and the browser's own zoom then
+          // enlarges/shrinks the whole page like a normal site.
+          var zoom = (window.devicePixelRatio || 1) / DPR0;
+          var baseVW = vw * zoom;
+          // Below 768px (at baseline zoom) the dedicated .mobile-site layout takes over.
+          if (baseVW < 768) {
             if (main) main.style.transform = "";
             document.body.style.width = "";
             document.body.style.height = "";
             return;
           }
-          scale = vw / DESIGN_W;
+          scale = baseVW / DESIGN_W;
           var h = designH();
           if (main) main.style.transform = "scale(" + scale + ")";
           document.body.style.width = DESIGN_W * scale + "px";
