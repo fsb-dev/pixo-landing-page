@@ -47,6 +47,53 @@
         color: #4decfe;
       }
 
+      /* ---- section-divider mark (replaces icon/box.png + icon/line1.png + icon/line2.png) ---- */
+      .hr-box {
+        width: 13px;
+        height: 13px;
+        background: #f8b751;
+        mix-blend-mode: plus-lighter;
+        backdrop-filter: blur(1.35px);
+        -webkit-backdrop-filter: blur(1.35px);
+        box-shadow: 0 0 9px 1px rgba(248, 183, 81, 0.55);
+      }
+      .hr-line-r {
+        background: linear-gradient(
+          90deg,
+          #f8b751 0%,
+          rgba(248, 183, 81, 0) 100%
+        );
+      }
+      .hr-line-l {
+        background: linear-gradient(
+          90deg,
+          rgba(248, 183, 81, 0) 0%,
+          #f8b751 100%
+        );
+      }
+      /* footer uses the cyan accent instead of the orange one */
+      .sec-footer .hr-box,
+      .m-footer .dot {
+        background: #05eaf9;
+        box-shadow: 0 0 9px 1px rgba(5, 234, 249, 0.55);
+      }
+      .sec-footer .hr-line-r,
+      .m-footer .hr-line-r {
+        background: linear-gradient(
+          90deg,
+          #05eaf9 0%,
+          rgba(5, 234, 249, 0) 100%
+        );
+      }
+      .sec-footer .hr-line-l,
+      .m-footer .hr-line-l {
+        background: linear-gradient(
+          90deg,
+          rgba(5, 234, 249, 0) 0%,
+          #05eaf9 100%
+        );
+      }
+
       /* ---- real sliding carousel (a track of slides that translates) ---- */
       /* mount keeps its own positioning (desktop: Tailwind .absolute, mobile: .m-crsl) */
       .crsl-vp {
@@ -219,6 +266,7 @@
         justify-content: center;
       }
       .m-flourish .ln {
+        display: block;
         height: 2px;
         width: 68px;
       }
@@ -226,10 +274,15 @@
         width: 75px;
       }
       .m-flourish .dot {
-        height: 22px;
-        width: 22px;
-        object-fit: contain;
+        display: block;
+        height: 13px;
+        width: 13px;
         flex: none;
+        background: #f8b751;
+        mix-blend-mode: plus-lighter;
+        backdrop-filter: blur(1.35px);
+        -webkit-backdrop-filter: blur(1.35px);
+        box-shadow: 0 0 9px 1px rgba(248, 183, 81, 0.55);
       }
       /* title with a compact flourish tucked to its right */
       .m-titlerow {
@@ -245,14 +298,20 @@
         padding-bottom: 8px;
       }
       .m-fl-mini .ln {
+        display: block;
         height: 2px;
         width: 75px;
       }
       .m-fl-mini .dot {
-        height: 16px;
-        width: 16px;
-        object-fit: contain;
+        display: block;
+        height: 11px;
+        width: 11px;
         flex: none;
+        background: #f8b751;
+        mix-blend-mode: plus-lighter;
+        backdrop-filter: blur(1.35px);
+        -webkit-backdrop-filter: blur(1.35px);
+        box-shadow: 0 0 7px 1px rgba(248, 183, 81, 0.55);
       }
       /* standalone section photo that fades into the navy at top and bottom */
       .m-photo {
@@ -644,21 +703,13 @@
         <div
           class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(66.67%+3px)] top-[611px]"
         >
-          <img
-            alt=""
-            class="block max-w-none h-[34px] w-[34px] object-contain"
-            src="icon/box.png"
-          />
+          <div class="hr-box"></div>
         </div>
-        <img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(66.67%+45px)] top-[621px]"
-          src="icon/line2.png"
-        /><img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(50%+8px)] top-[621px]"
-          src="icon/line1.png"
-        />
+        <div
+          class="absolute h-[2px] w-[296px] left-[calc(66.67%+45px)] top-[621px] hr-line-r"
+        ></div><div
+          class="absolute h-[2px] w-[296px] left-[calc(50%+8px)] top-[621px] hr-line-l"
+        ></div>
         <nav class="contents" data-node-id="6118:23458">
           <div
             class="absolute h-[48.985px] left-[calc(33.33%+68.79px)] top-[40.01px] w-[1131.319px] bg-[#01132C]/[0.47]"
@@ -872,21 +923,13 @@
         <div
           class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(16.67%+74px)] top-[447px]"
         >
-          <img
-            alt=""
-            class="block max-w-none h-[34px] w-[34px] object-contain"
-            src="icon/box.png"
-          />
+          <div class="hr-box"></div>
         </div>
-        <img
-          alt=""
-          class="absolute block h-[4px] w-[179px] left-[calc(16.67%+113px)] top-[457px]"
-          src="icon/line2.png"
-        /><img
-          alt=""
-          class="absolute block h-[4px] w-[179px] left-[calc(8.33%+39px)] top-[457px]"
-          src="icon/line1.png"
-        />
+        <div
+          class="absolute h-[2px] w-[179px] left-[calc(16.67%+113px)] top-[457px] hr-line-r"
+        ></div><div
+          class="absolute h-[2px] w-[179px] left-[calc(8.33%+39px)] top-[457px] hr-line-l"
+        ></div>
         <div
           class="absolute h-[903px] left-[calc(41.67%+93px)] top-[103px] w-[1022.5px]"
           data-node-id="6269:211"
@@ -952,21 +995,13 @@
         <div
           class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[238px]"
         >
-          <img
-            alt=""
-            class="block max-w-none h-[34px] w-[34px] object-contain"
-            src="icon/box.png"
-          />
+          <div class="hr-box"></div>
         </div>
-        <img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[248px]"
-          src="icon/line2.png"
-        /><img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[248px]"
-          src="icon/line1.png"
-        />
+        <div
+          class="absolute h-[2px] w-[296px] left-[calc(50%+31px)] top-[248px] hr-line-r"
+        ></div><div
+          class="absolute h-[2px] w-[296px] left-[calc(25%+154px)] top-[248px] hr-line-l"
+        ></div>
         <div
           class="absolute left-1/2 -translate-x-1/2 top-[394px] h-[400px] w-[1920px]"
           data-node-id="6118:23264"
@@ -1052,21 +1087,13 @@
         <div
           class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[152px]"
         >
-          <img
-            alt=""
-            class="block max-w-none h-[34px] w-[34px] object-contain"
-            src="icon/box.png"
-          />
+          <div class="hr-box"></div>
         </div>
-        <img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[162px]"
-          src="icon/line2.png"
-        /><img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[162px]"
-          src="icon/line1.png"
-        />
+        <div
+          class="absolute h-[2px] w-[296px] left-[calc(50%+31px)] top-[162px] hr-line-r"
+        ></div><div
+          class="absolute h-[2px] w-[296px] left-[calc(25%+154px)] top-[162px] hr-line-l"
+        ></div>
         <div
           class="absolute left-1/2 -translate-x-1/2 top-[305px] h-[380px] w-[1920px]"
           data-node-id="6118:23145"
@@ -1156,21 +1183,13 @@
         <div
           class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(66.67%-3px)] top-[308px]"
         >
-          <img
-            alt=""
-            class="block max-w-none h-[34px] w-[34px] object-contain"
-            src="icon/box.png"
-          />
+          <div class="hr-box"></div>
         </div>
-        <img
-          alt=""
-          class="absolute block h-[4px] w-[179px] left-[calc(66.67%+36px)] top-[318px]"
-          src="icon/line2.png"
-        /><img
-          alt=""
-          class="absolute block h-[4px] w-[179px] left-[calc(50%+122px)] top-[318px]"
-          src="icon/line1.png"
-        />
+        <div
+          class="absolute h-[2px] w-[179px] left-[calc(66.67%+36px)] top-[318px] hr-line-r"
+        ></div><div
+          class="absolute h-[2px] w-[179px] left-[calc(50%+122px)] top-[318px] hr-line-l"
+        ></div>
         <div
           class="absolute bg-[#00152a] h-[609.652px] left-0 top-[10.31px] w-[962px]"
           data-node-id="6118:23229"
@@ -1247,21 +1266,13 @@
         <div
           class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11.73px)] top-[234px]"
         >
-          <img
-            alt=""
-            class="block max-w-none h-[34px] w-[34px] object-contain"
-            src="icon/box.png"
-          />
+          <div class="hr-box"></div>
         </div>
-        <img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(50%+30.27px)] top-[244px]"
-          src="icon/line2.png"
-        /><img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(25%+153.27px)] top-[244px]"
-          src="icon/line1.png"
-        />
+        <div
+          class="absolute h-[2px] w-[296px] left-[calc(50%+30.27px)] top-[244px] hr-line-r"
+        ></div><div
+          class="absolute h-[2px] w-[296px] left-[calc(25%+153.27px)] top-[244px] hr-line-l"
+        ></div>
         <div
           class="-translate-x-1/2 absolute h-[519px] left-[calc(50%+0.27px)] top-[402px] w-[966.956px]"
           data-node-id="6126:8624"
@@ -1400,21 +1411,13 @@
         <div
           class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[222px]"
         >
-          <img
-            alt=""
-            class="block max-w-none h-[34px] w-[34px] object-contain"
-            src="icon/box.png"
-          />
+          <div class="hr-box"></div>
         </div>
-        <img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(50%+31px)] top-[232px]"
-          src="icon/line2.png"
-        /><img
-          alt=""
-          class="absolute block h-[4px] w-[296px] left-[calc(25%+154px)] top-[232px]"
-          src="icon/line1.png"
-        />
+        <div
+          class="absolute h-[2px] w-[296px] left-[calc(50%+31px)] top-[232px] hr-line-r"
+        ></div><div
+          class="absolute h-[2px] w-[296px] left-[calc(25%+154px)] top-[232px] hr-line-l"
+        ></div>
         <p
           class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-1/2 text-[26px] text-center text-white top-[512px] w-[696px]"
           data-node-id="6151:12670"
@@ -1439,11 +1442,8 @@
           </div>
           <h1 class="m-title">Beyond<br />The Horizon</h1>
           <div class="m-flourish">
-            <img class="ln" src="icon/line1.png" alt="" /><img
-              class="dot"
-              src="icon/box.png"
-              alt=""
-            /><img class="ln" src="icon/line2.png" alt="" />
+            <span class="ln hr-line-l"></span><span class="dot"></span
+            ><span class="ln hr-line-r"></span>
           </div>
           <p class="m-lead">
             A world of discovery, danger, and unexpected challenges awaits.
@@ -1472,11 +1472,9 @@
           <h1 class="m-title">This Is PIXO</h1>
         </div>
         <span class="m-fl-mini"
-          ><img class="ln" src="icon/line1.png" alt="" /><img
-            class="dot"
-            src="icon/box.png"
-            alt="" /><img class="ln" src="icon/line2.png" alt=""
-        /></span>
+          ><span class="ln hr-line-l"></span><span class="dot"></span
+          ><span class="ln hr-line-r"></span
+        ></span>
 
         <p class="m-sub">Every Adventure Needs A Hero</p>
         <p class="m-lead">
@@ -1504,11 +1502,8 @@
         </div>
         <h1 class="m-title c">A World Beyond<br />The Horizon</h1>
         <div class="m-flourish c">
-          <img class="ln" src="icon/line1.png" alt="" /><img
-            class="dot"
-            src="icon/box.png"
-            alt=""
-          /><img class="ln" src="icon/line2.png" alt="" />
+          <span class="ln hr-line-l"></span><span class="dot"></span
+          ><span class="ln hr-line-r"></span>
         </div>
         <p class="m-lead c">
           Curious by nature, fearless by design. PIXO is ready to explore a
@@ -1547,11 +1542,8 @@
         </div>
         <h1 class="m-title c">Built To Break<br />The Rules</h1>
         <div class="m-flourish c">
-          <img class="ln" src="icon/line1.png" alt="" /><img
-            class="dot"
-            src="icon/box.png"
-            alt=""
-          /><img class="ln" src="icon/line2.png" alt="" />
+          <span class="ln hr-line-l"></span><span class="dot"></span
+          ><span class="ln hr-line-r"></span>
         </div>
         <p class="m-lead c">
           Master PIXO’s unique abilities to move faster, fight smarter, and
@@ -1588,11 +1580,8 @@
         </div>
         <h1 class="m-title">Nothing Stays<br />Undefeated</h1>
         <div class="m-flourish">
-          <img class="ln" src="icon/line1.png" alt="" /><img
-            class="dot"
-            src="icon/box.png"
-            alt=""
-          /><img class="ln" src="icon/line2.png" alt="" />
+          <span class="ln hr-line-l"></span><span class="dot"></span
+          ><span class="ln hr-line-r"></span>
         </div>
         <p class="m-lead">
           Dangerous machines and mysterious creatures stand between PIXO and the
@@ -1610,11 +1599,8 @@
         </div>
         <h1 class="m-title c">Move. Fight.<br />Master.</h1>
         <div class="m-flourish c">
-          <img class="ln" src="icon/line1.png" alt="" /><img
-            class="dot"
-            src="icon/box.png"
-            alt=""
-          /><img class="ln" src="icon/line2.png" alt="" />
+          <span class="ln hr-line-l"></span><span class="dot"></span
+          ><span class="ln hr-line-r"></span>
         </div>
         <p class="m-lead c">
           Experience fast-paced action with movement, combat, and powerful
@@ -1633,11 +1619,8 @@
       <footer class="m-footer">
         <img class="flogo" src="image/logo.png" alt="PIXO" />
         <div class="m-flourish c" style="margin: 6px 0 14px">
-          <img class="ln" src="icon/line1.png" alt="" /><img
-            class="dot"
-            src="icon/box.png"
-            alt=""
-          /><img class="ln" src="icon/line2.png" alt="" />
+          <span class="ln hr-line-l"></span><span class="dot"></span
+          ><span class="ln hr-line-r"></span>
         </div>
         <p class="m-lead c" style="margin-bottom: 0">
           PIXO is a fast-paced open-world adventure packed with exciting
