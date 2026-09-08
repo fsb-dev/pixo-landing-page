@@ -1947,10 +1947,6 @@
                   m.slides.forEach(function (s) {
                     s.style.transition = "none";
                   });
-                  void m.track.offsetHeight;
-                  m.slides.forEach(function (s) {
-                    s.style.transition = "";
-                  });
                 }
                 m.slides.forEach(function (s, k) {
                   var rel = k - index,
@@ -1972,11 +1968,17 @@
                   s.style.opacity = ramp(FADE, d);
                   s.style.filter =
                     d === 0
-                      ? "none"
+                      ? "saturate(1) brightness(1)"
                       : "saturate(.9) brightness(" + ramp(DIM, d) + ")";
                   s.style.zIndex = 20 - d;
                   s.classList.toggle("is-active", rel === 0);
                 });
+                if (!animate) {
+                  void m.track.offsetHeight;
+                  m.slides.forEach(function (s) {
+                    s.style.transition = "";
+                  });
+                }
               });
               var it = items[((index % n) + n) % n];
               labels.forEach(function (el) {
