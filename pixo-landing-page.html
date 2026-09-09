@@ -145,6 +145,10 @@
           #05eaf9 100%
         );
       }
+      /* footer flourish uses the cyan bloom, not the orange one */
+      .m-footer .m-flourish .ln {
+        filter: drop-shadow(0 0 2.5px rgba(5, 234, 249, 0.9));
+      }
 
       /* ================= ENEMIES section ================= */
       /* three layers: full-bleed frame, enemy line-up art, and one positioned copy block */
@@ -795,13 +799,16 @@
         flex: 1 1 auto;
         min-width: 0;
         max-width: 157px;
-        height: 1.5px; /* 0.8px renders as nothing on 1x screens */
+        height: 2px;
+        min-height: 2px;
+        /* a blurred copy in the line colour keeps the hairline visible when the
+           page is zoomed out and the 1px core rounds away to nothing */
+        filter: drop-shadow(0 0 2.5px rgba(248, 183, 81, 0.9));
       }
       /* hero keeps the original short left-aligned accent */
       .m-hero .m-flourish .ln {
         flex: none;
         width: 75px;
-        height: 2px;
       }
       .m-flourish .dot {
         display: block;
@@ -830,7 +837,9 @@
         flex: 1 1 auto;
         min-width: 0;
         max-width: 157px;
-        height: 1.5px; /* 0.8px renders as nothing on 1x screens */
+        height: 2px;
+        min-height: 2px;
+        filter: drop-shadow(0 0 2.5px rgba(248, 183, 81, 0.9));
       }
       .m-fl-mini .dot {
         display: block;
