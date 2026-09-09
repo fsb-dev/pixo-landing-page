@@ -167,6 +167,18 @@
         );
       }
 
+      /* ================= GAMEPLAY section ================= */
+      /* full-bleed background photo behind the "MOVE. FIGHT. MASTER." copy + art */
+      .sec-gameplay .g-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+        user-select: none;
+      }
+
       /* ================= ENEMIES section ================= */
       /* three layers: full-bleed frame, enemy line-up art, and one positioned copy block */
       .sec-enemies .e-bg {
@@ -1589,7 +1601,7 @@
         class="sec sec-gameplay"
         style="position: relative; width: 1920px; height: 1112px"
       >
-        
+        <img class="g-bg" src="image/game_play_bg.png" alt="" />
         <p
           class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%-0.23px)] text-[26px] text-center text-white top-[290px] w-[903px]"
           data-node-id="6118:23331"
