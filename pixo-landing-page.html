@@ -2056,7 +2056,11 @@
         var main = document.querySelector("main");
         var siteNav = document.querySelector(".site-nav");
         var scale = 1;
-        // devicePixelRatio at load = the user's "100% zoom" baseline (accounts for OS display scaling).
+        // devicePixelRatio at the user's "100% zoom" baseline (accounts for OS display
+        // scaling). It can be reported wrong (1 instead of 2, …) while the page is still
+        // starting up — on Retina Macs, iPad Safari, responsive-design mode — which then
+        // makes the zoom factor below ~2x and blows the design past the viewport. So it's
+        // re-sampled once things settle (load / tab shown / bfcache restore).
         var DPR0 = window.devicePixelRatio || 1;
         // total design height = sum of the stacked <section> blocks (measured, so editing a
         // section's height never needs a constant updated here)
@@ -2074,6 +2078,12 @@
           // enlarges/shrinks the whole page like a normal site.
           var zoom = (window.devicePixelRatio || 1) / DPR0;
           var baseVW = vw * zoom;
+          // Safety net: a real browser zoom-out keeps baseVW ≈ the unzoomed width, so it
+          // never much exceeds the physical screen. If baseVW runs well past the screen,
+          // DPR0 was mis-sampled — ignore the zoom factor and just fit the viewport.
+          if (baseVW > (window.screen ? window.screen.width : vw) * 1.25) {
+            baseVW = vw;
+          }
           // Below 768px (at baseline zoom) the dedicated .mobile-site layout takes over.
           if (baseVW < 768) {
             if (main) main.style.transform = "";
@@ -2089,10 +2099,19 @@
           document.body.style.width = DESIGN_W * scale + "px";
           document.body.style.height = h * scale + "px";
         }
+        function rebaseline() {
+          DPR0 = window.devicePixelRatio || 1;
+          fit();
+        }
         fit();
         window.addEventListener("resize", fit);
-        window.addEventListener("orientationchange", fit);
-        window.addEventListener("load", fit);
+        window.addEventListener("orientationchange", rebaseline);
+        window.addEventListener("load", rebaseline);
+        window.addEventListener("pageshow", rebaseline);
+        // one more re-sample shortly after load — some engines (iPad Safari,
+        // responsive-design mode) don't report the final devicePixelRatio until
+        // a beat after the load event
+        setTimeout(rebaseline, 400);
 
         // solidify the sticky nav bar once the page is scrolled past the hero top
         function navScroll() {
