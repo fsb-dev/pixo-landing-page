@@ -42,7 +42,7 @@
         top: 0;
         left: 0;
         width: 1920px;
-        height: 96px;
+        height: 80px;
         transform-origin: top left;
         z-index: 1000;
         pointer-events: none;
@@ -51,35 +51,23 @@
       .site-nav .nav-link {
         pointer-events: auto;
       }
-      /* full-width glass header that fades in once the page is scrolled */
+      /* full-width glass header — always visible (Figma: #01132C78 + blur(16.1px)) */
       .site-nav::before {
         content: "";
         position: absolute;
         left: 0;
         top: 0;
         width: 1920px;
-        height: 96px;
-        background: rgba(1, 19, 44, 0);
-        border-bottom: 1px solid transparent;
-        pointer-events: none;
-        transition:
-          background 0.3s ease,
-          border-color 0.3s ease,
-          box-shadow 0.3s ease;
-      }
-      .site-nav.scrolled::before {
-        background: rgba(1, 19, 44, 0.9);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-bottom-color: rgba(120, 205, 245, 0.18);
+        height: 80px;
+        background: rgba(1, 19, 44, 0.47);
+        backdrop-filter: blur(16.1px);
+        -webkit-backdrop-filter: blur(16.1px);
+        border-bottom: 1px solid rgba(120, 205, 245, 0.18);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        pointer-events: none;
       }
-      /* the rounded pill: visible while floating over the hero, hands off to the glass header on scroll */
+      /* the pill sits inside the glass header, so it stays transparent */
       #navBar {
-        background: rgba(1, 19, 44, 0.62);
-        transition: background 0.3s ease;
-      }
-      .site-nav.scrolled #navBar {
         background: transparent;
       }
       @media (max-width: 767px) {
@@ -97,6 +85,19 @@
       }
       .nav-link.is-active {
         color: #4decfe;
+      }
+      /* vertically centre the nav contents in the 80px bar */
+      .site-nav .nav-link {
+        top: 30px;
+      }
+      .site-nav #navBar {
+        top: 15.5px;
+      }
+      .site-nav #navUnderline {
+        top: 54px;
+      }
+      .site-nav a[aria-label="PIXO home"] {
+        top: 3.5px;
       }
 
       /* ---- section-divider mark (replaces icon/box.png + icon/line1.png + icon/line2.png) ---- */
