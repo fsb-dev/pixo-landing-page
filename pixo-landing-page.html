@@ -178,6 +178,26 @@
         pointer-events: none;
         user-select: none;
       }
+      /* play button centred over the gameplay screenshot */
+      .sec-gameplay .gp-play {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 46.12235641479492px;
+        transform: translate(-50%, -50%);
+        display: block;
+        cursor: pointer;
+        filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.45));
+        transition: transform 0.15s ease;
+      }
+      .sec-gameplay .gp-play:hover {
+        transform: translate(-50%, -50%) scale(1.07);
+      }
+      .sec-gameplay .gp-play img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
 
       /* ================= ENEMIES section ================= */
       /* three layers: full-bleed frame, enemy line-up art, and one positioned copy block */
@@ -1108,6 +1128,20 @@
       .m-gp .flank.r {
         right: -10px;
       }
+      .m-gp .gp-play {
+        position: absolute;
+        left: 50%;
+        top: calc(50% - 3px);
+        width: 44px;
+        transform: translate(-50%, -50%);
+        display: block;
+        filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
+      }
+      .m-gp .gp-play img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
       .m-footer {
         text-align: center;
         padding: 42px var(--m-pad, 30px) 28px;
@@ -1811,6 +1845,16 @@
             src="image/14.png"
             width="966.956"
           />
+          <a
+            href="https://youtu.be/G62QQ42Ewwg"
+            data-trailer
+            target="_blank"
+            rel="noopener"
+            class="gp-play"
+            aria-label="Watch trailer"
+          >
+            <img src="image/17.png" alt="" />
+          </a>
         </div>
         
         <div
@@ -2141,6 +2185,16 @@
           <img class="flank l" src="image/13.png" alt="" />
           <img class="m-img" src="image/14.png" alt="" />
           <img class="flank r" src="image/15.png" alt="" />
+          <a
+            href="https://youtu.be/G62QQ42Ewwg"
+            data-trailer
+            target="_blank"
+            rel="noopener"
+            class="gp-play"
+            aria-label="Watch trailer"
+          >
+            <img src="image/17.png" alt="" />
+          </a>
         </div>
       </div>
 
