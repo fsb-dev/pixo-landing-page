@@ -145,8 +145,12 @@
           #05eaf9 100%
         );
       }
-      /* footer flourish uses the cyan bloom, not the orange one */
+      /* footer flourish is unchanged: cyan 2px bar (not the Figma border spec) */
       .m-footer .m-flourish .ln {
+        height: 2px;
+        min-height: 2px;
+        border: 0;
+        border-image: none;
         filter: drop-shadow(0 0 2.5px rgba(5, 234, 249, 0.9));
       }
 
@@ -794,23 +798,33 @@
       .m-flourish.c {
         justify-content: center;
       }
-      .m-flourish .ln {
+      /* mobile flourish line — Figma spec: 99.04px wide, 0.83px gradient border */
+      .m-flourish .ln,
+      .m-fl-mini .ln {
         display: block;
-        flex: 1 1 auto;
-        min-width: 0;
-        max-width: 157px;
-        height: 2px;
-        min-height: 2px;
-        /* a blurred copy in the line colour keeps the hairline visible when the
-           page is zoomed out and the 1px core rounds away to nothing */
-        filter: drop-shadow(0 0 2.5px rgba(248, 183, 81, 0.9));
+        flex: 0 0 auto;
+        width: 99.0391845703125px;
+        max-width: 40%;
+        height: 0;
+        border-top: 0.83px solid transparent;
+        border-image: linear-gradient(
+            90deg,
+            #f8b751 0%,
+            rgba(248, 183, 81, 0) 100%
+          )
+          1;
       }
-      /* hero keeps the original short left-aligned accent */
-      .m-hero .m-flourish .ln {
-        flex: none;
-        width: 75px;
+      /* left segment mirrors the gradient so it fades toward the outer edge */
+      .m-flourish .hr-line-l,
+      .m-fl-mini .hr-line-l {
+        border-image-source: linear-gradient(
+          90deg,
+          rgba(248, 183, 81, 0) 0%,
+          #f8b751 100%
+        );
       }
-      .m-flourish .dot {
+      .m-flourish .dot,
+      .m-fl-mini .dot {
         display: block;
         height: 11px;
         width: 11px;
@@ -831,24 +845,6 @@
         align-items: center;
         gap: 6px;
         padding-bottom: 8px;
-      }
-      .m-fl-mini .ln {
-        display: block;
-        flex: 1 1 auto;
-        min-width: 0;
-        max-width: 157px;
-        height: 2px;
-        min-height: 2px;
-        filter: drop-shadow(0 0 2.5px rgba(248, 183, 81, 0.9));
-      }
-      .m-fl-mini .dot {
-        display: block;
-        height: 11px;
-        width: 11px;
-        flex: none;
-        transform: rotate(45deg); /* diamond, same as .hr-box */
-        background: #f8b751;
-        box-shadow: 0 0 7px 1px rgba(248, 183, 81, 0.55);
       }
       /* standalone section photo that fades into the navy at top and bottom */
       .m-photo {
