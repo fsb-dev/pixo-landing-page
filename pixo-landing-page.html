@@ -145,13 +145,25 @@
           #05eaf9 100%
         );
       }
-      /* footer flourish is unchanged: cyan 2px bar (not the Figma border spec) */
+      /* footer flourish — Figma spec: 152.76px wide, 1.3px cyan gradient border */
       .m-footer .m-flourish .ln {
-        height: 2px;
-        min-height: 2px;
-        border: 0;
-        border-image: none;
-        filter: drop-shadow(0 0 2.5px rgba(5, 234, 249, 0.9));
+        width: 152.7595672607422px;
+        height: 0;
+        min-height: 0;
+        border-top: 1.3px solid transparent;
+        border-image: linear-gradient(
+            90deg,
+            #05eaf9 0%,
+            rgba(5, 234, 249, 0) 100%
+          )
+          1;
+      }
+      .m-footer .m-flourish .hr-line-l {
+        border-image-source: linear-gradient(
+          90deg,
+          rgba(5, 234, 249, 0) 0%,
+          #05eaf9 100%
+        );
       }
 
       /* ================= ENEMIES section ================= */
