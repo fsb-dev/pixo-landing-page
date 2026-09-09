@@ -326,6 +326,17 @@
         overflow: visible;
         clip-path: inset(-40px 0 -280px 0);
       }
+      /* decorative crystals tucked under the centred ability */
+      .sec-abilities .a-crystals {
+        position: absolute;
+        left: 50%;
+        top: 491px;
+        width: 430px;
+        transform: translateX(-50%);
+        pointer-events: none;
+        user-select: none;
+        z-index: 1;
+      }
       .sec-abilities .a-caption {
         position: absolute;
         left: 0;
@@ -976,6 +987,17 @@
       .m-crsl.abil {
         height: 168px;
       }
+      /* decorative crystals tucked under the centred ability (mobile) */
+      .m-crsl.abil .m-abil-crystals {
+        position: absolute;
+        left: 50%;
+        top: 84px;
+        width: 228px;
+        transform: translateX(-50%);
+        z-index: 0;
+        pointer-events: none;
+        user-select: none;
+      }
       .m-crsl .crsl-arw {
         position: absolute;
         z-index: 5;
@@ -1513,6 +1535,7 @@
           </p>
         </div>
 
+        <img class="a-crystals" src="image/11.png" alt="" />
         <div class="a-stage" id="acMount"></div>
 
         <div class="a-caption">
@@ -1889,7 +1912,9 @@
           Master PIXO’s unique abilities to move faster, fight smarter, and
           overcome challenges in unexpected ways.
         </p>
-        <div class="m-crsl abil" id="acMountM"></div>
+        <div class="m-crsl abil" id="acMountM">
+          <img class="m-abil-crystals" src="image/11.png" alt="" />
+        </div>
         <p class="m-cardlabel" data-ac="label">Time Bubble</p>
         <p class="m-lead c" style="margin-bottom: 0" data-ac="desc">
           Freeze time within a localized bubble, slowing enemies and creating
