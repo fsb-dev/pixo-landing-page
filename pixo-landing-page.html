@@ -1135,6 +1135,127 @@
         padding-top: 18px;
         margin-top: 4px;
       }
+
+      /* ============ trailer lightbox ============ */
+      .video-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .video-modal[hidden] {
+        display: none;
+      }
+      .video-modal.is-open {
+        animation: video-modal-in 0.2s ease both;
+      }
+      @keyframes video-modal-in {
+        from {
+          opacity: 0;
+        }
+      }
+      .video-modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(3, 12, 26, 0.86);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+      .video-modal-frame {
+        position: relative;
+        width: 100%;
+        /* keep the 16:9 video + the close button inside the viewport height */
+        max-width: min(1422px, calc((100vh - 120px) * 16 / 9));
+      }
+      .video-modal-ratio {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        background: #000;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+      }
+      .video-modal-ratio iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .video-modal-fallback {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        padding: 32px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.75);
+        font-family: "Outfit", sans-serif;
+      }
+      .video-modal-fallback p {
+        margin: 0;
+        max-width: 460px;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .video-modal-fallback code {
+        background: rgba(255, 255, 255, 0.12);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+      .video-modal-play {
+        display: inline-flex;
+        align-items: center;
+        padding: 13px 30px;
+        border-radius: 9999px;
+        background: #ff0033;
+        color: #fff;
+        font-family: "Outfit", sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        text-decoration: none;
+        transition: transform 0.15s ease;
+      }
+      .video-modal-play:hover {
+        transform: translateY(-1px);
+      }
+      .video-modal-close {
+        position: absolute;
+        top: -46px;
+        right: 0;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        line-height: 1;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 9999px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+      }
+      .video-modal-close:hover {
+        background: rgba(255, 255, 255, 0.24);
+      }
+      @media (max-width: 520px) {
+        .video-modal {
+          padding: 16px;
+        }
+        .video-modal-close {
+          top: -42px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1440,7 +1561,10 @@
           </p>
 
           <a
-            href="#"
+            href="https://youtu.be/G62QQ42Ewwg"
+            data-trailer
+            target="_blank"
+            rel="noopener"
             aria-label="Watch trailer"
             class="mp-btn group no-underline transition-transform duration-150"
           >
@@ -1880,7 +2004,7 @@
           Curious by nature, fearless by design. PIXO is ready to explore a
           world of mystery, challenge, and adventure.
         </p>
-        <a href="#" class="m-btn"
+        <a href="https://youtu.be/G62QQ42Ewwg" data-trailer target="_blank" rel="noopener" class="m-btn"
           ><span class="ic"
             ><i
               ><svg width="12" height="14" viewBox="0 0 12 14" fill="none">
@@ -2048,6 +2172,29 @@
         </div>
         <p class="m-copy">© 2026 PIXO. All Rights Reserved.</p>
       </footer>
+    </div>
+
+    <!-- ============ trailer lightbox (YouTube) ============ -->
+    <div
+      id="trailerModal"
+      class="video-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="PIXO trailer"
+      hidden
+    >
+      <div class="video-modal-backdrop" data-close></div>
+      <div class="video-modal-frame">
+        <button
+          type="button"
+          class="video-modal-close"
+          data-close
+          aria-label="Close video"
+        >
+          &times;
+        </button>
+        <div class="video-modal-ratio"><div id="trailerMount"></div></div>
+      </div>
     </div>
 
     <script>
@@ -2442,6 +2589,69 @@
           requestAnimationFrame(function () {
             bar.style.transition = prev;
           });
+        });
+      })();
+
+      /* ============ trailer lightbox (YouTube) ============ */
+      (function () {
+        var YT_ID = "G62QQ42Ewwg";
+        var modal = document.getElementById("trailerModal");
+        var mount = document.getElementById("trailerMount");
+        if (!modal || !mount) return;
+
+        // The YouTube IFrame player only runs on a real web origin. Opened straight
+        // from disk (file://) it has no origin and shows "Video player configuration
+        // error" (153) — no URL/param change fixes that, the page must be served over
+        // http(s). So from file:// we show a link out instead of a dead player.
+        var onWeb = /^https?:$/.test(location.protocol);
+
+        function open(e) {
+          if (e) e.preventDefault();
+          if (onWeb) {
+            mount.innerHTML =
+              '<iframe src="https://www.youtube.com/embed/' +
+              YT_ID +
+              '?si=G9KtSDsOkwsjZ2X2&autoplay=1" title="YouTube video player" ' +
+              'frameborder="0" allow="accelerometer; autoplay; clipboard-write; ' +
+              "encrypted-media; gyroscope; picture-in-picture; web-share\" " +
+              'referrerpolicy="strict-origin-when-cross-origin" ' +
+              "allowfullscreen></iframe>";
+          } else {
+            mount.innerHTML =
+              '<div class="video-modal-fallback">' +
+              '<a class="video-modal-play" href="https://youtu.be/' +
+              YT_ID +
+              '" target="_blank" rel="noopener">▶ &nbsp;Watch the trailer</a>' +
+              "<p>YouTube blocks in-page playback on pages opened from a file. " +
+              "Run <code>start.bat</code> in the project folder to preview it " +
+              "playing right here — it works automatically once the site is live.</p>" +
+              "</div>";
+          }
+          modal.hidden = false;
+          modal.classList.add("is-open");
+          document.body.style.overflow = "hidden";
+        }
+        function close() {
+          modal.classList.remove("is-open");
+          modal.hidden = true;
+          mount.innerHTML = ""; // stops playback
+          document.body.style.overflow = "";
+        }
+
+        Array.prototype.forEach.call(
+          document.querySelectorAll("[data-trailer]"),
+          function (btn) {
+            btn.addEventListener("click", open);
+          },
+        );
+        Array.prototype.forEach.call(
+          modal.querySelectorAll("[data-close]"),
+          function (el) {
+            el.addEventListener("click", close);
+          },
+        );
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && !modal.hidden) close();
         });
       })();
     </script>
