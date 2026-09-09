@@ -326,7 +326,7 @@
         overflow: visible;
         clip-path: inset(-40px 0 -280px 0);
       }
-      /* decorative crystals tucked under the centred ability */
+      /* decorative crystals tucked under whichever ability is centred */
       .sec-abilities .a-crystals {
         position: absolute;
         left: 50%;
@@ -336,6 +336,7 @@
         pointer-events: none;
         user-select: none;
         z-index: 1;
+        transition: opacity 0.35s ease;
       }
       .sec-abilities .a-caption {
         position: absolute;
@@ -987,16 +988,18 @@
       .m-crsl.abil {
         height: 168px;
       }
-      /* decorative crystals tucked under the centred ability (mobile) */
+      /* decorative crystals tucked under the centred ability (mobile) —
+         sits IN FRONT of the sphere, like the desktop version */
       .m-crsl.abil .m-abil-crystals {
         position: absolute;
         left: 50%;
         top: 84px;
         width: 228px;
         transform: translateX(-50%);
-        z-index: 0;
+        z-index: 25;
         pointer-events: none;
         user-select: none;
+        transition: opacity 0.35s ease;
       }
       .m-crsl .crsl-arw {
         position: absolute;
