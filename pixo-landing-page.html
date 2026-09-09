@@ -1068,6 +1068,27 @@
       .m-field input::placeholder {
         color: rgba(255, 255, 255, 0.45);
       }
+      /* gameplay: faint background photo behind the heading (Figma: 550px tall,
+         25% opacity) */
+      .m-gameplay {
+        position: relative;
+      }
+      .m-gameplay::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 550px;
+        background: url("image/game_play_bg.png") center top / cover no-repeat;
+        opacity: 0.55;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .m-gameplay > * {
+        position: relative;
+        z-index: 1;
+      }
       .m-gp {
         position: relative;
         padding: 6px 14px 12px;
@@ -1972,25 +1993,27 @@
       <div class="m-photo"><img src="image/12.png" alt="" /></div>
 
       <!-- GAMEPLAY -->
-      <section class="m-wrap m-sec">
-        <div class="m-eyebrow c">
-          <img src="icon/line3.png" alt="" /><span>The Gameplay</span
-          ><img src="icon/line4.png" alt="" />
+      <div class="m-gameplay">
+        <section class="m-wrap m-sec">
+          <div class="m-eyebrow c">
+            <img src="icon/line3.png" alt="" /><span>The Gameplay</span
+            ><img src="icon/line4.png" alt="" />
+          </div>
+          <h1 class="m-title c">Move. Fight.<br />Master.</h1>
+          <div class="m-flourish c">
+            <span class="ln hr-line-l"></span><span class="dot"></span
+            ><span class="ln hr-line-r"></span>
+          </div>
+          <p class="m-lead c">
+            Experience fast-paced action with movement, combat, and powerful
+            abilities. Jump, dash, fight, and adapt to overcome every challenge.
+          </p>
+        </section>
+        <div class="m-gp">
+          <img class="flank l" src="image/13.png" alt="" />
+          <img class="m-img" src="image/14.png" alt="" />
+          <img class="flank r" src="image/15.png" alt="" />
         </div>
-        <h1 class="m-title c">Move. Fight.<br />Master.</h1>
-        <div class="m-flourish c">
-          <span class="ln hr-line-l"></span><span class="dot"></span
-          ><span class="ln hr-line-r"></span>
-        </div>
-        <p class="m-lead c">
-          Experience fast-paced action with movement, combat, and powerful
-          abilities. Jump, dash, fight, and adapt to overcome every challenge.
-        </p>
-      </section>
-      <div class="m-gp">
-        <img class="flank l" src="image/13.png" alt="" />
-        <img class="m-img" src="image/14.png" alt="" />
-        <img class="flank r" src="image/15.png" alt="" />
       </div>
 
      
