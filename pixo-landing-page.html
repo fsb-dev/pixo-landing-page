@@ -20,13 +20,17 @@
         overflow-x: auto;
         background: #091f34;
       }
-      /* <body> is the "stage": its size is the scaled design; the browser scrolls it (one scrollbar). */
+      /* <body> is the "stage": its size is the scaled design; the browser scrolls it (one scrollbar).
+         overflow-x only (not overflow-y): "overflow: hidden" on an ancestor clips descendant
+         position:fixed content (like the trailer modal) to that ancestor's own box, even though
+         fixed elements are positioned relative to the viewport — so clipping vertically here would
+         cut the full-screen modal off wherever body's box happened to end. */
       body {
         margin: 0 auto;
         padding: 0;
         background: #091f34;
         position: relative;
-        overflow: hidden;
+        overflow-x: hidden;
       }
       /* Fixed 1920px design, scaled by JS to fit the viewport width. */
       body > main {
@@ -198,21 +202,8 @@
         width: 100%;
         height: auto;
       }
-      /* the trailer plays right inside the screenshot frame */
       .gp-video {
         overflow: hidden;
-      }
-      .gp-video-frame {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
-        z-index: 4;
-        background: #000;
-      }
-      .gp-video.is-playing .gp-play {
-        display: none;
       }
 
       /* ================= ENEMIES section ================= */
@@ -1241,47 +1232,7 @@
         width: 100%;
         height: 100%;
         border: 0;
-      }
-      .video-modal-fallback {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 18px;
-        padding: 32px;
-        text-align: center;
-        color: rgba(255, 255, 255, 0.75);
-        font-family: "Outfit", sans-serif;
-      }
-      .video-modal-fallback p {
-        margin: 0;
-        max-width: 460px;
-        font-size: 13px;
-        line-height: 1.6;
-      }
-      .video-modal-fallback code {
-        background: rgba(255, 255, 255, 0.12);
-        padding: 1px 6px;
-        border-radius: 4px;
-        font-size: 12px;
-      }
-      .video-modal-play {
-        display: inline-flex;
-        align-items: center;
-        padding: 13px 30px;
-        border-radius: 9999px;
-        background: #ff0033;
-        color: #fff;
-        font-family: "Outfit", sans-serif;
-        font-weight: 600;
-        font-size: 16px;
-        text-decoration: none;
-        transition: transform 0.15s ease;
-      }
-      .video-modal-play:hover {
-        transform: translateY(-1px);
+        object-fit: contain;
       }
       .video-modal-close {
         position: absolute;
@@ -1869,7 +1820,8 @@
           />
           <a
             href="https://youtu.be/CC9m13zQcw8"
-            data-inline-video
+            data-trailer
+            data-video="video/game_play.mp4"
             target="_blank"
             rel="noopener"
             class="gp-play"
@@ -2209,7 +2161,8 @@
             <img class="m-img" src="image/14.png" alt="" />
             <a
               href="https://youtu.be/CC9m13zQcw8"
-              data-inline-video
+              data-trailer
+              data-video="video/game_play.mp4"
               target="_blank"
               rel="noopener"
               class="gp-play"
@@ -2683,30 +2636,19 @@
 
       /* ============ trailer lightbox (local video) ============ */
       (function () {
-        var YT_ID = "CC9m13zQcw8"; // fallback if a button has no usable href
         var modal = document.getElementById("trailerModal");
         var mount = document.getElementById("trailerMount");
         if (!modal || !mount) return;
 
-        // The YouTube IFrame player only runs on a real web origin. Opened straight
-        // from disk (file://) it has no origin and shows "Video player configuration
-        // error" (153) — no URL/param change fixes that, the page must be served over
-        // http(s). So from file:// we show a link out instead of a dead player.
-        var onWeb = /^https?:$/.test(location.protocol);
-
-        // pull the 11-char video id out of whatever YouTube URL the button links to
-        function videoId(el) {
-          var m = /(?:youtu\.be\/|[?&]v=|\/embed\/)([\w-]{11})/.exec(
-            (el && el.getAttribute("href")) || "",
-          );
-          return m ? m[1] : YT_ID;
-        }
-
         function open(e) {
           if (e) e.preventDefault();
+          var btn = e && e.currentTarget;
+          var src =
+            (btn && btn.getAttribute("data-video")) || "video/trailer.mp4";
           mount.innerHTML =
-            '<video class="video-modal-video" src="video/trailer.mp4" ' +
-            'controls autoplay playsinline></video>';
+            '<video class="video-modal-video" src="' +
+            src +
+            '" controls autoplay playsinline></video>';
           modal.hidden = false;
           modal.classList.add("is-open");
           document.body.style.overflow = "hidden";
@@ -2733,41 +2675,6 @@
         document.addEventListener("keydown", function (e) {
           if (e.key === "Escape" && !modal.hidden) close();
         });
-
-        // ---- play the trailer INSIDE the gameplay screenshot frame ----
-        Array.prototype.forEach.call(
-          document.querySelectorAll("[data-inline-video]"),
-          function (btn) {
-            btn.addEventListener("click", function (e) {
-              var host = btn.closest(".gp-video");
-              if (!host) return;
-              // file:// has no origin for the YouTube player — let the link
-              // open the video on YouTube in a new tab instead
-              if (!onWeb) return;
-              e.preventDefault();
-              if (host.classList.contains("is-playing")) return;
-              host.classList.add("is-playing");
-              var f = document.createElement("iframe");
-              f.className = "gp-video-frame";
-              f.src =
-                "https://www.youtube.com/embed/" +
-                videoId(btn) +
-                "?autoplay=1&rel=0&playsinline=1";
-              f.title = "PIXO trailer";
-              f.setAttribute(
-                "allow",
-                "accelerometer; autoplay; clipboard-write; encrypted-media; " +
-                  "gyroscope; picture-in-picture; web-share",
-              );
-              f.setAttribute(
-                "referrerpolicy",
-                "strict-origin-when-cross-origin",
-              );
-              f.allowFullscreen = true;
-              host.appendChild(f);
-            });
-          },
-        );
       })();
     </script>
   </body>
