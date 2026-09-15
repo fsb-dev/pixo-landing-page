@@ -1234,7 +1234,8 @@
         overflow: hidden;
         box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
       }
-      .video-modal-ratio iframe {
+      .video-modal-ratio iframe,
+      .video-modal-ratio video {
         position: absolute;
         inset: 0;
         width: 100%;
@@ -2255,7 +2256,7 @@
       </footer>
     </div>
 
-    <!-- ============ trailer lightbox (YouTube) ============ -->
+    <!-- ============ trailer lightbox (local video) ============ -->
     <div
       id="trailerModal"
       class="video-modal"
@@ -2680,7 +2681,7 @@
         });
       })();
 
-      /* ============ trailer lightbox (YouTube) ============ */
+      /* ============ trailer lightbox (local video) ============ */
       (function () {
         var YT_ID = "CC9m13zQcw8"; // fallback if a button has no usable href
         var modal = document.getElementById("trailerModal");
@@ -2703,27 +2704,9 @@
 
         function open(e) {
           if (e) e.preventDefault();
-          var id = videoId(e && e.currentTarget);
-          if (onWeb) {
-            mount.innerHTML =
-              '<iframe src="https://www.youtube.com/embed/' +
-              id +
-              '?autoplay=1" title="YouTube video player" ' +
-              'frameborder="0" allow="accelerometer; autoplay; clipboard-write; ' +
-              "encrypted-media; gyroscope; picture-in-picture; web-share\" " +
-              'referrerpolicy="strict-origin-when-cross-origin" ' +
-              "allowfullscreen></iframe>";
-          } else {
-            mount.innerHTML =
-              '<div class="video-modal-fallback">' +
-              '<a class="video-modal-play" href="https://youtu.be/' +
-              id +
-              '" target="_blank" rel="noopener">▶ &nbsp;Watch the trailer</a>' +
-              "<p>YouTube blocks in-page playback on pages opened from a file. " +
-              "Run <code>start.bat</code> in the project folder to preview it " +
-              "playing right here — it works automatically once the site is live.</p>" +
-              "</div>";
-          }
+          mount.innerHTML =
+            '<video class="video-modal-video" src="video/trailer.mp4" ' +
+            'controls autoplay playsinline></video>';
           modal.hidden = false;
           modal.classList.add("is-open");
           document.body.style.overflow = "hidden";
