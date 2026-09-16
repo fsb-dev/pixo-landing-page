@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PIXO - Landing Page</title>
@@ -8,1317 +9,1466 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Teko:wght@500;600&amp;display=swap"
-      rel="stylesheet"
-    />
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=Teko:wght@500;600&amp;display=swap"
+        rel="stylesheet" />
     <style>
-      * {
-        box-sizing: border-box;
-      }
-      html {
-        /* auto (not hidden) so Ctrl +/- zoom can scroll to content wider than the window */
-        overflow-x: auto;
-        background: #091f34;
-      }
-      /* <body> is the "stage": its size is the scaled design; the browser scrolls it (one scrollbar).
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            /* auto (not hidden) so Ctrl +/- zoom can scroll to content wider than the window */
+            overflow-x: auto;
+            background: #091f34;
+        }
+
+        /* <body> is the "stage": its size is the scaled design; the browser scrolls it (one scrollbar).
          overflow-x only (not overflow-y): "overflow: hidden" on an ancestor clips descendant
          position:fixed content (like the trailer modal) to that ancestor's own box, even though
          fixed elements are positioned relative to the viewport — so clipping vertically here would
          cut the full-screen modal off wherever body's box happened to end. */
-      body {
-        margin: 0 auto;
-        padding: 0;
-        background: #091f34;
-        position: relative;
-        overflow-x: hidden;
-      }
-      /* Fixed 1920px design, scaled by JS to fit the viewport width. */
-      body > main {
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform-origin: top left;
-        will-change: transform;
-      }
-      /* sticky top nav: fixed to the viewport, scaled by JS with the same factor as <main> */
-      .site-nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 1920px;
-        height: 80px;
-        transform-origin: top left;
-        z-index: 1000;
-        pointer-events: none;
-      }
-      .site-nav a,
-      .site-nav .nav-link {
-        pointer-events: auto;
-      }
-      /* full-width glass header — always visible (Figma: #01132C78 + blur(16.1px)) */
-      .site-nav::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 1920px;
-        height: 80px;
-        background: rgba(1, 19, 44, 0.47);
-        backdrop-filter: blur(16.1px);
-        -webkit-backdrop-filter: blur(16.1px);
-        border-bottom: 1px solid rgba(120, 205, 245, 0.18);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-        pointer-events: none;
-      }
-      /* the pill sits inside the glass header, so it stays transparent */
-      #navBar {
-        background: transparent;
-      }
-      @media (max-width: 767px) {
-        .site-nav {
-          display: none;
-        }
-      }
-      .nav-link {
-        color: #fff;
-        cursor: pointer;
-        transition: color 0.2s ease;
-      }
-      .nav-link:hover {
-        color: #9fe9ff;
-      }
-      .nav-link.is-active {
-        color: #4decfe;
-      }
-      /* vertically centre the nav contents in the 80px bar */
-      .site-nav .nav-link {
-        top: 30px;
-      }
-      .site-nav #navBar {
-        top: 15.5px;
-      }
-      .site-nav #navUnderline {
-        top: 54px;
-      }
-      .site-nav a[aria-label="PIXO home"] {
-        top: 3.5px;
-      }
-
-      /* ---- section-divider mark (replaces icon/box.png + icon/line1.png + icon/line2.png) ---- */
-      .hr-box {
-        width: 16px;
-        height: 16px;
-        transform: rotate(45deg); /* diamond — 16px square ≈ 23px across the points */
-        background: #f8b751;
-        backdrop-filter: blur(2.44px);
-        -webkit-backdrop-filter: blur(2.44px);
-        box-shadow: 0 0 9px 1px rgba(248, 183, 81, 0.55);
-      }
-      .hr-line-r {
-        background: linear-gradient(
-          90deg,
-          #f8b751 0%,
-          rgba(248, 183, 81, 0) 100%
-        );
-      }
-      .hr-line-l {
-        background: linear-gradient(
-          90deg,
-          rgba(248, 183, 81, 0) 0%,
-          #f8b751 100%
-        );
-      }
-      /* footer uses the cyan accent instead of the orange one */
-      .sec-footer .hr-box,
-      .m-footer .m-flourish .dot {
-        background: #05eaf9;
-        box-shadow: 0 0 9px 1px rgba(5, 234, 249, 0.55);
-      }
-      .sec-footer .hr-line-r,
-      .m-footer .m-flourish .hr-line-r {
-        background: linear-gradient(
-          90deg,
-          #05eaf9 0%,
-          rgba(5, 234, 249, 0) 100%
-        );
-      }
-      .sec-footer .hr-line-l,
-      .m-footer .m-flourish .hr-line-l {
-        background: linear-gradient(
-          90deg,
-          rgba(5, 234, 249, 0) 0%,
-          #05eaf9 100%
-        );
-      }
-      .sec-footer .f-divider {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 145px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-        margin: 0;
-      }
-      .sec-footer .f-divider .hr-box {
-        flex: none;
-      }
-      .sec-footer .f-divider .hr-line-l,
-      .sec-footer .f-divider .hr-line-r {
-        width: 296px;
-        height: 2px;
-      }
-      .sec-footer .f-socials {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 318.99px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 23.69px;
-      }
-      .sec-footer .f-socials a {
-        position: relative;
-        display: block;
-        width: 61.012px;
-        height: 61.012px;
-      }
-      .sec-footer .f-socials img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        pointer-events: none;
-      }
-      /* footer flourish — Figma spec: 152.76px wide, 1.3px cyan gradient border */
-      .m-footer .m-flourish .ln {
-        width: 152.7595672607422px;
-        height: 0;
-        min-height: 0;
-        border-top: 1.3px solid transparent;
-        border-image: linear-gradient(
-            90deg,
-            #05eaf9 0%,
-            rgba(5, 234, 249, 0) 100%
-          )
-          1;
-      }
-      .m-footer .m-flourish .hr-line-l {
-        border-image-source: linear-gradient(
-          90deg,
-          rgba(5, 234, 249, 0) 0%,
-          #05eaf9 100%
-        );
-      }
-
-      /* ================= GAMEPLAY section ================= */
-      /* full-bleed background photo behind the "MOVE. FIGHT. MASTER." copy + art */
-      .sec-gameplay .g-bg {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        pointer-events: none;
-        user-select: none;
-      }
-      /* play button centred over the gameplay screenshot */
-      .sec-gameplay .gp-play {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 46.12235641479492px;
-        transform: translate(-50%, -50%);
-        display: block;
-        cursor: pointer;
-        filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.45));
-        transition: transform 0.15s ease;
-      }
-      .sec-gameplay .gp-play:hover {
-        transform: translate(-50%, -50%) scale(1.07);
-      }
-      .sec-gameplay .gp-play img {
-        display: block;
-        width: 100%;
-        height: auto;
-      }
-      .gp-video {
-        overflow: hidden;
-      }
-
-      /* ================= ENEMIES section ================= */
-      /* three layers: full-bleed frame, enemy line-up art, and one positioned copy block */
-      .sec-enemies .e-bg {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: fill;
-        pointer-events: none;
-        user-select: none;
-      }
-      .sec-enemies .e-art {
-        position: absolute;
-        left: 0;
-        top: 63px;
-        width: 962px;
-        height: 609.644px;
-        object-fit: cover;
-        pointer-events: none;
-        user-select: none;
-      }
-      .sec-enemies .e-copy {
-        position: absolute;
-        left: 1082px;
-        top: 100px;
-        width: 640px;
-      }
-      .sec-enemies .e-eyebrow {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        margin: 0;
-        font-family: "Outfit", sans-serif;
-        font-size: 24px;
-        line-height: 24px;
-        letter-spacing: 3.84px;
-        text-transform: uppercase;
-        white-space: nowrap;
-        color: #05eaf9;
-      }
-      .sec-enemies .e-eyebrow img {
-        display: block;
-        flex: none;
-        width: 47px;
-        height: 9.451px;
-        object-fit: contain;
-      }
-      .sec-enemies .e-title {
-        margin: 8px 0 0;
-        width: 616px;
-        height: 260px; /* locks the 2-line block so the divider/lead don't shift */
-        font-family: "Teko", sans-serif;
-        font-weight: 500;
-        font-size: 120px;
-        line-height: 130px;
-        text-transform: uppercase;
-        color: #fff;
-      }
-      .sec-enemies .e-divider {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin: 0;
-      }
-      .sec-enemies .e-divider .hr-box {
-        flex: none;
-      }
-      .sec-enemies .e-divider .hr-line-l,
-      .sec-enemies .e-divider .hr-line-r {
-        width: 179px;
-        height: 2px;
-      }
-      .sec-enemies .e-lead {
-        margin: 43px 0 0;
-        width: 628px;
-        font-family: "Outfit", sans-serif;
-        font-size: 26px;
-        line-height: 36px;
-        color: #fff;
-      }
-
-      /* ================= ABILITIES section ================= */
-      /* three blocks: the heading (.a-head), the carousel stage (#acMount), the caption (.a-caption) */
-      .sec-abilities .a-head {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-      .sec-abilities .a-eyebrow {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        margin: 0;
-        font-family: "Outfit", sans-serif;
-        font-size: 24px;
-        line-height: 24px;
-        letter-spacing: 3.84px;
-        text-transform: uppercase;
-        white-space: nowrap;
-        color: #05eaf9;
-      }
-      .sec-abilities .a-eyebrow img {
-        display: block;
-        flex: none;
-        width: 47px;
-        height: 9.451px;
-        object-fit: contain;
-      }
-      .sec-abilities .a-title {
-        margin: 8px 0 0;
-        font-family: "Teko", sans-serif;
-        font-weight: 500;
-        font-size: 120px;
-        line-height: 120px;
-        text-transform: uppercase;
-        white-space: nowrap;
-        color: #fff;
-      }
-      .sec-abilities .a-divider {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin: 0;
-      }
-      .sec-abilities .a-divider .hr-box {
-        flex: none;
-      }
-      .sec-abilities .a-divider .hr-line-l,
-      .sec-abilities .a-divider .hr-line-r {
-        width: 296px;
-        height: 2px;
-      }
-      .sec-abilities .a-intro {
-        margin: 43px 0 0;
-        max-width: 741px;
-        font-family: "Outfit", sans-serif;
-        font-size: 26px;
-        line-height: 36px;
-        color: #fff;
-      }
-      .sec-abilities .a-stage {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: 305px;
-        width: 1920px;
-        height: 380px;
-      }
-      /* the outer circles are pushed down by drop[] — let them spill below the
-         stage instead of being clipped, while still hiding slides at the L/R edges */
-      .sec-abilities .a-stage .crsl-vp {
-        overflow: visible;
-        clip-path: inset(-40px 0 -280px 0);
-      }
-      /* decorative crystals tucked under whichever ability is centred */
-      .sec-abilities .a-crystals {
-        position: absolute;
-        left: 50%;
-        top: 491px;
-        width: 430px;
-        transform: translateX(-50%);
-        pointer-events: none;
-        user-select: none;
-        z-index: 1;
-        transition: opacity 0.35s ease;
-      }
-      .sec-abilities .a-caption {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 700px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-      .sec-abilities .a-label {
-        margin: 0;
-        font-family: "Outfit", sans-serif;
-        font-weight: 600;
-        font-size: 24px;
-        line-height: 24px;
-        color: #cfb16d;
-      }
-      .sec-abilities .a-desc {
-        margin: 14px 0 0;
-        max-width: 495px;
-        font-family: "Outfit", sans-serif;
-        font-size: 20px;
-        line-height: 30px;
-        color: #fff;
-      }
-      .sec-abilities .a-nav {
-        display: flex;
-        gap: 40px;
-        margin: 32px 0 0;
-      }
-      .sec-abilities .a-nav a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 58px;
-        height: 58px;
-        transition: transform 0.15s ease;
-      }
-      .sec-abilities .a-nav a:hover {
-        transform: translateY(-1px);
-      }
-      .sec-abilities .a-nav a:active {
-        transform: translateY(0);
-      }
-      .sec-abilities .a-nav img {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-
-      /* ================= MEET PIXO section ================= */
-      /* two blocks: the portrait art (.mp-art) and one positioned copy block (.mp-copy) */
-      .sec-meet .mp-art {
-        position: absolute;
-        left: 893px;
-        top: 96px;
-        width: 1026.5px;
-        height: 858px;
-        object-fit: cover;
-        pointer-events: none;
-        user-select: none;
-      }
-      .sec-meet .mp-copy {
-        position: absolute;
-        left: 199px;
-        top: 285px;
-        width: 640px;
-      }
-      .sec-meet .mp-eyebrow {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        margin: 0;
-        font-family: "Outfit", sans-serif;
-        font-size: 24px;
-        line-height: 24px;
-        letter-spacing: 3.84px;
-        text-transform: uppercase;
-        white-space: nowrap;
-        color: #05eaf9;
-      }
-      .sec-meet .mp-eyebrow img {
-        display: block;
-        flex: none;
-        width: 47px;
-        height: 9.451px;
-        object-fit: contain;
-      }
-      .sec-meet .mp-title {
-        margin: 8px 0 0;
-        font-family: "Teko", sans-serif;
-        font-weight: 500;
-        font-size: 120px;
-        line-height: 130px;
-        text-transform: uppercase;
-        white-space: nowrap;
-        color: #fff;
-      }
-      .sec-meet .mp-divider {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin: 0;
-      }
-      .sec-meet .mp-divider .hr-box {
-        flex: none;
-      }
-      .sec-meet .mp-divider .hr-line-l,
-      .sec-meet .mp-divider .hr-line-r {
-        width: 179px;
-        height: 2px;
-      }
-      .sec-meet .mp-kicker {
-        margin: 43px 0 0;
-        font-family: "Outfit", sans-serif;
-        font-weight: 500;
-        font-size: 24px;
-        line-height: 24px;
-        letter-spacing: 3.84px;
-        text-transform: uppercase;
-        white-space: nowrap;
-        color: #cdaa68;
-      }
-      .sec-meet .mp-lead {
-        margin: 20px 0 0;
-        width: 628px;
-        font-family: "Outfit", sans-serif;
-        font-size: 26px;
-        line-height: 36px;
-        color: #fff;
-      }
-      .sec-meet .mp-btn {
-        position: relative;
-        display: block;
-        margin: 43px 0 0;
-        width: 336.912px;
-        height: 89.462px;
-        text-decoration: none;
-        transition: transform 0.15s ease;
-      }
-      .sec-meet .mp-btn:hover {
-        transform: translateY(-1px);
-      }
-      .sec-meet .mp-btn:active {
-        transform: translateY(0);
-      }
-      .sec-meet .mp-btn-bg {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: fill;
-      }
-      .sec-meet .mp-btn-orb {
-        position: absolute;
-        left: 36px;
-        top: 19.73px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 50px;
-        height: 50px;
-        border-radius: 9999px;
-      }
-      .sec-meet .mp-btn-orb > span {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 9999px;
-      }
-      .sec-meet .mp-btn-label {
-        position: absolute;
-        left: 104px;
-        top: 32.73px;
-        font-family: "Outfit", sans-serif;
-        font-weight: 600;
-        font-size: 24px;
-        line-height: 24px;
-        letter-spacing: 0.96px;
-        white-space: nowrap;
-        color: #fff;
-        text-shadow: 0 1px 3px rgba(5, 20, 45, 0.55);
-      }
-
-      /* ================= THE WORLD section ================= */
-      /* centred layout (matches the mobile ".c" variant): heading, carousel stage,
-         side arrows, and a centred caption */
-      .sec-world .w-head {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 25px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-      .sec-world .w-eyebrow {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        margin: 0;
-        font-family: "Outfit", sans-serif;
-        font-size: 24px;
-        line-height: 24px;
-        letter-spacing: 3.84px;
-        text-transform: uppercase;
-        white-space: nowrap;
-        color: #05eaf9;
-      }
-      .sec-world .w-eyebrow img {
-        display: block;
-        flex: none;
-        width: 47px;
-        height: 9.451px;
-        object-fit: contain;
-      }
-      .sec-world .w-title {
-        margin: 8px 0 0;
-        font-family: "Teko", sans-serif;
-        font-weight: 500;
-        font-size: 120px;
-        line-height: 120px;
-        text-transform: uppercase;
-        white-space: nowrap;
-        color: #fff;
-      }
-      .sec-world .w-divider {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin: 0;
-      }
-      .sec-world .w-divider .hr-box {
-        flex: none;
-      }
-      .sec-world .w-divider .hr-line-l,
-      .sec-world .w-divider .hr-line-r {
-        width: 296px;
-        height: 2px;
-      }
-      .sec-world .w-intro {
-        margin: 43px 0 0;
-        max-width: 900px;
-        font-family: "Outfit", sans-serif;
-        font-size: 26px;
-        line-height: 36px;
-        color: #fff;
-      }
-      .sec-world .w-stage {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: 355px;
-        width: 1920px;
-        height: 400px;
-      }
-      .sec-world .w-arrow {
-        position: absolute;
-        top: 560px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 58px;
-        height: 58px;
-        transition: transform 0.15s ease;
-      }
-      .sec-world .w-arrow:hover {
-        transform: translateY(-1px);
-      }
-      .sec-world .w-arrow:active {
-        transform: translateY(0);
-      }
-      .sec-world .w-arrow img {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-      .sec-world .w-arrow-prev {
-        left: 542px;
-      }
-      .sec-world .w-arrow-next {
-        left: 1320px;
-      }
-      .sec-world .w-caption {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 780px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-      .sec-world .w-label {
-        margin: 0;
-        font-family: "Outfit", sans-serif;
-        font-weight: 600;
-        font-size: 24px;
-        line-height: 24px;
-        color: #cfb16d;
-      }
-      .sec-world .w-desc {
-        margin: 16px 0 0;
-        max-width: 420px;
-        font-family: "Outfit", sans-serif;
-        font-size: 20px;
-        line-height: 30px;
-        color: #fff;
-      }
-
-      /* ---- real sliding carousel (a track of slides that translates) ---- */
-      /* mount keeps its own positioning (desktop: Tailwind .absolute, mobile: .m-crsl) */
-      .crsl-vp {
-        position: absolute;
-        inset: 0;
-        overflow: hidden;
-      }
-      .crsl-track {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        will-change: transform;
-      }
-      .crsl-slide {
-        position: relative;
-        flex: 0 0 auto;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition:
-          transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
-          opacity 0.55s ease,
-          filter 0.55s ease;
-      }
-      .crsl-slide img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-      /* depth (scale / arc-drop / dim / z-index) is applied per-slide from JS by distance from centre */
-
-      /* ================= MOBILE LAYOUT ( < 768px ) ================= */
-      .mobile-site {
-        display: none;
-      }
-      @media (max-width: 767px) {
-        html {
-          overflow-x: hidden;
-        }
         body {
-          position: static !important;
-          overflow: visible !important;
-          width: 100% !important;
-          height: auto !important;
-          margin: 0 !important;
+            margin: 0 auto;
+            padding: 0;
+            background: #091f34;
+            position: relative;
+            overflow-x: hidden;
         }
-        body > main {
-          display: none !important;
+
+        /* Fixed 1920px design, scaled by JS to fit the viewport width. */
+        body>main {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top left;
+            will-change: transform;
         }
+
+        /* sticky top nav: fixed to the viewport, scaled by JS with the same factor as <main> */
+        .site-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 1920px;
+            height: 80px;
+            transform-origin: top left;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .site-nav a,
+        .site-nav .nav-link {
+            pointer-events: auto;
+        }
+
+        /* full-width glass header — always visible (Figma: #01132C78 + blur(16.1px)) */
+        .site-nav::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1920px;
+            height: 80px;
+            background: rgba(1, 19, 44, 0.47);
+            backdrop-filter: blur(16.1px);
+            -webkit-backdrop-filter: blur(16.1px);
+            border-bottom: 1px solid rgba(120, 205, 245, 0.18);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            pointer-events: none;
+        }
+
+        /* the pill sits inside the glass header, so it stays transparent */
+        #navBar {
+            background: transparent;
+        }
+
+        @media (max-width: 767px) {
+            .site-nav {
+                display: none;
+            }
+        }
+
+        .nav-link {
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #9fe9ff;
+        }
+
+        .nav-link.is-active {
+            color: #4decfe;
+        }
+
+        /* vertically centre the nav contents in the 80px bar */
+        .site-nav .nav-link {
+            top: 30px;
+        }
+
+        .site-nav #navBar {
+            top: 15.5px;
+        }
+
+        .site-nav #navUnderline {
+            top: 54px;
+        }
+
+        .site-nav a[aria-label="PIXO home"] {
+            top: 3.5px;
+        }
+
+        /* ---- section-divider mark (replaces icon/box.png + icon/line1.png + icon/line2.png) ---- */
+        .hr-box {
+            width: 16px;
+            height: 16px;
+            transform: rotate(45deg);
+            /* diamond — 16px square ≈ 23px across the points */
+            background: #f8b751;
+            backdrop-filter: blur(2.44px);
+            -webkit-backdrop-filter: blur(2.44px);
+            box-shadow: 0 0 9px 1px rgba(248, 183, 81, 0.55);
+        }
+
+        .hr-line-r {
+            background: linear-gradient(90deg,
+                    #f8b751 0%,
+                    rgba(248, 183, 81, 0) 100%);
+        }
+
+        .hr-line-l {
+            background: linear-gradient(90deg,
+                    rgba(248, 183, 81, 0) 0%,
+                    #f8b751 100%);
+        }
+
+        /* footer uses the cyan accent instead of the orange one */
+        .sec-footer .hr-box,
+        .m-footer .m-flourish .dot {
+            background: #05eaf9;
+            box-shadow: 0 0 9px 1px rgba(5, 234, 249, 0.55);
+        }
+
+        .sec-footer .hr-line-r,
+        .m-footer .m-flourish .hr-line-r {
+            background: linear-gradient(90deg,
+                    #05eaf9 0%,
+                    rgba(5, 234, 249, 0) 100%);
+        }
+
+        .sec-footer .hr-line-l,
+        .m-footer .m-flourish .hr-line-l {
+            background: linear-gradient(90deg,
+                    rgba(5, 234, 249, 0) 0%,
+                    #05eaf9 100%);
+        }
+
+        .sec-footer .f-divider {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 145px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .sec-footer .f-divider .hr-box {
+            flex: none;
+        }
+
+        .sec-footer .f-divider .hr-line-l,
+        .sec-footer .f-divider .hr-line-r {
+            width: 296px;
+            height: 2px;
+        }
+
+        .sec-footer .f-socials {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 318.99px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 23.69px;
+        }
+
+        .sec-footer .f-socials a {
+            position: relative;
+            display: block;
+            width: 61.012px;
+            height: 61.012px;
+        }
+
+        .sec-footer .f-socials img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        /* footer flourish — Figma spec: 152.76px wide, 1.3px cyan gradient border */
+        .m-footer .m-flourish .ln {
+            width: 152.7595672607422px;
+            height: 0;
+            min-height: 0;
+            border-top: 1.3px solid transparent;
+            border-image: linear-gradient(90deg,
+                    #05eaf9 0%,
+                    rgba(5, 234, 249, 0) 100%) 1;
+        }
+
+        .m-footer .m-flourish .hr-line-l {
+            border-image-source: linear-gradient(90deg,
+                    rgba(5, 234, 249, 0) 0%,
+                    #05eaf9 100%);
+        }
+
+        /* ================= GAMEPLAY section ================= */
+        /* full-bleed background photo behind the "MOVE. FIGHT. MASTER." copy + art */
+        .sec-gameplay .g-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* play button centred over the gameplay screenshot */
+        .sec-gameplay .gp-play {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 46.12235641479492px;
+            transform: translate(-50%, -50%);
+            display: block;
+            cursor: pointer;
+            filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.45));
+            transition: transform 0.15s ease;
+        }
+
+        .sec-gameplay .gp-play:hover {
+            transform: translate(-50%, -50%) scale(1.07);
+        }
+
+        .sec-gameplay .gp-play img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .gp-video {
+            overflow: hidden;
+        }
+
+        /* ================= ENEMIES section ================= */
+        /* three layers: full-bleed frame, enemy line-up art, and one positioned copy block */
+        .sec-enemies .e-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .sec-enemies .e-art {
+            position: absolute;
+            left: 0;
+            top: 117px;
+            width: 962px;
+            height: 609.644px;
+            object-fit: cover;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .sec-enemies .e-copy {
+            position: absolute;
+            left: 1082px;
+            top: 192px;
+            width: 640px;
+        }
+
+        .sec-enemies .e-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin: 0;
+            font-family: "Outfit", sans-serif;
+            font-size: 24px;
+            line-height: 24px;
+            letter-spacing: 3.84px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: #05eaf9;
+        }
+
+        .sec-enemies .e-eyebrow img {
+            display: block;
+            flex: none;
+            width: 47px;
+            height: 9.451px;
+            object-fit: contain;
+        }
+
+        .sec-enemies .e-title {
+            margin: 8px 0 0;
+            width: 616px;
+            height: 260px;
+            /* locks the 2-line block so the divider/lead don't shift */
+            font-family: "Teko", sans-serif;
+            font-weight: 500;
+            font-size: 120px;
+            line-height: 130px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .sec-enemies .e-divider {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .sec-enemies .e-divider .hr-box {
+            flex: none;
+        }
+
+        .sec-enemies .e-divider .hr-line-l,
+        .sec-enemies .e-divider .hr-line-r {
+            width: 179px;
+            height: 2px;
+        }
+
+        .sec-enemies .e-lead {
+            margin: 43px 0 0;
+            width: 628px;
+            font-family: "Outfit", sans-serif;
+            font-size: 26px;
+            line-height: 36px;
+            color: #fff;
+        }
+
+        /* ================= ABILITIES section ================= */
+        /* three blocks: the heading (.a-head), the carousel stage (#acMount), the caption (.a-caption) */
+        .sec-abilities .a-head {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .sec-abilities .a-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin: 0;
+            font-family: "Outfit", sans-serif;
+            font-size: 24px;
+            line-height: 24px;
+            letter-spacing: 3.84px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: #05eaf9;
+        }
+
+        .sec-abilities .a-eyebrow img {
+            display: block;
+            flex: none;
+            width: 47px;
+            height: 9.451px;
+            object-fit: contain;
+        }
+
+        .sec-abilities .a-title {
+            margin: 8px 0 0;
+            font-family: "Teko", sans-serif;
+            font-weight: 500;
+            font-size: 120px;
+            line-height: 120px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: #fff;
+        }
+
+        .sec-abilities .a-divider {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .sec-abilities .a-divider .hr-box {
+            flex: none;
+        }
+
+        .sec-abilities .a-divider .hr-line-l,
+        .sec-abilities .a-divider .hr-line-r {
+            width: 296px;
+            height: 2px;
+        }
+
+        .sec-abilities .a-intro {
+            margin: 43px 0 0;
+            max-width: 741px;
+            font-family: "Outfit", sans-serif;
+            font-size: 26px;
+            line-height: 36px;
+            color: #fff;
+        }
+
+        .sec-abilities .a-stage {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 305px;
+            width: 1920px;
+            height: 380px;
+        }
+
+        /* the outer circles are pushed down by drop[] — let them spill below the
+         stage instead of being clipped, while still hiding slides at the L/R edges */
+        .sec-abilities .a-stage .crsl-vp {
+            overflow: visible;
+            clip-path: inset(-40px 0 -280px 0);
+        }
+
+        /* decorative crystals tucked under whichever ability is centred */
+        .sec-abilities .a-crystals {
+            position: absolute;
+            left: 50%;
+            top: 491px;
+            width: 430px;
+            transform: translateX(-50%);
+            pointer-events: none;
+            user-select: none;
+            z-index: 1;
+            transition: opacity 0.35s ease;
+        }
+
+        .sec-abilities .a-caption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .sec-abilities .a-label {
+            margin: 0;
+            font-family: "Outfit", sans-serif;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 24px;
+            color: #cfb16d;
+        }
+
+        .sec-abilities .a-desc {
+            margin: 14px 0 0;
+            max-width: 495px;
+            font-family: "Outfit", sans-serif;
+            font-size: 20px;
+            line-height: 30px;
+            color: #fff;
+        }
+
+        .sec-abilities .a-nav {
+            display: flex;
+            gap: 40px;
+            margin: 32px 0 0;
+        }
+
+        .sec-abilities .a-nav a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 58px;
+            height: 58px;
+            transition: transform 0.15s ease;
+        }
+
+        .sec-abilities .a-nav a:hover {
+            transform: translateY(-1px);
+        }
+
+        .sec-abilities .a-nav a:active {
+            transform: translateY(0);
+        }
+
+        .sec-abilities .a-nav img {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ================= MEET PIXO section ================= */
+        /* two blocks: the portrait art (.mp-art) and one positioned copy block (.mp-copy) */
+        .sec-meet .mp-art {
+            position: absolute;
+            left: 893px;
+            top: 96px;
+            width: 1026.5px;
+            height: 858px;
+            object-fit: cover;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .sec-meet .mp-copy {
+            position: absolute;
+            left: 199px;
+            top: 285px;
+            width: 640px;
+        }
+
+        .sec-meet .mp-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin: 0;
+            font-family: "Outfit", sans-serif;
+            font-size: 24px;
+            line-height: 24px;
+            letter-spacing: 3.84px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: #05eaf9;
+        }
+
+        .sec-meet .mp-eyebrow img {
+            display: block;
+            flex: none;
+            width: 47px;
+            height: 9.451px;
+            object-fit: contain;
+        }
+
+        .sec-meet .mp-title {
+            margin: 8px 0 0;
+            font-family: "Teko", sans-serif;
+            font-weight: 500;
+            font-size: 120px;
+            line-height: 130px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: #fff;
+        }
+
+        .sec-meet .mp-divider {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .sec-meet .mp-divider .hr-box {
+            flex: none;
+        }
+
+        .sec-meet .mp-divider .hr-line-l,
+        .sec-meet .mp-divider .hr-line-r {
+            width: 179px;
+            height: 2px;
+        }
+
+        .sec-meet .mp-kicker {
+            margin: 43px 0 0;
+            font-family: "Outfit", sans-serif;
+            font-weight: 500;
+            font-size: 24px;
+            line-height: 24px;
+            letter-spacing: 3.84px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: #cdaa68;
+        }
+
+        .sec-meet .mp-lead {
+            margin: 20px 0 0;
+            width: 628px;
+            font-family: "Outfit", sans-serif;
+            font-size: 26px;
+            line-height: 36px;
+            color: #fff;
+        }
+
+        .sec-meet .mp-btn {
+            position: relative;
+            display: block;
+            margin: 43px 0 0;
+            width: 336.912px;
+            height: 89.462px;
+            text-decoration: none;
+            transition: transform 0.15s ease;
+        }
+
+        .sec-meet .mp-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .sec-meet .mp-btn:active {
+            transform: translateY(0);
+        }
+
+        .sec-meet .mp-btn-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+
+        .sec-meet .mp-btn-orb {
+            position: absolute;
+            left: 36px;
+            top: 19.73px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 9999px;
+        }
+
+        .sec-meet .mp-btn-orb>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 9999px;
+        }
+
+        .sec-meet .mp-btn-label {
+            position: absolute;
+            left: 104px;
+            top: 32.73px;
+            font-family: "Outfit", sans-serif;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 24px;
+            letter-spacing: 0.96px;
+            white-space: nowrap;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(5, 20, 45, 0.55);
+        }
+
+        /* ================= THE WORLD section ================= */
+        /* centred layout (matches the mobile ".c" variant): heading, carousel stage,
+         side arrows, and a centred caption */
+        .sec-world .w-head {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .sec-world .w-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin: 0;
+            font-family: "Outfit", sans-serif;
+            font-size: 24px;
+            line-height: 24px;
+            letter-spacing: 3.84px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: #05eaf9;
+        }
+
+        .sec-world .w-eyebrow img {
+            display: block;
+            flex: none;
+            width: 47px;
+            height: 9.451px;
+            object-fit: contain;
+        }
+
+        .sec-world .w-title {
+            margin: 8px 0 0;
+            font-family: "Teko", sans-serif;
+            font-weight: 500;
+            font-size: 120px;
+            line-height: 120px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            color: #fff;
+        }
+
+        .sec-world .w-divider {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 0;
+        }
+
+        .sec-world .w-divider .hr-box {
+            flex: none;
+        }
+
+        .sec-world .w-divider .hr-line-l,
+        .sec-world .w-divider .hr-line-r {
+            width: 296px;
+            height: 2px;
+        }
+
+        .sec-world .w-intro {
+            margin: 43px 0 0;
+            max-width: 900px;
+            font-family: "Outfit", sans-serif;
+            font-size: 26px;
+            line-height: 36px;
+            color: #fff;
+        }
+
+        .sec-world .w-stage {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 355px;
+            width: 1920px;
+            height: 400px;
+        }
+
+        .sec-world .w-arrow {
+            position: absolute;
+            top: 560px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 58px;
+            height: 58px;
+            transition: transform 0.15s ease;
+        }
+
+        .sec-world .w-arrow:hover {
+            transform: translateY(-1px);
+        }
+
+        .sec-world .w-arrow:active {
+            transform: translateY(0);
+        }
+
+        .sec-world .w-arrow img {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sec-world .w-arrow-prev {
+            left: 542px;
+        }
+
+        .sec-world .w-arrow-next {
+            left: 1320px;
+        }
+
+        .sec-world .w-caption {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 780px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .sec-world .w-label {
+            margin: 0;
+            font-family: "Outfit", sans-serif;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 24px;
+            color: #cfb16d;
+        }
+
+        .sec-world .w-desc {
+            margin: 16px 0 0;
+            max-width: 420px;
+            font-family: "Outfit", sans-serif;
+            font-size: 20px;
+            line-height: 30px;
+            color: #fff;
+        }
+
+        /* ---- real sliding carousel (a track of slides that translates) ---- */
+        /* mount keeps its own positioning (desktop: Tailwind .absolute, mobile: .m-crsl) */
+        .crsl-vp {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .crsl-track {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            will-change: transform;
+        }
+
+        .crsl-slide {
+            position: relative;
+            flex: 0 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition:
+                transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.55s ease,
+                filter 0.55s ease;
+        }
+
+        .crsl-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* depth (scale / arc-drop / dim / z-index) is applied per-slide from JS by distance from centre */
+
+        /* ================= MOBILE LAYOUT ( < 768px ) ================= */
         .mobile-site {
-          display: block;
-          width: 100%;
-          max-width: 520px;
-          margin: 0 auto;
-          background: #091f34;
-          color: #fff;
-          font-family:
-            "Outfit",
-            system-ui,
-            -apple-system,
-            sans-serif;
-          --m-pad: 30px; /* consistent left/right gutter for text on every section */
+            display: none;
         }
-      }
-      .m-wrap {
-        padding-left: var(--m-pad, 30px);
-        padding-right: var(--m-pad, 30px);
-      }
-      .m-sec {
-        padding-top: 44px;
-        padding-bottom: 8px;
-      }
-      .m-img {
-        display: block;
-        width: 100%;
-        height: auto;
-      }
 
-      /* Hero: one full-bleed image fills the whole section, copy overlaid on the dark sky at the top. */
-      .m-hero {
-        position: relative;
-        background: #091f34;
-        overflow: hidden;
-        min-height: 100vh;
-        min-height: 100svh;
-      }
-      .m-hero-bg {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center top;
-        z-index: 0;
-      }
-      .m-hero::after {
-        /* legibility scrim: dark behind the copy at the top, dark at the very bottom to blend */
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        pointer-events: none;
-        background:
-          linear-gradient(
-            180deg,
-            rgba(9, 31, 52, 0.82) 0%,
-            rgba(9, 31, 52, 0.5) 30%,
-            rgba(9, 31, 52, 0) 55%
-          ),
-          linear-gradient(180deg, rgba(9, 31, 52, 0) 82%, #091f34 100%);
-      }
-      .m-hero-content {
-        position: relative;
-        z-index: 2;
-        padding: 26px var(--m-pad, 30px) 40px;
-      }
-      .m-hero-logo {
-        display: inline-block;
-        margin-bottom: 26px;
-      }
-      .m-hero-logo img {
-        height: 34px;
-        width: auto;
-        display: block;
-      }
-      .m-eyebrow {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 14px;
-      }
-      .m-eyebrow.c {
-        justify-content: center;
-      }
-      .m-eyebrow span {
-        color: #05eaf9;
-        font-size: 12px;
-        font-weight: 500;
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        white-space: nowrap;
-      }
-      .m-eyebrow img {
-        height: 7px;
-        width: 34px;
-        object-fit: contain;
-        flex: none;
-      }
-      .m-title {
-        font-family: "Teko", sans-serif;
-        font-weight: 500;
-        font-size: 44px;
-        line-height: 0.95;
-        text-transform: uppercase;
-        margin: 0;
-        letter-spacing: 0.5px;
-      }
-      .m-title.c {
-        text-align: center;
-      }
-      .m-flourish {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 16px 0;
-      }
-      .m-flourish.c {
-        justify-content: center;
-      }
-      /* mobile flourish line — Figma spec: 99.04px wide, 0.83px gradient border */
-      .m-flourish .ln,
-      .m-fl-mini .ln {
-        display: block;
-        flex: 0 0 auto;
-        width: 99.0391845703125px;
-        max-width: 40%;
-        height: 0;
-        border-top: 0.83px solid transparent;
-        border-image: linear-gradient(
-            90deg,
-            #f8b751 0%,
-            rgba(248, 183, 81, 0) 100%
-          )
-          1;
-      }
-      /* left segment mirrors the gradient so it fades toward the outer edge */
-      .m-flourish .hr-line-l,
-      .m-fl-mini .hr-line-l {
-        border-image-source: linear-gradient(
-          90deg,
-          rgba(248, 183, 81, 0) 0%,
-          #f8b751 100%
-        );
-      }
-      .m-flourish .dot,
-      .m-fl-mini .dot {
-        display: block;
-        height: 11px;
-        width: 11px;
-        flex: none;
-        transform: rotate(45deg); /* diamond, same as .hr-box */
-        background: #f8b751;
-        box-shadow: 0 0 7px 1px rgba(248, 183, 81, 0.55);
-      }
-      /* title with a compact flourish tucked to its right */
-      .m-titlerow {
-        display: flex;
-        align-items: flex-end;
-        gap: 14px;
-        margin-bottom: 14px;
-      }
-      .m-fl-mini {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding-bottom: 8px;
-      }
-      /* standalone section photo that fades into the navy at top and bottom */
-      .m-photo {
-        position: relative;
-        margin-top: 4px;
-      }
-      .m-photo img {
-        display: block;
-        width: 100%;
-        height: auto;
-      }
-      .m-photo::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        background:
-          linear-gradient(
-            180deg,
-            #091f34 0%,
-            rgba(9, 31, 52, 0.4) 12%,
-            rgba(9, 31, 52, 0) 30%
-          ),
-          linear-gradient(
-            180deg,
-            rgba(9, 31, 52, 0) 72%,
-            rgba(9, 31, 52, 0.55) 88%,
-            #091f34 100%
-          );
-      }
-      .m-sub {
-        color: #cdaa68;
-        font-size: 13px;
-        font-weight: 500;
-        letter-spacing: 2.4px;
-        text-transform: uppercase;
-        margin: 0 0 12px;
-      }
-      .m-lead {
-        font-size: 15px;
-        line-height: 1.6;
-        color: rgba(255, 255, 255, 0.9);
-        margin: 0 0 22px;
-      }
-      .m-lead.c {
-        text-align: center;
-      }
-      /* centre an entire mobile section (eyebrow row, title, flourish, sub, lead, button) */
-      .m-sec.m-c {
-        text-align: center;
-      }
-      .m-sec.m-c .m-eyebrow,
-      .m-sec.m-c .m-titlerow,
-      .m-sec.m-c .m-flourish,
-      .m-sec.m-c .m-fl-mini {
-        justify-content: center;
-      }
-      .m-cardlabel {
-        text-align: center;
-        color: #cfb16d;
-        font-weight: 600;
-        letter-spacing: 1px;
-        font-size: 14px;
-        text-transform: uppercase;
-        margin: 8px 0;
-      }
-      .m-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        height: 52px;
-        padding: 0 26px 0 7px;
-        background: url("icon/button.png") center/100% 100% no-repeat;
-        color: #fff;
-        font-weight: 600;
-        font-size: 15px;
-        letter-spacing: 0.8px;
-        text-decoration: none;
-      }
-      .m-btn .ic {
-        width: 38px;
-        height: 38px;
-        border-radius: 999px;
-        flex: none;
-        display: grid;
-        place-items: center;
-        background: conic-gradient(
-          from 140deg,
-          #eef2f6,
-          #9aa4af,
-          #f4f7fa,
-          #828d9a,
-          #dde3e9,
-          #aab4bf,
-          #eef2f6
-        );
-        box-shadow:
-          0 2px 6px rgba(5, 20, 45, 0.5),
-          inset 0 1px 1px rgba(255, 255, 255, 0.7);
-      }
-      .m-btn .ic > i {
-        width: 26px;
-        height: 26px;
-        border-radius: 999px;
-        display: grid;
-        place-items: center;
-        background: radial-gradient(circle at 42% 34%, #1a3b63, #0a1c33 68%);
-        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
-      }
-      /* Mobile carousel: a sliding track, big centre slide, dim neighbours peeking at each edge */
-      .m-crsl {
-        position: relative;
-        margin: 18px calc(var(--m-pad, 30px) * -1) 10px;
-        height: 210px;
-      }
-      .m-crsl.abil {
-        height: 168px;
-      }
-      /* decorative crystals tucked under the centred ability (mobile) —
+        @media (max-width: 767px) {
+            html {
+                overflow-x: hidden;
+            }
+
+            body {
+                position: static !important;
+                overflow: visible !important;
+                width: 100% !important;
+                height: auto !important;
+                margin: 0 !important;
+            }
+
+            body>main {
+                display: none !important;
+            }
+
+            .mobile-site {
+                display: block;
+                width: 100%;
+                max-width: 520px;
+                margin: 0 auto;
+                background: #091f34;
+                color: #fff;
+                font-family:
+                    "Outfit",
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
+                --m-pad: 30px;
+                /* consistent left/right gutter for text on every section */
+            }
+        }
+
+        .m-wrap {
+            padding-left: var(--m-pad, 30px);
+            padding-right: var(--m-pad, 30px);
+        }
+
+        .m-sec {
+            padding-top: 44px;
+            padding-bottom: 8px;
+        }
+
+        .m-img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Hero: one full-bleed image fills the whole section, copy overlaid on the dark sky at the top. */
+        .m-hero {
+            position: relative;
+            background: #091f34;
+            overflow: hidden;
+            min-height: 100vh;
+            min-height: 100svh;
+        }
+
+        .m-hero-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            z-index: 0;
+        }
+
+        .m-hero::after {
+            /* legibility scrim: dark behind the copy at the top, dark at the very bottom to blend */
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background:
+                linear-gradient(180deg,
+                    rgba(9, 31, 52, 0.82) 0%,
+                    rgba(9, 31, 52, 0.5) 30%,
+                    rgba(9, 31, 52, 0) 55%),
+                linear-gradient(180deg, rgba(9, 31, 52, 0) 82%, #091f34 100%);
+        }
+
+        .m-hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 26px var(--m-pad, 30px) 40px;
+        }
+
+        .m-hero-logo {
+            display: inline-block;
+            margin-bottom: 26px;
+        }
+
+        .m-hero-logo img {
+            height: 34px;
+            width: auto;
+            display: block;
+        }
+
+        .m-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .m-eyebrow.c {
+            justify-content: center;
+        }
+
+        .m-eyebrow span {
+            color: #05eaf9;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .m-eyebrow img {
+            height: 7px;
+            width: 34px;
+            object-fit: contain;
+            flex: none;
+        }
+
+        .m-title {
+            font-family: "Teko", sans-serif;
+            font-weight: 500;
+            font-size: 44px;
+            line-height: 0.95;
+            text-transform: uppercase;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .m-title.c {
+            text-align: center;
+        }
+
+        .m-flourish {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .m-flourish.c {
+            justify-content: center;
+        }
+
+        /* mobile flourish line — Figma spec: 99.04px wide, 0.83px gradient border */
+        .m-flourish .ln,
+        .m-fl-mini .ln {
+            display: block;
+            flex: 0 0 auto;
+            width: 99.0391845703125px;
+            max-width: 40%;
+            height: 0;
+            border-top: 0.83px solid transparent;
+            border-image: linear-gradient(90deg,
+                    #f8b751 0%,
+                    rgba(248, 183, 81, 0) 100%) 1;
+        }
+
+        /* left segment mirrors the gradient so it fades toward the outer edge */
+        .m-flourish .hr-line-l,
+        .m-fl-mini .hr-line-l {
+            border-image-source: linear-gradient(90deg,
+                    rgba(248, 183, 81, 0) 0%,
+                    #f8b751 100%);
+        }
+
+        .m-flourish .dot,
+        .m-fl-mini .dot {
+            display: block;
+            height: 11px;
+            width: 11px;
+            flex: none;
+            transform: rotate(45deg);
+            /* diamond, same as .hr-box */
+            background: #f8b751;
+            box-shadow: 0 0 7px 1px rgba(248, 183, 81, 0.55);
+        }
+
+        /* title with a compact flourish tucked to its right */
+        .m-titlerow {
+            display: flex;
+            align-items: flex-end;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .m-fl-mini {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-bottom: 8px;
+        }
+
+        /* standalone section photo that fades into the navy at top and bottom */
+        .m-photo {
+            position: relative;
+            margin-top: 4px;
+        }
+
+        .m-photo img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .m-photo::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(180deg,
+                    #091f34 0%,
+                    rgba(9, 31, 52, 0.4) 12%,
+                    rgba(9, 31, 52, 0) 30%),
+                linear-gradient(180deg,
+                    rgba(9, 31, 52, 0) 72%,
+                    rgba(9, 31, 52, 0.55) 88%,
+                    #091f34 100%);
+        }
+
+        .m-sub {
+            color: #cdaa68;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2.4px;
+            text-transform: uppercase;
+            margin: 0 0 12px;
+        }
+
+        .m-lead {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0 22px;
+        }
+
+        .m-lead.c {
+            text-align: center;
+        }
+
+        /* centre an entire mobile section (eyebrow row, title, flourish, sub, lead, button) */
+        .m-sec.m-c {
+            text-align: center;
+        }
+
+        .m-sec.m-c .m-eyebrow,
+        .m-sec.m-c .m-titlerow,
+        .m-sec.m-c .m-flourish,
+        .m-sec.m-c .m-fl-mini {
+            justify-content: center;
+        }
+
+        .m-cardlabel {
+            text-align: center;
+            color: #cfb16d;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin: 8px 0;
+        }
+
+        .m-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            height: 52px;
+            padding: 0 26px 0 7px;
+            background: url("icon/button.png") center/100% 100% no-repeat;
+            color: #fff;
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 0.8px;
+            text-decoration: none;
+        }
+
+        .m-btn .ic {
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            flex: none;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(from 140deg,
+                    #eef2f6,
+                    #9aa4af,
+                    #f4f7fa,
+                    #828d9a,
+                    #dde3e9,
+                    #aab4bf,
+                    #eef2f6);
+            box-shadow:
+                0 2px 6px rgba(5, 20, 45, 0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.7);
+        }
+
+        .m-btn .ic>i {
+            width: 26px;
+            height: 26px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at 42% 34%, #1a3b63, #0a1c33 68%);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Mobile carousel: a sliding track, big centre slide, dim neighbours peeking at each edge */
+        .m-crsl {
+            position: relative;
+            margin: 18px calc(var(--m-pad, 30px) * -1) 10px;
+            height: 210px;
+        }
+
+        .m-crsl.abil {
+            height: 168px;
+        }
+
+        /* decorative crystals tucked under the centred ability (mobile) —
          sits IN FRONT of the sphere, like the desktop version */
-      .m-crsl.abil .m-abil-crystals {
-        position: absolute;
-        left: 50%;
-        top: 84px;
-        width: 228px;
-        transform: translateX(-50%);
-        z-index: 25;
-        pointer-events: none;
-        user-select: none;
-        transition: opacity 0.35s ease;
-      }
-      .m-crsl .crsl-arw {
-        position: absolute;
-        z-index: 5;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 38px;
-        height: 38px;
-        cursor: pointer;
-        filter: drop-shadow(0 2px 6px rgba(5, 20, 45, 0.55));
-      }
-      .m-crsl .crsl-arw.l {
-        left: 2px;
-      }
-      .m-crsl .crsl-arw.r {
-        right: 2px;
-      }
-      .m-navrow {
-        display: flex;
-        justify-content: center;
-        gap: 14px;
-        margin-top: 16px;
-      }
-      .m-navrow img {
-        width: 40px;
-        height: 40px;
-      }
-      .m-field {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        height: 56px;
-        padding: 0 16px;
-        border: 1px solid rgba(255, 255, 255, 0.35);
-        border-radius: 6px;
-        margin-bottom: 18px;
-      }
-      .m-field img {
-        width: 22px;
-        height: 22px;
-        opacity: 0.7;
-        flex: none;
-      }
-      .m-field input {
-        flex: 1;
-        min-width: 0;
-        background: none;
-        border: 0;
-        outline: 0;
-        color: #fff;
-        font-size: 15px;
-        font-family: inherit;
-      }
-      .m-field input::placeholder {
-        color: rgba(255, 255, 255, 0.45);
-      }
-      /* gameplay: faint background photo behind the heading (Figma: 550px tall,
-         25% opacity) */
-      .m-gameplay {
-        position: relative;
-      }
-      .m-gameplay::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 550px;
-        background: url("image/game_play_bg.png") center top / cover no-repeat;
-        opacity: 0.55;
-        pointer-events: none;
-        z-index: 0;
-      }
-      .m-gameplay > * {
-        position: relative;
-        z-index: 1;
-      }
-      .m-gp {
-        position: relative;
-        padding: 6px 14px 12px;
-      }
-      .m-gp .m-img {
-        border-radius: 8px;
-      }
-      .m-gp-video {
-        position: relative;
-        border-radius: 8px;
-        overflow: hidden;
-      }
-      .m-gp .flank {
-        position: absolute;
-        bottom: 22px;
-        width: 74px;
-        height: auto;
-      }
-      .m-gp .flank.l {
-        left: -10px;
-      }
-      .m-gp .flank.r {
-        right: -10px;
-      }
-      .m-gp .gp-play {
-        position: absolute;
-        left: 50%;
-        top: calc(50% - 3px);
-        width: 44px;
-        transform: translate(-50%, -50%);
-        display: block;
-        filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
-      }
-      .m-gp .gp-play img {
-        display: block;
-        width: 100%;
-        height: auto;
-      }
-      .m-footer {
-        text-align: center;
-        padding: 42px var(--m-pad, 30px) 28px;
-      }
-      .m-footer .flogo {
-        height: 52px;
-        width: auto;
-        margin: 0 auto 6px;
-        display: block;
-      }
-      .m-social {
-        display: flex;
-        justify-content: center;
-        gap: 16px;
-        margin: 18px 0;
-      }
-      .m-social img {
-        width: 44px;
-        height: 44px;
-      }
-      .m-copy {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.75);
-        border-top: 1px solid rgba(255, 255, 255, 0.12);
-        padding-top: 18px;
-        margin-top: 4px;
-      }
+        .m-crsl.abil .m-abil-crystals {
+            position: absolute;
+            left: 50%;
+            top: 84px;
+            width: 228px;
+            transform: translateX(-50%);
+            z-index: 25;
+            pointer-events: none;
+            user-select: none;
+            transition: opacity 0.35s ease;
+        }
 
-      /* ============ trailer lightbox ============ */
-      .video-modal {
-        position: fixed;
-        inset: 0;
-        z-index: 2000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-      }
-      .video-modal[hidden] {
-        display: none;
-      }
-      .video-modal.is-open {
-        animation: video-modal-in 0.2s ease both;
-      }
-      @keyframes video-modal-in {
-        from {
-          opacity: 0;
+        .m-crsl .crsl-arw {
+            position: absolute;
+            z-index: 5;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            filter: drop-shadow(0 2px 6px rgba(5, 20, 45, 0.55));
         }
-      }
-      .video-modal-backdrop {
-        position: absolute;
-        inset: 0;
-        background: rgba(3, 12, 26, 0.86);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-      }
-      .video-modal-frame {
-        position: relative;
-        width: 100%;
-        /* keep the 16:9 video + the close button inside the viewport height */
-        max-width: min(1422px, calc((100vh - 120px) * 16 / 9));
-      }
-      .video-modal-ratio {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        background: #000;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
-      }
-      .video-modal-ratio iframe,
-      .video-modal-ratio video {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
-        object-fit: contain;
-      }
-      .video-modal-close {
-        position: absolute;
-        top: -46px;
-        right: 0;
-        width: 38px;
-        height: 38px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        border-radius: 9999px;
-        cursor: pointer;
-        transition: background 0.15s ease;
-      }
-      .video-modal-close svg {
-        display: block;
-        width: 15px;
-        height: 15px;
-      }
-      .video-modal-close:hover {
-        background: rgba(255, 255, 255, 0.24);
-      }
-      @media (max-width: 520px) {
+
+        .m-crsl .crsl-arw.l {
+            left: 2px;
+        }
+
+        .m-crsl .crsl-arw.r {
+            right: 2px;
+        }
+
+        .m-navrow {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .m-navrow img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .m-field {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            height: 56px;
+            padding: 0 16px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 6px;
+            margin-bottom: 18px;
+        }
+
+        .m-field img {
+            width: 22px;
+            height: 22px;
+            opacity: 0.7;
+            flex: none;
+        }
+
+        .m-field input {
+            flex: 1;
+            min-width: 0;
+            background: none;
+            border: 0;
+            outline: 0;
+            color: #fff;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .m-field input::placeholder {
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        /* gameplay: faint background photo behind the heading (Figma: 550px tall,
+         25% opacity) */
+        .m-gameplay {
+            position: relative;
+        }
+
+        .m-gameplay::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 550px;
+            background: url("image/game_play_bg.png") center top / cover no-repeat;
+            opacity: 0.55;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .m-gameplay>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .m-gp {
+            position: relative;
+            padding: 6px 14px 12px;
+        }
+
+        .m-gp .m-img {
+            border-radius: 8px;
+        }
+
+        .m-gp-video {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .m-gp .flank {
+            position: absolute;
+            bottom: 22px;
+            width: 74px;
+            height: auto;
+        }
+
+        .m-gp .flank.l {
+            left: -10px;
+        }
+
+        .m-gp .flank.r {
+            right: -10px;
+        }
+
+        .m-gp .gp-play {
+            position: absolute;
+            left: 50%;
+            top: calc(50% - 3px);
+            width: 44px;
+            transform: translate(-50%, -50%);
+            display: block;
+            filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
+        }
+
+        .m-gp .gp-play img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .m-footer {
+            text-align: center;
+            padding: 42px var(--m-pad, 30px) 28px;
+        }
+
+        .m-footer .flogo {
+            height: 52px;
+            width: auto;
+            margin: 0 auto 6px;
+            display: block;
+        }
+
+        .m-social {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 18px 0;
+        }
+
+        .m-social img {
+            width: 44px;
+            height: 44px;
+        }
+
+        .m-copy {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.75);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            padding-top: 18px;
+            margin-top: 4px;
+        }
+
+        /* ============ trailer lightbox ============ */
         .video-modal {
-          padding: 16px;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
         }
+
+        .video-modal[hidden] {
+            display: none;
+        }
+
+        .video-modal.is-open {
+            animation: video-modal-in 0.2s ease both;
+        }
+
+        @keyframes video-modal-in {
+            from {
+                opacity: 0;
+            }
+        }
+
+        .video-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(3, 12, 26, 0.86);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .video-modal-frame {
+            position: relative;
+            width: 100%;
+            /* keep the 16:9 video + the close button inside the viewport height */
+            max-width: min(1422px, calc((100vh - 120px) * 16 / 9));
+        }
+
+        .video-modal-ratio {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        .video-modal-ratio iframe,
+        .video-modal-ratio video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            object-fit: contain;
+        }
+
         .video-modal-close {
-          top: -42px;
+            position: absolute;
+            top: -46px;
+            right: 0;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background 0.15s ease;
         }
-      }
+
+        .video-modal-close svg {
+            display: block;
+            width: 15px;
+            height: 15px;
+        }
+
+        .video-modal-close:hover {
+            background: rgba(255, 255, 255, 0.24);
+        }
+
+        @media (max-width: 520px) {
+            .video-modal {
+                padding: 16px;
+            }
+
+            .video-modal-close {
+                top: -42px;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <!-- sticky top nav (lives outside <main> so it stays fixed; JS scales it to match) -->
     <nav class="site-nav" data-node-id="6118:23458" aria-label="Primary">
-      <div
-        id="navBar"
-        class="absolute h-[48.985px] left-[calc(33.33%+68.79px)] top-[23px] w-[1131.319px]"
-        data-node-id="6118:23460"
-        style="
+        <div id="navBar" class="absolute h-[48.985px] left-[calc(33.33%+68.79px)] top-[23px] w-[1131.319px]"
+            data-node-id="6118:23460"
+            style="
           clip-path: polygon(
             8px 0,
             calc(100% - 8px) 0,
@@ -1329,111 +1479,59 @@
             0 calc(100% - 8px),
             0 8px
           );
-        "
-      ></div>
-      <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(33.33%+105px)] top-[38px] is-active"
-        data-target="sec-hero"
-        data-node-id="6118:23462"
-      >
-        HOME
-      </p>
-      <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(50%+64px)] top-[38px]"
-        data-target="sec-world"
-        data-node-id="6118:23463"
-      >
-        WORLD
-      </p>
-      <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(41.67%+91px)] top-[38px]"
-        data-target="sec-meet"
-        data-node-id="6118:23464"
-      >
-        PIXO
-      </p>
-      <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(58.33%+65px)] top-[38px]"
-        data-target="sec-abilities"
-        data-node-id="6118:23465"
-      >
-        ABILITIES
-      </p>
-      <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(66.67%+82px)] top-[38px]"
-        data-target="sec-enemies"
-        data-node-id="6118:23466"
-      >
-        ENEMIES
-      </p>
-      <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(75%+93px)] top-[38px]"
-        data-target="sec-gameplay"
-        data-node-id="6118:23467"
-      >
-        GAME PLAY
-      </p>
-      <p
-        class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(91.67%-30px)] top-[38px]"
-        data-target="sec-footer"
-        data-node-id="6118:23468"
-      >
-        DEMO
-      </p>
-      <div
-        id="navUnderline"
-        class="absolute h-[4px] top-[68px] rounded-[2px] bg-[#05EAF9]"
-        style="left: 741px; width: 68.58px"
-      ></div>
-      <div
-        class="absolute bg-[rgba(0,44,91,0.63)] blur-[19.006px] h-[100px] left-[80px] top-[-2px] w-[227px]"
-        data-node-id="6118:23470"
-      ></div>
-      <a
-        href="#"
-        aria-label="PIXO home"
-        class="absolute block h-[73px] left-[88px] top-[11px] w-[212px]"
-        data-node-id="6118:23471"
-      >
-        <img
-          alt="PIXO"
-          class="block max-w-none size-full object-contain"
-          src="image/logo.png"
-        />
-      </a>
-    </nav>
-    <main
-      class="bg-[#091f34] w-[1920px] overflow-hidden relative"
-      data-node-id="6118:22938"
-      data-name="DESKTOP"
-    >
-      <!-- ==================== HERO  ·  "AN ADVENTURE AWAITS"  (nav lives here) ==================== -->
-      <section
-        class="sec sec-hero"
-        style="position: relative; width: 1920px; height: 1092px"
-      >
-     
-          
+        ">
         </div>
-        <div
-          class="-translate-x-1/2 -translate-y-1/2 absolute h-[1132px] left-1/2 top-[566px] w-[1920px]"
-          data-node-id="6118:22943"
-          data-name="BG"
-        ></div>
-        <div
-          class="-translate-x-1/2 -translate-y-1/2 absolute h-[1241px] left-[calc(45.83%+32.5px)] top-[511.5px] w-[2105px]"
-          data-node-id="6118:23411"
-          data-name="BG"
-        >
-          <div aria-hidden="" class="absolute inset-0 pointer-events-none">
-            <img
-              alt=""
-              class="absolute inset-0 max-w-none object-cover size-full"
-              src="image/1.png"
-            />
-            <div
-              class="absolute inset-0"
-              style="
+        <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(33.33%+105px)] top-[38px] is-active"
+            data-target="sec-hero" data-node-id="6118:23462">
+            HOME
+        </p>
+        <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(50%+64px)] top-[38px]"
+            data-target="sec-world" data-node-id="6118:23463">
+            WORLD
+        </p>
+        <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(41.67%+91px)] top-[38px]"
+            data-target="sec-meet" data-node-id="6118:23464">
+            PIXO
+        </p>
+        <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(58.33%+65px)] top-[38px]"
+            data-target="sec-abilities" data-node-id="6118:23465">
+            ABILITIES
+        </p>
+        <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(66.67%+82px)] top-[38px]"
+            data-target="sec-enemies" data-node-id="6118:23466">
+            ENEMIES
+        </p>
+        <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(75%+93px)] top-[38px]"
+            data-target="sec-gameplay" data-node-id="6118:23467">
+            GAME PLAY
+        </p>
+        <p class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(91.67%-30px)] top-[38px]"
+            data-target="sec-footer" data-node-id="6118:23468">
+            DEMO
+        </p>
+        <div id="navUnderline" class="absolute h-[4px] top-[68px] rounded-[2px] bg-[#05EAF9]"
+            style="left: 741px; width: 68.58px"></div>
+        <div class="absolute bg-[rgba(0,44,91,0.63)] blur-[19.006px] h-[100px] left-[80px] top-[-2px] w-[227px]"
+            data-node-id="6118:23470"></div>
+        <a href="#" aria-label="PIXO home" class="absolute block h-[73px] left-[88px] top-[11px] w-[212px]"
+            data-node-id="6118:23471">
+            <img alt="PIXO" class="block max-w-none size-full object-contain" src="image/logo.png" />
+        </a>
+    </nav>
+    <main class="bg-[#091f34] w-[1920px] overflow-hidden relative" data-node-id="6118:22938" data-name="DESKTOP">
+        <!-- ==================== HERO  ·  "AN ADVENTURE AWAITS"  (nav lives here) ==================== -->
+        <section class="sec sec-hero" style="position: relative; width: 1920px; height: 1092px">
+
+
+            </div>
+            <div class="-translate-x-1/2 -translate-y-1/2 absolute h-[1132px] left-1/2 top-[566px] w-[1920px]"
+                data-node-id="6118:22943" data-name="BG"></div>
+            <div class="-translate-x-1/2 -translate-y-1/2 absolute h-[1241px] left-[calc(45.83%+32.5px)] top-[511.5px] w-[2105px]"
+                data-node-id="6118:23411" data-name="BG">
+                <div aria-hidden="" class="absolute inset-0 pointer-events-none">
+                    <img alt="" class="absolute inset-0 max-w-none object-cover size-full" src="image/1.png" />
+                    <div class="absolute inset-0"
+                        style="
                 background-image: linear-gradient(
                   -89.97873232796866deg,
                   rgba(9, 31, 52, 0.66) 2.3857%,
@@ -1441,45 +1539,32 @@
                   rgba(9, 31, 52, 0.66) 41.847%,
                   rgba(9, 31, 52, 0) 66.374%
                 );
-              "
-            ></div>
-            <div
-              class="absolute bottom-0 left-0 right-0 h-[260px]"
-              style="
+              ">
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 h-[260px]"
+                        style="
                 background-image: linear-gradient(
                   180deg,
                   rgba(9, 31, 52, 0) 0%,
                   #091f34 92%
                 );
-              "
-            ></div>
-          </div>
-        </div>
-        
-        
-        <div
-          class="absolute flex h-[50.442px] items-center justify-center left-[calc(66.67%+22.37px)] top-[789.28px] w-[3.49px]"
-          data-node-id="6118:23421"
-        >
-         
-        </div>
-        <a
-          href="PixoGame.zip"
-          download
-          data-node-id="6118:23422"
-          aria-label="Download PIXO demo"
-          class="group absolute block no-underline h-[89.462px] left-[calc(50%+8px)] top-[769.29px] w-[336.912px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0"
-        >
-          <img
-            alt=""
-            class="absolute inset-0 block max-w-none size-full object-fill"
-            src="icon/button.png"
-            data-node-id="6118:23424"
-          />
-          <div
-            class="absolute flex items-center justify-center size-[50px] left-[36px] top-[19.71px] rounded-full"
-            data-node-id="6118:23438"
-            style="
+              ">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="absolute flex h-[50.442px] items-center justify-center left-[calc(66.67%+22.37px)] top-[789.28px] w-[3.49px]"
+                data-node-id="6118:23421">
+
+            </div>
+            <a href="PixoGame.zip" download data-node-id="6118:23422" aria-label="Download PIXO demo"
+                class="group absolute block no-underline h-[89.462px] left-[calc(50%+8px)] top-[769.29px] w-[336.912px] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-0">
+                <img alt="" class="absolute inset-0 block max-w-none size-full object-fill"
+                    src="icon/button.png" data-node-id="6118:23424" />
+                <div class="absolute flex items-center justify-center size-[50px] left-[36px] top-[19.71px] rounded-full"
+                    data-node-id="6118:23438"
+                    style="
               background: conic-gradient(
                 from 140deg at 50% 50%,
                 #eef2f6,
@@ -1494,11 +1579,9 @@
                 0 2px 6px rgba(5, 20, 45, 0.55),
                 inset 0 1px 1px rgba(255, 255, 255, 0.7),
                 inset 0 -2px 3px rgba(40, 60, 90, 0.5);
-            "
-          >
-            <span
-              class="flex items-center justify-center size-[36px] rounded-full"
-              style="
+            ">
+                    <span class="flex items-center justify-center size-[36px] rounded-full"
+                        style="
                 background: radial-gradient(
                   circle at 42% 34%,
                   #1a3b63 0%,
@@ -1508,123 +1591,76 @@
                   inset 0 2px 5px rgba(0, 0, 0, 0.65),
                   inset 0 -1px 2px rgba(120, 160, 210, 0.35),
                   0 0 0 1px rgba(10, 20, 40, 0.6);
-              "
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8 1.5V10M8 10L11 7M8 10L5 7M3 13.5H13"
-                  stroke="#ffffff"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
-            </span>
-          </div>
-          <span
-            class="absolute font-['Outfit'] font-semibold leading-[24px] text-[24px] text-white tracking-[0.96px] whitespace-nowrap left-[104px] top-[32.71px]"
-            data-node-id="6118:23431"
-            style="text-shadow: 0 1px 3px rgba(5, 20, 45, 0.55)"
-            >PLAY DEMO</span
-          >
-        </a>
-        <p
-          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%+8px)] text-[26px] text-white top-[654.03px] w-[821px]"
-          data-node-id="6118:23443"
-        >
-          A world of discovery, danger, and unexpected challenges awaits. Follow
-          PIXO beyond the horizon and uncover what lies ahead.
-        </p>
-        <div
-          class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[0] left-[calc(50%+8px)] text-[185.401px] text-white top-[271px] whitespace-nowrap"
-          data-node-id="6118:23445"
-        >
-          <p class="leading-[157.591px] mb-0 whitespace-pre">BEYOND</p>
-          <p class="leading-[157.591px] whitespace-pre">THE HORIZON</p>
-        </div>
-        <p
-          class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(50%+66px)] text-[#05eaf9] text-[24px] top-[222px] tracking-[3.84px] whitespace-nowrap"
-          data-node-id="6118:23447"
-        >
-          AN ADVENTURE AWAITS
-        </p>
-        <div
-          class="absolute h-[9.451px] left-[calc(50%-2px)] top-[229px] w-[47px]"
-          data-node-id="6118:23448"
-        >
-          <img
-            alt=""
-            class="absolute block inset-0 max-w-none size-full"
-            src="icon/line3.png"
-          />
-        </div>
-        <div
-          class="absolute flex h-[9.451px] items-center justify-center left-[calc(66.67%+107px)] top-[229px] w-[47px]"
-          data-node-id="6118:23449"
-        >
-          <img
-            alt=""
-            class="block max-w-none size-full object-contain"
-            src="icon/line4.png"
-          />
-        </div>
-        <div
-          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(66.67%+3px)] top-[611px]"
-        >
-          <div class="hr-box"></div>
-        </div>
-        <div
-          class="absolute h-[2px] w-[296px] left-[calc(66.67%+45px)] top-[621px] hr-line-r"
-        ></div><div
-          class="absolute h-[2px] w-[296px] left-[calc(50%+8px)] top-[621px] hr-line-l"
-        ></div>
-      </section>
-      <!-- ==================== MEET PIXO  ·  "THIS IS PIXO" ==================== -->
-      <section
-        class="sec sec-meet"
-        style="position: relative; width: 1920px; height: 1020px"
-      >
-       
-        
-        
-        <img class="mp-art" src="image/2.png" alt="" />
-
-        <div class="mp-copy">
-          <p class="mp-eyebrow">
-            <img src="icon/line3.png" alt="" />
-            MEET PIXO
-            <img src="icon/line4.png" alt="" />
-          </p>
-          <h2 class="mp-title">This Is PIXO</h2>
-          <div class="mp-divider">
-            <span class="hr-line-l"></span>
-            <span class="hr-box"></span>
-            <span class="hr-line-r"></span>
-          </div>
-          <p class="mp-kicker">Every Adventure Needs A Hero</p>
-          <p class="mp-lead">
-            Curious by nature, fearless by design. PIXO is ready to explore a
-            world of mystery, challenge, and adventure.
-          </p>
-
-          <a
-            href="https://youtu.be/0wEjbSYNUM8"
-            data-trailer
-            target="_blank"
-            rel="noopener"
-            aria-label="Watch trailer"
-            class="mp-btn group no-underline transition-transform duration-150"
-          >
-            <img class="mp-btn-bg" src="icon/button.png" alt="" />
+              ">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 1.5V10M8 10L11 7M8 10L5 7M3 13.5H13" stroke="#ffffff" stroke-width="1.7"
+                                stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </span>
+                </div>
+                <span
+                    class="absolute font-['Outfit'] font-semibold leading-[24px] text-[24px] text-white tracking-[0.96px] whitespace-nowrap left-[104px] top-[32.71px]"
+                    data-node-id="6118:23431" style="text-shadow: 0 1px 3px rgba(5, 20, 45, 0.55)">PLAY DEMO</span>
+            </a>
+            <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%+8px)] text-[26px] text-white top-[654.03px] w-[821px]"
+                data-node-id="6118:23443">
+                A world of discovery, danger, and unexpected challenges awaits. Follow
+                PIXO beyond the horizon and uncover what lies ahead.
+            </p>
+            <div class="[word-break:break-word] absolute font-['Teko'] font-medium leading-[0] left-[calc(50%+8px)] text-[185.401px] text-white top-[271px] whitespace-nowrap"
+                data-node-id="6118:23445">
+                <p class="leading-[157.591px] mb-0 whitespace-pre">BEYOND</p>
+                <p class="leading-[157.591px] whitespace-pre">THE HORIZON</p>
+            </div>
+            <p class="[word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(50%+66px)] text-[#05eaf9] text-[24px] top-[222px] tracking-[3.84px] whitespace-nowrap"
+                data-node-id="6118:23447">
+                AN ADVENTURE AWAITS
+            </p>
+            <div class="absolute h-[9.451px] left-[calc(50%-2px)] top-[229px] w-[47px]" data-node-id="6118:23448">
+                <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line3.png" />
+            </div>
+            <div class="absolute flex h-[9.451px] items-center justify-center left-[calc(66.67%+107px)] top-[229px] w-[47px]"
+                data-node-id="6118:23449">
+                <img alt="" class="block max-w-none size-full object-contain" src="icon/line4.png" />
+            </div>
             <div
-              class="mp-btn-orb"
-              style="
+                class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(66.67%+3px)] top-[611px]">
+                <div class="hr-box"></div>
+            </div>
+            <div class="absolute h-[2px] w-[296px] left-[calc(66.67%+45px)] top-[621px] hr-line-r"></div>
+            <div class="absolute h-[2px] w-[296px] left-[calc(50%+8px)] top-[621px] hr-line-l"></div>
+        </section>
+        <!-- ==================== MEET PIXO  ·  "THIS IS PIXO" ==================== -->
+        <section class="sec sec-meet" style="position: relative; width: 1920px; height: 1020px">
+
+
+
+            <img class="mp-art" src="image/2.png" alt="" />
+
+            <div class="mp-copy">
+                <p class="mp-eyebrow">
+                    <img src="icon/line3.png" alt="" />
+                    MEET PIXO
+                    <img src="icon/line4.png" alt="" />
+                </p>
+                <h2 class="mp-title">This Is PIXO</h2>
+                <div class="mp-divider">
+                    <span class="hr-line-l"></span>
+                    <span class="hr-box"></span>
+                    <span class="hr-line-r"></span>
+                </div>
+                <p class="mp-kicker">Every Adventure Needs A Hero</p>
+                <p class="mp-lead">
+                    Curious by nature, fearless by design. PIXO is ready to explore a
+                    world of mystery, challenge, and adventure.
+                </p>
+
+                <a href="https://youtu.be/0wEjbSYNUM8" data-trailer target="_blank" rel="noopener"
+                    aria-label="Watch trailer" class="mp-btn group no-underline transition-transform duration-150">
+                    <img class="mp-btn-bg" src="icon/button.png" alt="" />
+                    <div class="mp-btn-orb"
+                        style="
                 background: conic-gradient(
                   from 140deg at 50% 50%,
                   #eef2f6,
@@ -1639,10 +1675,9 @@
                   0 2px 6px rgba(5, 20, 45, 0.55),
                   inset 0 1px 1px rgba(255, 255, 255, 0.7),
                   inset 0 -2px 3px rgba(40, 60, 90, 0.5);
-              "
-            >
-              <span
-                style="
+              ">
+                        <span
+                            style="
                   background: radial-gradient(
                     circle at 42% 34%,
                     #1a3b63 0%,
@@ -1652,1112 +1687,935 @@
                     inset 0 2px 5px rgba(0, 0, 0, 0.65),
                     inset 0 -1px 2px rgba(120, 160, 210, 0.35),
                     0 0 0 1px rgba(10, 20, 40, 0.6);
-                "
-              >
-                <svg
-                  width="14"
-                  height="16"
-                  viewBox="0 0 14 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style="margin-left: 2px"
-                >
-                  <path
-                    d="M1 1.3C1 0.5 1.9 0 2.6 0.5L12.5 7.2C13.1 7.6 13.1 8.4 12.5 8.8L2.6 15.5C1.9 16 1 15.5 1 14.7V1.3Z"
-                    fill="#ffffff"
-                  ></path>
-                </svg>
-              </span>
+                ">
+                            <svg width="14" height="16" viewBox="0 0 14 16" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" style="margin-left: 2px">
+                                <path
+                                    d="M1 1.3C1 0.5 1.9 0 2.6 0.5L12.5 7.2C13.1 7.6 13.1 8.4 12.5 8.8L2.6 15.5C1.9 16 1 15.5 1 14.7V1.3Z"
+                                    fill="#ffffff"></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <span class="mp-btn-label">WATCH TRAILER</span>
+                </a>
             </div>
-            <span class="mp-btn-label">WATCH TRAILER</span>
-          </a>
-        </div>
-      </section>
-      <!-- ==================== THE WORLD  ·  "A WORLD BEYOND THE HORIZON"  (world carousel: #wcMount) ==================== -->
-      <section
-        class="sec sec-world"
-        style="position: relative; width: 1920px; height: 1083px"
-      >
-        
-        
-        <div class="w-head">
-          <p class="w-eyebrow">
-            <img src="icon/line3.png" alt="" />
-            THE WORLD
-            <img src="icon/line4.png" alt="" />
-          </p>
-          <h2 class="w-title">A World Beyond The Horizon</h2>
-          <div class="w-divider">
-            <span class="hr-line-l"></span>
-            <span class="hr-box"></span>
-            <span class="hr-line-r"></span>
-          </div>
-          <p class="w-intro">
-            Curious by nature, fearless by design. PIXO is ready to explore a
-            world of mystery, challenge, and adventure.
-          </p>
-        </div>
+        </section>
+        <!-- ==================== THE WORLD  ·  "A WORLD BEYOND THE HORIZON"  (world carousel: #wcMount) ==================== -->
+        <section class="sec sec-world" style="position: relative; width: 1920px; height: 1083px">
 
-        <div class="w-stage" id="wcMount"></div>
 
-        <a
-          href="#"
-          data-wc="prev-btn"
-          aria-label="Previous slide"
-          class="w-arrow w-arrow-prev transition-transform duration-150"
-        >
-          <img alt="" src="icon/1.png" />
-        </a>
-        <a
-          href="#"
-          data-wc="next-btn"
-          aria-label="Next slide"
-          class="w-arrow w-arrow-next transition-transform duration-150"
-        >
-          <img alt="" src="icon/2.png" />
-        </a>
+            <div class="w-head">
+                <p class="w-eyebrow">
+                    <img src="icon/line3.png" alt="" />
+                    THE WORLD
+                    <img src="icon/line4.png" alt="" />
+                </p>
+                <h2 class="w-title">A World Beyond The Horizon</h2>
+                <div class="w-divider">
+                    <span class="hr-line-l"></span>
+                    <span class="hr-box"></span>
+                    <span class="hr-line-r"></span>
+                </div>
+                <p class="w-intro">
+                    Curious by nature, fearless by design. PIXO is ready to explore a
+                    world of mystery, challenge, and adventure.
+                </p>
+            </div>
 
-        <div class="w-caption">
-          <p class="w-label" data-wc="label">WILD FRONTTIERS</p>
-          <p class="w-desc" data-wc="desc">
-            Lush forests, floating island and untamed lands full of life and
-            wonder.
-          </p>
-        </div>
-      </section>
-      <!-- ==================== ABILITIES  ·  "BUILT TO BREAK THE RULES"  (abilities carousel: #acMount) ==================== -->
-      <section
-        class="sec sec-abilities"
-        style="position: relative; width: 1920px; height: 973px"
-      >
-        <div class="a-head">
-          <p class="a-eyebrow">
-            <img src="icon/line3.png" alt="" />
-            ABILITIES
-            <img src="icon/line4.png" alt="" />
-          </p>
-          <h2 class="a-title">Built To Break The Rules</h2>
-          <div class="a-divider">
-            <span class="hr-line-l"></span>
-            <span class="hr-box"></span>
-            <span class="hr-line-r"></span>
-          </div>
-          <p class="a-intro">
-            Master PIXO’s unique abilities to move faster, fight smarter, and
-            overcome challenges in unexpected ways.
-          </p>
-        </div>
+            <div class="w-stage" id="wcMount"></div>
 
-        <img class="a-crystals" src="image/11.png" alt="" />
-        <div class="a-stage" id="acMount"></div>
-
-        <div class="a-caption">
-          <p class="a-label" data-ac="label">TIME BUBBLE</p>
-          <p class="a-desc" data-ac="desc">
-            Freeze time within a localized bubble, slowing enemies and creating
-            the perfect moment to strike.
-          </p>
-          <div class="a-nav">
-            <a href="#" data-ac="prev-btn" aria-label="Previous ability">
-              <img src="icon/1.png" alt="" />
+            <a href="#" data-wc="prev-btn" aria-label="Previous slide"
+                class="w-arrow w-arrow-prev transition-transform duration-150">
+                <img alt="" src="icon/1.png" />
             </a>
-            <a href="#" data-ac="next-btn" aria-label="Next ability">
-              <img src="icon/2.png" alt="" />
+            <a href="#" data-wc="next-btn" aria-label="Next slide"
+                class="w-arrow w-arrow-next transition-transform duration-150">
+                <img alt="" src="icon/2.png" />
             </a>
-          </div>
-        </div>
-      </section>
-      <!-- ==================== ENEMIES  ·  "NOTHING STAYS UNDEFEATED" ==================== -->
-      <section
-        class="sec sec-enemies"
-        style="position: relative; width: 1920px; height: 905px"
-      >
-        <img class="e-bg" src="image/enemy.png" alt="" />
-        <img class="e-art" src="image/12.png" alt="Enemy machines and creatures" />
 
-        <div class="e-copy">
-          <p class="e-eyebrow">
-            <img src="icon/line3.png" alt="" />
-            ENEMIES
-            <img src="icon/line4.png" alt="" />
-          </p>
-          <h2 class="e-title">Nothing Stays Undefeated</h2>
-          <div class="e-divider">
-            <span class="hr-line-l"></span>
-            <span class="hr-box"></span>
-            <span class="hr-line-r"></span>
-          </div>
-          <p class="e-lead">
-            Dangerous machines and mysterious creatures stand between PIXO and
-            the unknown. Learn their patterns, exploit their weaknesses, and
-            fight your way forward.
-          </p>
-        </div>
-      </section>
-      <!-- ==================== THE GAMEPLAY  ·  "MOVE. FIGHT. MASTER." ==================== -->
-      <section
-        class="sec sec-gameplay"
-        style="position: relative; width: 1920px; height: 1112px"
-      >
-        <img class="g-bg" src="image/game_play_bg.png" alt="" />
-        <p
-          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%-0.23px)] text-[26px] text-center text-white top-[290px] w-[903px]"
-          data-node-id="6118:23331"
-        >
-          Experience fast-paced action with movement, combat, and powerful
-          abilities. Jump, dash, fight, and adapt to overcome every challenge.
-        </p>
-        <p
-          class="-translate-x-1/2 [word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%+0.27px)] text-[120px] text-center text-white top-[114px] whitespace-nowrap"
-          data-node-id="6118:23333"
-        >
-          MOVE. FIGHT. MASTER.
-        </p>
-        <p
-          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+161.27px)] text-[#05eaf9] text-[24px] text-center top-[82px] tracking-[3.84px] whitespace-nowrap"
-          data-node-id="6118:23335"
-        >
-          THE GAMEPLAY
-        </p>
-        <div
-          class="absolute h-[9.451px] left-[calc(33.33%+144.27px)] top-[89px] w-[47px]"
-          data-node-id="6118:23336"
-        >
-          <img
-            alt=""
-            class="absolute block inset-0 max-w-none size-full"
-            src="icon/line3.png"
-          />
-        </div>
-        <div
-          class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+131.27px)] top-[89px] w-[47px]"
-          data-node-id="6118:23337"
-        >
-          <img
-            alt=""
-            class="block max-w-none size-full object-contain"
-            src="icon/line4.png"
-          />
-        </div>
-        <div
-          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11.73px)] top-[234px]"
-        >
-          <div class="hr-box"></div>
-        </div>
-        <div
-          class="absolute h-[2px] w-[296px] left-[calc(50%+30.27px)] top-[244px] hr-line-r"
-        ></div><div
-          class="absolute h-[2px] w-[296px] left-[calc(25%+153.27px)] top-[244px] hr-line-l"
-        ></div>
-        <div
-          class="gp-video -translate-x-1/2 absolute h-[519px] left-[calc(50%+0.27px)] top-[402px] w-[966.956px]"
-          data-node-id="6126:8624"
-        >
-          <img
-            alt=""
-            class="absolute block inset-0 max-w-none size-full"
-            height="519"
-            src="image/14.png"
-            width="966.956"
-          />
-          <a
-            href="https://youtu.be/CC9m13zQcw8"
-            data-trailer
-            data-video="video/game_play.mp4"
-            target="_blank"
-            rel="noopener"
-            class="gp-play"
-            aria-label="Play trailer"
-          >
-            <img src="image/17.png" alt="" />
-          </a>
-        </div>
-        
-        <div
-          class="absolute h-[403px] left-[calc(66.67%+26px)] top-[574px] w-[435px]"
-          data-node-id="6126:8618"
-          data-name="image 1184"
-        >
-          <img
-            alt=""
-            class="absolute inset-0 max-w-none object-contain pointer-events-none size-full"
-            src="image/15.png"
-          />
-        </div>
-        <div
-          class="absolute h-[403px] left-[144px] top-[574px] w-[435px]"
-          data-node-id="6126:8623"
-          data-name="image 1184"
-        >
-          <img
-            alt=""
-            class="absolute inset-0 max-w-none object-contain pointer-events-none size-full"
-            src="image/13.png"
-          />
-        </div>
-      </section>
-     
-      <!-- ==================== FOOTER  ·  socials + copyright ==================== -->
-      <section
-        class="sec sec-footer"
-        style="position: relative; width: 1920px; height: 400px"
-      >
-        <div
-          class="-translate-x-1/2 absolute h-[634.96px] left-[calc(50%-0.05px)] top-[0px] w-[1920.108px]"
-          data-node-id="6151:12660"
-        >
-          <img
-            alt=""
-            class="absolute block inset-0 max-w-none size-full"
-            height="634.96"
-            src="image/footer.png"
-            width="1920.108"
-          />
-        </div>
-        <a
-          href="#"
-          aria-label="PIXO home"
-          class="absolute block h-[70px] left-[calc(33.33%+143px)] top-[40px] w-[326px]"
-          data-node-id="6151:11434"
-        >
-          <img
-            alt="PIXO"
-            class="block max-w-none size-full object-contain"
-            src="image/logo.png"
-          />
-        </a>
-        
-        <div class="f-socials">
-          <a
-            href="#"
-            aria-label="Instagram"
-            data-node-id="6151:11454"
-            data-name="instagram"
-          >
-            <img alt="Instagram" src="icon/instagram.png" />
-          </a>
-          <a
-            href="#"
-            aria-label="LinkedIn"
-            data-node-id="6151:11455"
-            data-name="linkedin"
-          >
-            <img alt="LinkedIn" src="icon/linkedin.png" />
-          </a>
-          <a
-            href="#"
-            aria-label="Discord"
-            data-node-id="6151:11452"
-            data-name="3d icon discord"
-          >
-            <img alt="Discord" src="icon/discord.png" />
-          </a>
-          <a
-            href="#"
-            aria-label="WhatsApp"
-            data-node-id="6151:11453"
-            data-name="3d icon whatsapp"
-          >
-            <img alt="WhatsApp" src="icon/whatsapp.png" />
-          </a>
-          <a
-            href="#"
-            aria-label="Facebook"
-            data-node-id="6151:11450"
-            data-name="3d icon facebook"
-          >
-            <img alt="Facebook" src="icon/facebook.png" />
-          </a>
-        </div>
-        <div
-          class="-translate-x-1/2 absolute left-1/2 text-center top-[200px] w-[894px]"
-          data-node-id="6151:11465"
-        >
-          <p
-            class="[word-break:break-word] font-['Outfit'] font-normal leading-[36px] text-[20px] text-white"
-          >
-            PIXO is a fast-paced open-world adventure packed with exciting
-          </p>
-          <p
-            class="[word-break:break-word] font-['Outfit'] font-normal leading-[36px] text-[20px] text-white"
-          >
-            battles, unique abilities, and worlds waiting to be discovered.
-          </p>
-        </div>
-       
-        <div class="f-divider">
-          <span class="hr-line-l"></span>
-          <span class="hr-box"></span>
-          <span class="hr-line-r"></span>
-        </div>
-        <p
-          class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-1/2 text-[26px] text-center text-white top-[512px] w-[696px]"
-          data-node-id="6151:12670"
-        >
-          @ 2026 PIXO. All Rights Reserved.
-        </p>
-      </section>
+            <div class="w-caption">
+                <p class="w-label" data-wc="label">WILD FRONTTIERS</p>
+                <p class="w-desc" data-wc="desc">
+                    Lush forests, floating island and untamed lands full of life and
+                    wonder.
+                </p>
+            </div>
+        </section>
+        <!-- ==================== ABILITIES  ·  "BUILT TO BREAK THE RULES"  (abilities carousel: #acMount) ==================== -->
+        <section class="sec sec-abilities" style="position: relative; width: 1920px; height: 973px">
+            <div class="a-head">
+                <p class="a-eyebrow">
+                    <img src="icon/line3.png" alt="" />
+                    ABILITIES
+                    <img src="icon/line4.png" alt="" />
+                </p>
+                <h2 class="a-title">Built To Break The Rules</h2>
+                <div class="a-divider">
+                    <span class="hr-line-l"></span>
+                    <span class="hr-box"></span>
+                    <span class="hr-line-r"></span>
+                </div>
+                <p class="a-intro">
+                    Master PIXO’s unique abilities to move faster, fight smarter, and
+                    overcome challenges in unexpected ways.
+                </p>
+            </div>
+
+            <img class="a-crystals" src="image/11.png" alt="" />
+            <div class="a-stage" id="acMount"></div>
+
+            <div class="a-caption">
+                <p class="a-label" data-ac="label">TIME BUBBLE</p>
+                <p class="a-desc" data-ac="desc">
+                    Freeze time within a localized bubble, slowing enemies and creating
+                    the perfect moment to strike.
+                </p>
+                <div class="a-nav">
+                    <a href="#" data-ac="prev-btn" aria-label="Previous ability">
+                        <img src="icon/1.png" alt="" />
+                    </a>
+                    <a href="#" data-ac="next-btn" aria-label="Next ability">
+                        <img src="icon/2.png" alt="" />
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- ==================== ENEMIES  ·  "NOTHING STAYS UNDEFEATED" ==================== -->
+        <section class="sec sec-enemies" style="position: relative; width: 1920px; height: 905px">
+            <img class="e-bg" src="image/enemy.png" alt="" />
+            <img class="e-art" src="image/12.png" alt="Enemy machines and creatures" />
+
+            <div class="e-copy">
+                <p class="e-eyebrow">
+                    <img src="icon/line3.png" alt="" />
+                    ENEMIES
+                    <img src="icon/line4.png" alt="" />
+                </p>
+                <h2 class="e-title">Nothing Stays Undefeated</h2>
+                <div class="e-divider">
+                    <span class="hr-line-l"></span>
+                    <span class="hr-box"></span>
+                    <span class="hr-line-r"></span>
+                </div>
+                <p class="e-lead">
+                    Dangerous machines and mysterious creatures stand between PIXO and
+                    the unknown. Learn their patterns, exploit their weaknesses, and
+                    fight your way forward.
+                </p>
+            </div>
+        </section>
+        <!-- ==================== THE GAMEPLAY  ·  "MOVE. FIGHT. MASTER." ==================== -->
+        <section class="sec sec-gameplay" style="position: relative; width: 1920px; height: 1000px">
+            <img class="g-bg" src="image/game_play_bg.png" alt="" />
+
+            <div class="game-play">
+             <div class="text-all" style="margin-bottom: 60px;">
+               <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-[calc(50%-0.23px)] text-[26px] text-center text-white top-[210px] w-[903px]"
+                data-node-id="6118:23331">
+                Experience fast-paced action with movement, combat, and powerful
+                abilities. Jump, dash, fight, and adapt to overcome every challenge.
+            </p>
+
+            <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Teko'] font-medium leading-[120px] left-[calc(50%+0.27px)] text-[120px] text-center text-white top-[34px] whitespace-nowrap"
+                data-node-id="6118:23333">
+                MOVE. FIGHT. MASTER.
+            </p>
+
+            <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[24px] left-[calc(41.67%+161.27px)] text-[#05eaf9] text-[24px] text-center top-[2px] tracking-[3.84px] whitespace-nowrap"
+                data-node-id="6118:23335">
+                THE GAMEPLAY
+            </p>
+             </div>
+            
+            <div class="absolute h-[9.451px] left-[calc(33.33%+144.27px)] top-[9px] w-[47px]"
+                data-node-id="6118:23336">
+                <img alt="" class="absolute block inset-0 max-w-none size-full" src="icon/line3.png" />
+            </div>
+            
+            <div class="absolute flex h-[9.451px] items-center justify-center left-[calc(50%+131.27px)] top-[9px] w-[47px]"
+                data-node-id="6118:23337">
+                <img alt="" class="block max-w-none size-full object-contain" src="icon/line4.png" />
+            </div>
+
+            <div
+                class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11.73px)] top-[154px]">
+                <div class="hr-box"></div>
+            </div>
+
+            <div class="absolute h-[2px] w-[296px] left-[calc(50%+30.27px)] top-[164px] hr-line-r"></div>
+            <div class="absolute h-[2px] w-[296px] left-[calc(25%+153.27px)] top-[164px] hr-line-l"></div>
+            <div class="gp-video -translate-x-1/2 absolute h-[519px] left-[calc(50%+0.27px)] top-[322px] w-[966.956px]"
+                data-node-id="6126:8624">
+                <img alt="" class="absolute block inset-0 max-w-none size-full" height="519"
+                    src="image/14.png" width="966.956" />
+                <a href="https://youtu.be/CC9m13zQcw8" data-trailer data-video="video/game_play.mp4" target="_blank"
+                    rel="noopener" class="gp-play" aria-label="Play trailer">
+                    <img src="image/17.png" alt="" />
+                </a>
+            </div>
+
+            <div class="absolute h-[403px] left-[calc(66.67%+26px)] top-[494px] w-[435px]" data-node-id="6126:8618"
+                data-name="image 1184">
+                <img alt="" class="absolute inset-0 max-w-none object-contain pointer-events-none size-full"
+                    src="image/15.png" />
+            </div>
+
+            <div class="absolute h-[403px] left-[144px] top-[494px] w-[435px]" data-node-id="6126:8623"
+                data-name="image 1184">
+                <img alt="" class="absolute inset-0 max-w-none object-contain pointer-events-none size-full"
+                    src="image/13.png" />
+            </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== FOOTER  ·  socials + copyright ==================== -->
+        <section class="sec sec-footer" style="position: relative; width: 1920px; height: 400px">
+            <div class="-translate-x-1/2 absolute h-[634.96px] left-[calc(50%-0.05px)] top-[0px] w-[1920.108px]"
+                data-node-id="6151:12660">
+                <img alt="" class="absolute block inset-0 max-w-none size-full" height="634.96"
+                    src="image/footer.png" width="1920.108" />
+            </div>
+            <a href="#" aria-label="PIXO home"
+                class="absolute block h-[70px] left-[calc(33.33%+143px)] top-[40px] w-[326px]"
+                data-node-id="6151:11434">
+                <img alt="PIXO" class="block max-w-none size-full object-contain" src="image/logo.png" />
+            </a>
+
+            <div class="f-socials">
+                <a href="#" aria-label="Instagram" data-node-id="6151:11454" data-name="instagram">
+                    <img alt="Instagram" src="icon/instagram.png" />
+                </a>
+                <a href="#" aria-label="LinkedIn" data-node-id="6151:11455" data-name="linkedin">
+                    <img alt="LinkedIn" src="icon/linkedin.png" />
+                </a>
+                <a href="#" aria-label="Discord" data-node-id="6151:11452" data-name="3d icon discord">
+                    <img alt="Discord" src="icon/discord.png" />
+                </a>
+                <a href="#" aria-label="WhatsApp" data-node-id="6151:11453" data-name="3d icon whatsapp">
+                    <img alt="WhatsApp" src="icon/whatsapp.png" />
+                </a>
+                <a href="#" aria-label="Facebook" data-node-id="6151:11450" data-name="3d icon facebook">
+                    <img alt="Facebook" src="icon/facebook.png" />
+                </a>
+            </div>
+            <div class="-translate-x-1/2 absolute left-1/2 text-center top-[200px] w-[894px]"
+                data-node-id="6151:11465">
+                <p class="[word-break:break-word] font-['Outfit'] font-normal leading-[36px] text-[20px] text-white">
+                    PIXO is a fast-paced open-world adventure packed with exciting
+                </p>
+                <p class="[word-break:break-word] font-['Outfit'] font-normal leading-[36px] text-[20px] text-white">
+                    battles, unique abilities, and worlds waiting to be discovered.
+                </p>
+            </div>
+
+            <div class="f-divider">
+                <span class="hr-line-l"></span>
+                <span class="hr-box"></span>
+                <span class="hr-line-r"></span>
+            </div>
+            <p class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-1/2 text-[26px] text-center text-white top-[512px] w-[696px]"
+                data-node-id="6151:12670">
+                @ 2026 PIXO. All Rights Reserved.
+            </p>
+        </section>
     </main>
 
     <!-- ============================ MOBILE VERSION ============================ -->
     <div class="mobile-site">
-      <!-- HERO -->
-      <section class="m-hero">
-        <img class="m-hero-bg" src="image/mobile_hero.png" alt="" />
-        <div class="m-hero-content">
-          <a href="#" class="m-hero-logo"
-            ><img src="image/logo.png" alt="PIXO"
-          /></a>
-          <div class="m-eyebrow">
-            <img src="icon/line3.png" alt="" /><span>An Adventure Awaits</span
-            ><img src="icon/line4.png" alt="" />
-          </div>
-          <h1 class="m-title">Beyond<br />The Horizon</h1>
-          <div class="m-flourish">
-            <span class="ln hr-line-l"></span><span class="dot"></span
-            ><span class="ln hr-line-r"></span>
-          </div>
-          <p class="m-lead">
-            A world of discovery, danger, and unexpected challenges awaits.
-            Follow PIXO beyond the horizon and uncover what lies ahead.
-          </p>
-          <a href="PixoGame.zip" download class="m-btn" aria-label="Download PIXO demo"
-            ><span class="ic"
-              ><i
-                ><svg width="12" height="14" viewBox="0 0 12 14" fill="none">
-                  <path
-                    d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z"
-                    fill="#fff"
-                  ></path></svg></i></span
-            >PLAY DEMO</a
-          >
-        </div>
-      </section>
-
-      <!-- THIS IS PIXO -->
-      <section class="m-wrap m-sec m-c">
-        <div class="m-eyebrow">
-          <img src="icon/line3.png" alt="" /><span>Meet PIXO</span
-          ><img src="icon/line4.png" alt="" />
-        </div>
-        <div class="m-titlerow">
-          <h1 class="m-title">This Is PIXO</h1>
-        </div>
-        <span class="m-fl-mini"
-          ><span class="ln hr-line-l"></span><span class="dot"></span
-          ><span class="ln hr-line-r"></span
-        ></span>
-
-        <p class="m-sub">Every Adventure Needs A Hero</p>
-        <p class="m-lead">
-          Curious by nature, fearless by design. PIXO is ready to explore a
-          world of mystery, challenge, and adventure.
-        </p>
-        <a href="https://youtu.be/0wEjbSYNUM8" data-trailer target="_blank" rel="noopener" class="m-btn"
-          ><span class="ic"
-            ><i
-              ><svg width="12" height="14" viewBox="0 0 12 14" fill="none">
-                <path
-                  d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z"
-                  fill="#fff"
-                ></path></svg></i></span
-          >WATCH TRAILER</a
-        >
-      </section>
-      <div class="m-photo"><img src="image/2.png" alt="" /></div>
-
-      <!-- THE WORLD -->
-      <section class="m-wrap m-sec">
-        <div class="m-eyebrow c">
-          <img src="icon/line3.png" alt="" /><span>The World</span
-          ><img src="icon/line4.png" alt="" />
-        </div>
-        <h1 class="m-title c">A World Beyond<br />The Horizon</h1>
-        <div class="m-flourish c">
-          <span class="ln hr-line-l"></span><span class="dot"></span
-          ><span class="ln hr-line-r"></span>
-        </div>
-        <p class="m-lead c">
-          Curious by nature, fearless by design. PIXO is ready to explore a
-          world of mystery, challenge, and adventure.
-        </p>
-        <div class="m-crsl" id="wcMountM">
-          <img
-            class="crsl-arw l"
-            data-wc="prev-btn"
-            src="icon/1.png"
-            alt="Previous"
-            role="button"
-            tabindex="0"
-          />
-          <img
-            class="crsl-arw r"
-            data-wc="next-btn"
-            src="icon/2.png"
-            alt="Next"
-            role="button"
-            tabindex="0"
-          />
-        </div>
-        <p class="m-cardlabel" data-wc="label">Wild Fronttiers</p>
-        <p class="m-lead c" style="margin-bottom: 0" data-wc="desc">
-          Lush forests, floating island and untamed lands full of life and
-          wonder.
-        </p>
-      </section>
-
-      <!-- ABILITIES -->
-      <section class="m-wrap m-sec">
-        <div class="m-eyebrow c">
-          <img src="icon/line3.png" alt="" /><span>Abilities</span
-          ><img src="icon/line4.png" alt="" />
-        </div>
-        <h1 class="m-title c">Built To Break<br />The Rules</h1>
-        <div class="m-flourish c">
-          <span class="ln hr-line-l"></span><span class="dot"></span
-          ><span class="ln hr-line-r"></span>
-        </div>
-        <p class="m-lead c">
-          Master PIXO’s unique abilities to move faster, fight smarter, and
-          overcome challenges in unexpected ways.
-        </p>
-        <div class="m-crsl abil" id="acMountM">
-          <img class="m-abil-crystals" src="image/11.png" alt="" />
-        </div>
-        <p class="m-cardlabel" data-ac="label">Time Bubble</p>
-        <p class="m-lead c" style="margin-bottom: 0" data-ac="desc">
-          Freeze time within a localized bubble, slowing enemies and creating
-          the perfect moment to strike.
-        </p>
-        <div class="m-navrow">
-          <img
-            data-ac="prev-btn"
-            src="icon/1.png"
-            alt="Previous"
-            role="button"
-            tabindex="0"
-          /><img
-            data-ac="next-btn"
-            src="icon/2.png"
-            alt="Next"
-            role="button"
-            tabindex="0"
-          />
-        </div>
-      </section>
-
-      <!-- ENEMIES -->
-      <section class="m-wrap m-sec m-c">
-        <div class="m-eyebrow">
-          <img src="icon/line3.png" alt="" /><span>Enemies</span
-          ><img src="icon/line4.png" alt="" />
-        </div>
-        <h1 class="m-title">Nothing Stays<br />Undefeated</h1>
-        <div class="m-flourish">
-          <span class="ln hr-line-l"></span><span class="dot"></span
-          ><span class="ln hr-line-r"></span>
-        </div>
-        <p class="m-lead">
-          Dangerous machines and mysterious creatures stand between PIXO and the
-          unknown. Learn their patterns, exploit their weaknesses, and fight
-          your way forward.
-        </p>        
-      </section>
-      <div class="m-photo"><img src="image/12.png" alt="" /></div>
-
-      <!-- GAMEPLAY -->
-      <div class="m-gameplay">
-        <section class="m-wrap m-sec">
-          <div class="m-eyebrow c">
-            <img src="icon/line3.png" alt="" /><span>The Gameplay</span
-            ><img src="icon/line4.png" alt="" />
-          </div>
-          <h1 class="m-title c">Move. Fight.<br />Master.</h1>
-          <div class="m-flourish c">
-            <span class="ln hr-line-l"></span><span class="dot"></span
-            ><span class="ln hr-line-r"></span>
-          </div>
-          <p class="m-lead c">
-            Experience fast-paced action with movement, combat, and powerful
-            abilities. Jump, dash, fight, and adapt to overcome every challenge.
-          </p>
+        <!-- HERO -->
+        <section class="m-hero">
+            <img class="m-hero-bg" src="image/mobile_hero.png" alt="" />
+            <div class="m-hero-content">
+                <a href="#" class="m-hero-logo"><img src="image/logo.png" alt="PIXO" /></a>
+                <div class="m-eyebrow">
+                    <img src="icon/line3.png" alt="" /><span>An Adventure Awaits</span><img
+                        src="icon/line4.png" alt="" />
+                </div>
+                <h1 class="m-title">Beyond<br />The Horizon</h1>
+                <div class="m-flourish">
+                    <span class="ln hr-line-l"></span><span class="dot"></span><span class="ln hr-line-r"></span>
+                </div>
+                <p class="m-lead">
+                    A world of discovery, danger, and unexpected challenges awaits.
+                    Follow PIXO beyond the horizon and uncover what lies ahead.
+                </p>
+                <a href="PixoGame.zip" download class="m-btn" aria-label="Download PIXO demo"><span
+                        class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none">
+                                <path
+                                    d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z"
+                                    fill="#fff"></path>
+                            </svg></i></span>PLAY DEMO</a>
+            </div>
         </section>
-        <div class="m-gp">
-          <img class="flank l" src="image/13.png" alt="" />
-          <div class="gp-video m-gp-video">
-            <img class="m-img" src="image/14.png" alt="" />
-            <a
-              href="https://youtu.be/CC9m13zQcw8"
-              data-trailer
-              data-video="video/game_play.mp4"
-              target="_blank"
-              rel="noopener"
-              class="gp-play"
-              aria-label="Play trailer"
-            >
-              <img src="image/17.png" alt="" />
-            </a>
-          </div>
-          <img class="flank r" src="image/15.png" alt="" />
-        </div>
-      </div>
 
-     
+        <!-- THIS IS PIXO -->
+        <section class="m-wrap m-sec m-c">
+            <div class="m-eyebrow">
+                <img src="icon/line3.png" alt="" /><span>Meet PIXO</span><img src="icon/line4.png"
+                    alt="" />
+            </div>
+            <div class="m-titlerow">
+                <h1 class="m-title">This Is PIXO</h1>
+            </div>
+            <span class="m-fl-mini"><span class="ln hr-line-l"></span><span class="dot"></span><span
+                    class="ln hr-line-r"></span></span>
 
-      <!-- FOOTER -->
-      <footer class="m-footer">
-        <img class="flogo" src="image/logo.png" alt="PIXO" />
-        <div class="m-flourish c" style="margin: 6px 0 14px">
-          <span class="ln hr-line-l"></span><span class="dot"></span
-          ><span class="ln hr-line-r"></span>
+            <p class="m-sub">Every Adventure Needs A Hero</p>
+            <p class="m-lead">
+                Curious by nature, fearless by design. PIXO is ready to explore a
+                world of mystery, challenge, and adventure.
+            </p>
+            <a href="https://youtu.be/0wEjbSYNUM8" data-trailer target="_blank" rel="noopener" class="m-btn"><span
+                    class="ic"><i><svg width="12" height="14" viewBox="0 0 12 14" fill="none">
+                            <path
+                                d="M1 1.2C1 .5 1.8 0 2.4 .5L10.7 6C11.3 6.4 11.3 7.6 10.7 8L2.4 13.5C1.8 13.9 1 13.5 1 12.8V1.2Z"
+                                fill="#fff"></path>
+                        </svg></i></span>WATCH TRAILER</a>
+        </section>
+        <div class="m-photo"><img src="image/2.png" alt="" /></div>
+
+        <!-- THE WORLD -->
+        <section class="m-wrap m-sec">
+            <div class="m-eyebrow c">
+                <img src="icon/line3.png" alt="" /><span>The World</span><img src="icon/line4.png"
+                    alt="" />
+            </div>
+            <h1 class="m-title c">A World Beyond<br />The Horizon</h1>
+            <div class="m-flourish c">
+                <span class="ln hr-line-l"></span><span class="dot"></span><span class="ln hr-line-r"></span>
+            </div>
+            <p class="m-lead c">
+                Curious by nature, fearless by design. PIXO is ready to explore a
+                world of mystery, challenge, and adventure.
+            </p>
+            <div class="m-crsl" id="wcMountM">
+                <img class="crsl-arw l" data-wc="prev-btn" src="icon/1.png" alt="Previous" role="button"
+                    tabindex="0" />
+                <img class="crsl-arw r" data-wc="next-btn" src="icon/2.png" alt="Next" role="button"
+                    tabindex="0" />
+            </div>
+            <p class="m-cardlabel" data-wc="label">Wild Fronttiers</p>
+            <p class="m-lead c" style="margin-bottom: 0" data-wc="desc">
+                Lush forests, floating island and untamed lands full of life and
+                wonder.
+            </p>
+        </section>
+
+        <!-- ABILITIES -->
+        <section class="m-wrap m-sec">
+            <div class="m-eyebrow c">
+                <img src="icon/line3.png" alt="" /><span>Abilities</span><img src="icon/line4.png"
+                    alt="" />
+            </div>
+            <h1 class="m-title c">Built To Break<br />The Rules</h1>
+            <div class="m-flourish c">
+                <span class="ln hr-line-l"></span><span class="dot"></span><span class="ln hr-line-r"></span>
+            </div>
+            <p class="m-lead c">
+                Master PIXO’s unique abilities to move faster, fight smarter, and
+                overcome challenges in unexpected ways.
+            </p>
+            <div class="m-crsl abil" id="acMountM">
+                <img class="m-abil-crystals" src="image/11.png" alt="" />
+            </div>
+            <p class="m-cardlabel" data-ac="label">Time Bubble</p>
+            <p class="m-lead c" style="margin-bottom: 0" data-ac="desc">
+                Freeze time within a localized bubble, slowing enemies and creating
+                the perfect moment to strike.
+            </p>
+            <div class="m-navrow">
+                <img data-ac="prev-btn" src="icon/1.png" alt="Previous" role="button" tabindex="0" /><img
+                    data-ac="next-btn" src="icon/2.png" alt="Next" role="button" tabindex="0" />
+            </div>
+        </section>
+
+        <!-- ENEMIES -->
+        <section class="m-wrap m-sec m-c">
+            <div class="m-eyebrow">
+                <img src="icon/line3.png" alt="" /><span>Enemies</span><img src="icon/line4.png"
+                    alt="" />
+            </div>
+            <h1 class="m-title">Nothing Stays<br />Undefeated</h1>
+            <div class="m-flourish">
+                <span class="ln hr-line-l"></span><span class="dot"></span><span class="ln hr-line-r"></span>
+            </div>
+            <p class="m-lead">
+                Dangerous machines and mysterious creatures stand between PIXO and the
+                unknown. Learn their patterns, exploit their weaknesses, and fight
+                your way forward.
+            </p>
+        </section>
+        <div class="m-photo"><img src="image/12.png" alt="" /></div>
+
+        <!-- GAMEPLAY -->
+        <div class="m-gameplay">
+            <section class="m-wrap m-sec">
+                <div class="m-eyebrow c">
+                    <img src="icon/line3.png" alt="" /><span>The Gameplay</span><img src="icon/line4.png"
+                        alt="" />
+                </div>
+                <h1 class="m-title c">Move. Fight.<br />Master.</h1>
+                <div class="m-flourish c">
+                    <span class="ln hr-line-l"></span><span class="dot"></span><span class="ln hr-line-r"></span>
+                </div>
+                <p class="m-lead c">
+                    Experience fast-paced action with movement, combat, and powerful
+                    abilities. Jump, dash, fight, and adapt to overcome every challenge.
+                </p>
+            </section>
+            <div class="m-gp">
+                <img class="flank l" src="image/13.png" alt="" />
+                <div class="gp-video m-gp-video">
+                    <img class="m-img" src="image/14.png" alt="" />
+                    <a href="https://youtu.be/CC9m13zQcw8" data-trailer data-video="video/game_play.mp4"
+                        target="_blank" rel="noopener" class="gp-play" aria-label="Play trailer">
+                        <img src="image/17.png" alt="" />
+                    </a>
+                </div>
+                <img class="flank r" src="image/15.png" alt="" />
+            </div>
         </div>
-        <p class="m-lead c" style="margin-bottom: 0">
-          PIXO is a fast-paced open-world adventure packed with exciting
-          battles, unique abilities, and worlds waiting to be discovered.
-        </p>
-        <div class="m-social">
-          <a href="#" aria-label="Instagram"
-            ><img src="icon/instagram.png" alt="Instagram"
-          /></a>
-          <a href="#" aria-label="LinkedIn"
-            ><img src="icon/linkedin.png" alt="LinkedIn"
-          /></a>
-          <a href="#" aria-label="Discord"
-            ><img src="icon/discord.png" alt="Discord"
-          /></a>
-          <a href="#" aria-label="WhatsApp"
-            ><img src="icon/whatsapp.png" alt="WhatsApp"
-          /></a>
-          <a href="#" aria-label="Facebook"
-            ><img src="icon/facebook.png" alt="Facebook"
-          /></a>
-        </div>
-        <p class="m-copy">© 2026 PIXO. All Rights Reserved.</p>
-      </footer>
+
+
+
+        <!-- FOOTER -->
+        <footer class="m-footer">
+            <img class="flogo" src="image/logo.png" alt="PIXO" />
+            <div class="m-flourish c" style="margin: 6px 0 14px">
+                <span class="ln hr-line-l"></span><span class="dot"></span><span class="ln hr-line-r"></span>
+            </div>
+            <p class="m-lead c" style="margin-bottom: 0">
+                PIXO is a fast-paced open-world adventure packed with exciting
+                battles, unique abilities, and worlds waiting to be discovered.
+            </p>
+            <div class="m-social">
+                <a href="#" aria-label="Instagram"><img src="icon/instagram.png" alt="Instagram" /></a>
+                <a href="#" aria-label="LinkedIn"><img src="icon/linkedin.png" alt="LinkedIn" /></a>
+                <a href="#" aria-label="Discord"><img src="icon/discord.png" alt="Discord" /></a>
+                <a href="#" aria-label="WhatsApp"><img src="icon/whatsapp.png" alt="WhatsApp" /></a>
+                <a href="#" aria-label="Facebook"><img src="icon/facebook.png" alt="Facebook" /></a>
+            </div>
+            <p class="m-copy">© 2026 PIXO. All Rights Reserved.</p>
+        </footer>
     </div>
 
     <!-- ============ trailer lightbox (local video) ============ -->
-    <div
-      id="trailerModal"
-      class="video-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-label="PIXO trailer"
-      hidden
-    >
-      <div class="video-modal-backdrop" data-close></div>
-      <div class="video-modal-frame">
-        <button
-          type="button"
-          class="video-modal-close"
-          data-close
-          aria-label="Close video"
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M6 6L18 18M18 6L6 18"
-              stroke="currentColor"
-              stroke-width="2.4"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button>
-        <div class="video-modal-ratio"><div id="trailerMount"></div></div>
-      </div>
+    <div id="trailerModal" class="video-modal" role="dialog" aria-modal="true" aria-label="PIXO trailer" hidden>
+        <div class="video-modal-backdrop" data-close></div>
+        <div class="video-modal-frame">
+            <button type="button" class="video-modal-close" data-close aria-label="Close video">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+                </svg>
+            </button>
+            <div class="video-modal-ratio">
+                <div id="trailerMount"></div>
+            </div>
+        </div>
     </div>
 
     <script>
-      (function () {
-        var DESIGN_W = 1920;
-        var main = document.querySelector("main");
-        var siteNav = document.querySelector(".site-nav");
-        var scale = 1;
-        // devicePixelRatio at the user's "100% zoom" baseline (accounts for OS display
-        // scaling). It can be reported wrong (1 instead of 2, …) while the page is still
-        // starting up — on Retina Macs, iPad Safari, responsive-design mode — which then
-        // makes the zoom factor below ~2x and blows the design past the viewport. So it's
-        // re-sampled once things settle (load / tab shown / bfcache restore).
-        var DPR0 = window.devicePixelRatio || 1;
-        // total design height = sum of the stacked <section> blocks (measured, so editing a
-        // section's height never needs a constant updated here)
-        function designH() {
-          return main ? main.offsetHeight : 7831;
-        }
+        (function() {
+            var DESIGN_W = 1920;
+            var main = document.querySelector("main");
+            var siteNav = document.querySelector(".site-nav");
+            var scale = 1;
+            // devicePixelRatio at the user's "100% zoom" baseline (accounts for OS display
+            // scaling). It can be reported wrong (1 instead of 2, …) while the page is still
+            // starting up — on Retina Macs, iPad Safari, responsive-design mode — which then
+            // makes the zoom factor below ~2x and blows the design past the viewport. So it's
+            // re-sampled once things settle (load / tab shown / bfcache restore).
+            var DPR0 = window.devicePixelRatio || 1;
+            // total design height = sum of the stacked <section> blocks (measured, so editing a
+            // section's height never needs a constant updated here)
+            function designH() {
+                return main ? main.offsetHeight : 7831;
+            }
 
-        // Scale the fixed 1920px design to always fill the full viewport width (up or down).
-        // <body> is sized to the scaled design so the browser produces exactly one scrollbar.
-        function fit() {
-          var vw = document.documentElement.clientWidth || window.innerWidth;
-          // Factor out browser zoom: Ctrl +/- shrinks clientWidth and raises devicePixelRatio
-          // together. Multiplying back by that ratio gives the width at the user's baseline
-          // zoom, so the design's fitted size stays stable and the browser's own zoom then
-          // enlarges/shrinks the whole page like a normal site.
-          var zoom = (window.devicePixelRatio || 1) / DPR0;
-          var baseVW = vw * zoom;
-          // Safety net: a real browser zoom-out keeps baseVW ≈ the unzoomed width, so it
-          // never much exceeds the physical screen. If baseVW runs well past the screen,
-          // DPR0 was mis-sampled — ignore the zoom factor and just fit the viewport.
-          if (baseVW > (window.screen ? window.screen.width : vw) * 1.25) {
-            baseVW = vw;
-          }
-          // Below 768px (at baseline zoom) the dedicated .mobile-site layout takes over.
-          if (baseVW < 768) {
-            if (main) main.style.transform = "";
-            if (siteNav) siteNav.style.transform = "";
-            document.body.style.width = "";
-            document.body.style.height = "";
-            return;
-          }
-          scale = baseVW / DESIGN_W;
-          var h = designH();
-          if (main) main.style.transform = "scale(" + scale + ")";
-          if (siteNav) siteNav.style.transform = "scale(" + scale + ")";
-          document.body.style.width = DESIGN_W * scale + "px";
-          document.body.style.height = h * scale + "px";
-        }
-        function rebaseline() {
-          DPR0 = window.devicePixelRatio || 1;
-          fit();
-        }
-        fit();
-        window.addEventListener("resize", fit);
-        window.addEventListener("orientationchange", rebaseline);
-        window.addEventListener("load", rebaseline);
-        window.addEventListener("pageshow", rebaseline);
-        // one more re-sample shortly after load — some engines (iPad Safari,
-        // responsive-design mode) don't report the final devicePixelRatio until
-        // a beat after the load event
-        setTimeout(rebaseline, 400);
+            // Scale the fixed 1920px design to always fill the full viewport width (up or down).
+            // <body> is sized to the scaled design so the browser produces exactly one scrollbar.
+            function fit() {
+                var vw = document.documentElement.clientWidth || window.innerWidth;
+                // Factor out browser zoom: Ctrl +/- shrinks clientWidth and raises devicePixelRatio
+                // together. Multiplying back by that ratio gives the width at the user's baseline
+                // zoom, so the design's fitted size stays stable and the browser's own zoom then
+                // enlarges/shrinks the whole page like a normal site.
+                var zoom = (window.devicePixelRatio || 1) / DPR0;
+                var baseVW = vw * zoom;
+                // Safety net: a real browser zoom-out keeps baseVW ≈ the unzoomed width, so it
+                // never much exceeds the physical screen. If baseVW runs well past the screen,
+                // DPR0 was mis-sampled — ignore the zoom factor and just fit the viewport.
+                if (baseVW > (window.screen ? window.screen.width : vw) * 1.25) {
+                    baseVW = vw;
+                }
+                // Below 768px (at baseline zoom) the dedicated .mobile-site layout takes over.
+                if (baseVW < 768) {
+                    if (main) main.style.transform = "";
+                    if (siteNav) siteNav.style.transform = "";
+                    document.body.style.width = "";
+                    document.body.style.height = "";
+                    return;
+                }
+                scale = baseVW / DESIGN_W;
+                var h = designH();
+                if (main) main.style.transform = "scale(" + scale + ")";
+                if (siteNav) siteNav.style.transform = "scale(" + scale + ")";
+                document.body.style.width = DESIGN_W * scale + "px";
+                document.body.style.height = h * scale + "px";
+            }
 
-        // solidify the sticky nav bar once the page is scrolled past the hero top
-        function navScroll() {
-          if (siteNav)
-            siteNav.classList.toggle("scrolled", window.pageYOffset > 60);
-        }
-        navScroll();
-        window.addEventListener("scroll", navScroll, { passive: true });
+            function rebaseline() {
+                DPR0 = window.devicePixelRatio || 1;
+                fit();
+            }
+            fit();
+            window.addEventListener("resize", fit);
+            window.addEventListener("orientationchange", rebaseline);
+            window.addEventListener("load", rebaseline);
+            window.addEventListener("pageshow", rebaseline);
+            // one more re-sample shortly after load — some engines (iPad Safari,
+            // responsive-design mode) don't report the final devicePixelRatio until
+            // a beat after the load event
+            setTimeout(rebaseline, 400);
 
-        // ================= real sliding carousels (a track that translates) =================
-        (function () {
-          var q = function (sel, root) {
-            return Array.prototype.slice.call(
-              (root || document).querySelectorAll(sel),
+            // solidify the sticky nav bar once the page is scrolled past the hero top
+            function navScroll() {
+                if (siteNav)
+                    siteNav.classList.toggle("scrolled", window.pageYOffset > 60);
+            }
+            navScroll();
+            window.addEventListener("scroll", navScroll, {
+                passive: true
+            });
+
+            // ================= real sliding carousels (a track that translates) =================
+            (function() {
+                var q = function(sel, root) {
+                    return Array.prototype.slice.call(
+                        (root || document).querySelectorAll(sel),
+                    );
+                };
+                var SLIDE_MS = 550,
+                    EASE = "cubic-bezier(.4,0,.2,1)";
+
+                // items: [{img,label,desc}]. mounts: [{el, widthPct, gap}]. All mounts + labels + descs
+                // stay in sync off one shared index. The track holds 3 copies of the items so it can
+                // slide forever; after each move it snaps (no transition) back into the middle copy.
+                function build(cfg) {
+                    var items = cfg.items,
+                        n = items.length;
+                    if (n < 2) return;
+                    var mounts = cfg.mounts.filter(function(m) {
+                        return m.el;
+                    });
+                    if (!mounts.length) return;
+                    var labels = q(cfg.labels),
+                        descs = q(cfg.descs);
+                    var index = n,
+                        busy = false;
+
+                    mounts.forEach(function(m) {
+                        var vp = document.createElement("div");
+                        vp.className = "crsl-vp";
+                        var track = document.createElement("div");
+                        track.className = "crsl-track";
+                        items.concat(items, items).forEach(function(it) {
+                            var s = document.createElement("div");
+                            s.className = "crsl-slide";
+                            var im = document.createElement("img");
+                            im.src = it.img;
+                            im.alt = it.label || "";
+                            s.appendChild(im);
+                            track.appendChild(s);
+                        });
+                        vp.appendChild(track);
+                        m.el.appendChild(vp);
+                        m.vp = vp;
+                        m.track = track;
+                        m.slides = q(".crsl-slide", track);
+                    });
+
+                    function layout(m) {
+                        var vw = m.vp.clientWidth || 1;
+                        m.w = Math.max(40, Math.round(vw * m.widthPct));
+                        m.slides.forEach(function(s) {
+                            s.style.width = m.w + "px";
+                            s.style.marginRight = m.gap + "px";
+                        });
+                    }
+                    // depth ramp by distance from the centre slide (index 0 = active)
+                    var SCALE = cfg.scale || [1, 0.78, 0.6, 0.5];
+                    var DROP = cfg.drop || [0, 0, 0,
+                    0]; // per-ring vertical offset (see cfg.drop): fraction of slide width, + = down
+                    var PULL = cfg.pull || 0; // pull toward centre per ring, fraction of slide width
+                    var DIM = cfg.dim || [1, 0.82, 0.58, 0.5];
+                    var FADE = cfg.fade || [1, 0.95, 0.62, 0];
+                    var ramp = function(a, d) {
+                        return a[Math.min(d, a.length - 1)];
+                    };
+
+                    function place(animate) {
+                        mounts.forEach(function(m) {
+                            var vw = m.vp.clientWidth;
+                            var x = Math.round(vw / 2 - m.w / 2 - index * (m.w + m.gap));
+                            m.track.style.transition = animate ?
+                                "transform " + SLIDE_MS + "ms " + EASE :
+                                "none";
+                            m.track.style.transform = "translate3d(" + x + "px,0,0)";
+                            if (!animate) {
+                                m.slides.forEach(function(s) {
+                                    s.style.transition = "none";
+                                });
+                            }
+                            m.slides.forEach(function(s, k) {
+                                var rel = k - index,
+                                    d = Math.abs(rel),
+                                    sc = ramp(SCALE, d);
+                                var tx =
+                                    rel === 0 ?
+                                    0 :
+                                    -Math.sign(rel) * Math.min(d, 3) * PULL * m.w;
+                                var ty = ramp(DROP, d) * m.w;
+                                s.style.transform =
+                                    "translate(" +
+                                    tx.toFixed(1) +
+                                    "px," +
+                                    ty.toFixed(1) +
+                                    "px) scale(" +
+                                    sc +
+                                    ")";
+                                s.style.opacity = ramp(FADE, d);
+                                s.style.filter =
+                                    d === 0 ?
+                                    "saturate(1) brightness(1)" :
+                                    "saturate(.9) brightness(" + ramp(DIM, d) + ")";
+                                s.style.zIndex = 20 - d;
+                                s.classList.toggle("is-active", rel === 0);
+                            });
+                            if (!animate) {
+                                void m.track.offsetHeight;
+                                m.slides.forEach(function(s) {
+                                    s.style.transition = "";
+                                });
+                            }
+                        });
+                        var it = items[((index % n) + n) % n];
+                        labels.forEach(function(el) {
+                            el.textContent = it.label;
+                        });
+                        descs.forEach(function(el) {
+                            el.textContent = it.desc;
+                        });
+                    }
+
+                    function go(dir) {
+                        if (busy) return;
+                        busy = true;
+                        index += dir;
+                        place(true);
+                        var t = mounts[0].track,
+                            fired = false;
+
+                        function done(e) {
+                            if (fired || (e && e.target !== t)) return;
+                            fired = true;
+                            t.removeEventListener("transitionend", done);
+                            if (index < n) index += n;
+                            else if (index >= 2 * n) index -= n;
+                            place(false);
+                            busy = false;
+                        }
+                        t.addEventListener("transitionend", done);
+                        setTimeout(function() {
+                            done();
+                        }, SLIDE_MS + 120);
+                    }
+
+                    function bind(sel, dir) {
+                        q(sel).forEach(function(b) {
+                            b.addEventListener("click", function(e) {
+                                e.preventDefault();
+                                go(dir);
+                            });
+                            b.addEventListener("keydown", function(e) {
+                                if (
+                                    e.key === "Enter" ||
+                                    e.key === " " ||
+                                    e.key === "Spacebar"
+                                ) {
+                                    e.preventDefault();
+                                    go(dir);
+                                }
+                            });
+                        });
+                    }
+
+                    function relayout() {
+                        mounts.forEach(layout);
+                        place(false);
+                    }
+                    bind(cfg.prev, -1);
+                    bind(cfg.next, 1);
+                    relayout();
+                    window.addEventListener("resize", relayout);
+                    window.addEventListener("load", relayout);
+                }
+
+                build({
+                    prev: '[data-wc="prev-btn"]',
+                    next: '[data-wc="next-btn"]',
+                    labels: '[data-wc="label"]',
+                    descs: '[data-wc="desc"]',
+                    scale: [1, 0.82, 0.82, 0.8],
+                    dim: [1, 0.5, 0.5, 0.5],
+                    fade: [1, 0.9, 0.5, 0],
+                    mounts: [{
+                            el: document.getElementById("wcMount"),
+                            widthPct: 0.345,
+                            gap: 44,
+                        },
+                        {
+                            el: document.getElementById("wcMountM"),
+                            widthPct: 0.74,
+                            gap: 10,
+                        },
+                    ],
+                    items: [{
+                            img: "image/4.png",
+                            label: "WILD FRONTTIERS",
+                            desc: "Lush forests, floating island and untamed lands full of life and wonder.",
+                        },
+                        {
+                            img: "image/3.png",
+                            label: "COMING SOON",
+                            desc: "A new realm is being forged — explore what lies beyond, very soon.",
+                        },
+                        {
+                            img: "image/3.png",
+                            label: "COMING SOON",
+                            desc: "More worlds await discovery. Stay tuned for the next frontier.",
+                        },
+                    ],
+                });
+
+                build({
+                    prev: '[data-ac="prev-btn"]',
+                    next: '[data-ac="next-btn"]',
+                    labels: '[data-ac="label"]',
+                    descs: '[data-ac="desc"]',
+                    scale: [1, 0.9, 0.82, 0.72, 0.66],
+                    // ▼▲ VERTICAL POSITION of each ability circle, by how far it sits from the centre one.
+                    //    drop[0] = centre · drop[1] = the pair beside it · drop[2] = next pair · drop[3] = next · drop[4] = furthest.
+                    //    each number is a fraction of the circle's width:  BIGGER = that ring sits LOWER,  0 = level with the centre.
+                    //    (e.g. raise drop[3] / drop[4] to push the outer circles further down.)
+                    drop: [0, 0.08, 0.2, 0.42, 0.58],
+                    pull: 0.02,
+                    dim: [1, 0.96, 0.84, 0.62, 0.5],
+                    fade: [1, 1, 0.9, 0.5, 0],
+                    mounts: [{
+                            el: document.getElementById("acMount"),
+                            widthPct: 0.145,
+                            gap: 24,
+                        },
+                        {
+                            el: document.getElementById("acMountM"),
+                            widthPct: 0.4,
+                            gap: 2,
+                        },
+                    ],
+                    items: [{
+                            img: "image/8-1.png",
+                            label: "TIME BUBBLE",
+                            desc: "Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.",
+                        },
+                        {
+                            img: "image/8.png",
+                            label: "EMBER STRIKE",
+                            desc: "Ignite your fists and hammer down a lingering trail of scorching flame.",
+                        },
+                        {
+                            img: "image/9.png",
+                            label: "CRIMSON WARD",
+                            desc: "Raise a barrier of hardened plasma that reflects incoming fire back at attackers.",
+                        },
+                        {
+                            img: "image/10.png",
+                            label: "STATIC SURGE",
+                            desc: "Charge the air with lightning, chaining bolts between every enemy in range.",
+                        },
+                        {
+                            img: "image/5.png",
+                            label: "PHASE BLAST",
+                            desc: "Unleash a burst of void energy that pierces armour and knocks foes off balance.",
+                        },
+                        {
+                            img: "image/6.png",
+                            label: "OVERGROWTH",
+                            desc: "Summon living vines that root enemies in place while healing nearby allies.",
+                        },
+                        {
+                            img: "image/7.png",
+                            label: "PULSE DASH",
+                            desc: "Blink through space in a shockwave, damaging every enemy along your path.",
+                        },
+                    ],
+                });
+            })();
+
+            // ---- nav: active underline + smooth scroll ----
+            var links = Array.prototype.slice.call(
+                document.querySelectorAll(".nav-link"),
             );
-          };
-          var SLIDE_MS = 550,
-            EASE = "cubic-bezier(.4,0,.2,1)";
+            var bar = document.getElementById("navUnderline");
+            if (!bar || !links.length) return;
 
-          // items: [{img,label,desc}]. mounts: [{el, widthPct, gap}]. All mounts + labels + descs
-          // stay in sync off one shared index. The track holds 3 copies of the items so it can
-          // slide forever; after each move it snaps (no transition) back into the middle copy.
-          function build(cfg) {
-            var items = cfg.items,
-              n = items.length;
-            if (n < 2) return;
-            var mounts = cfg.mounts.filter(function (m) {
-              return m.el;
+            // matches .site-nav's own height: scrolling here lands a section's
+            // true top flush against the bottom edge of the fixed nav, so no
+            // sliver of the previous section's tail is ever revealed above it
+            var NAV_GAP = 80;
+
+            function sectionFor(l) {
+                var name = l.getAttribute("data-target");
+                return name ? document.querySelector("." + name) : null;
+            }
+            // section.offsetTop is measured in the unscaled design coordinate
+            // system (CSS transform: scale() doesn't affect layout), so it stays
+            // correct even if a section's height changes later.
+            function linkTarget(l) {
+                var sec = sectionFor(l);
+                var y = sec ? sec.offsetTop : 0;
+                return Math.max(0, Math.round((y - NAV_GAP) * scale));
+            }
+
+            function moveBar(el) {
+                bar.style.left = el.offsetLeft + "px";
+                bar.style.width = el.offsetWidth + "px";
+            }
+
+            function activate(el) {
+                links.forEach(function(l) {
+                    l.classList.remove("is-active");
+                });
+                el.classList.add("is-active");
+                moveBar(el);
+            }
+
+            links.forEach(function(l) {
+                l.addEventListener("click", function() {
+                    activate(l);
+                    window.scrollTo({
+                        top: linkTarget(l),
+                        behavior: "smooth",
+                    });
+                });
             });
-            if (!mounts.length) return;
-            var labels = q(cfg.labels),
-              descs = q(cfg.descs);
-            var index = n,
-              busy = false;
 
-            mounts.forEach(function (m) {
-              var vp = document.createElement("div");
-              vp.className = "crsl-vp";
-              var track = document.createElement("div");
-              track.className = "crsl-track";
-              items.concat(items, items).forEach(function (it) {
-                var s = document.createElement("div");
-                s.className = "crsl-slide";
-                var im = document.createElement("img");
-                im.src = it.img;
-                im.alt = it.label || "";
-                s.appendChild(im);
-                track.appendChild(s);
-              });
-              vp.appendChild(track);
-              m.el.appendChild(vp);
-              m.vp = vp;
-              m.track = track;
-              m.slides = q(".crsl-slide", track);
+            var current = document.querySelector(".nav-link.is-active") || links[0];
+            moveBar(current);
+            requestAnimationFrame(function() {
+                requestAnimationFrame(function() {
+                    bar.style.transition =
+                        "left .35s cubic-bezier(.4,0,.2,1), width .35s cubic-bezier(.4,0,.2,1)";
+                });
             });
 
-            function layout(m) {
-              var vw = m.vp.clientWidth || 1;
-              m.w = Math.max(40, Math.round(vw * m.widthPct));
-              m.slides.forEach(function (s) {
-                s.style.width = m.w + "px";
-                s.style.marginRight = m.gap + "px";
-              });
-            }
-            // depth ramp by distance from the centre slide (index 0 = active)
-            var SCALE = cfg.scale || [1, 0.78, 0.6, 0.5];
-            var DROP = cfg.drop || [0, 0, 0, 0]; // per-ring vertical offset (see cfg.drop): fraction of slide width, + = down
-            var PULL = cfg.pull || 0; // pull toward centre per ring, fraction of slide width
-            var DIM = cfg.dim || [1, 0.82, 0.58, 0.5];
-            var FADE = cfg.fade || [1, 0.95, 0.62, 0];
-            var ramp = function (a, d) {
-              return a[Math.min(d, a.length - 1)];
-            };
+            window.addEventListener("resize", function() {
+                var prev = bar.style.transition;
+                bar.style.transition = "none";
+                moveBar(document.querySelector(".nav-link.is-active") || current);
+                requestAnimationFrame(function() {
+                    bar.style.transition = prev;
+                });
+            });
 
-            function place(animate) {
-              mounts.forEach(function (m) {
-                var vw = m.vp.clientWidth;
-                var x = Math.round(vw / 2 - m.w / 2 - index * (m.w + m.gap));
-                m.track.style.transition = animate
-                  ? "transform " + SLIDE_MS + "ms " + EASE
-                  : "none";
-                m.track.style.transform = "translate3d(" + x + "px,0,0)";
-                if (!animate) {
-                  m.slides.forEach(function (s) {
-                    s.style.transition = "none";
-                  });
+            // ---- nav: keep the active link in sync with actual scroll position ----
+            var lastLink = links.reduce(function(a, b) {
+                return linkTarget(b) > linkTarget(a) ? b : a;
+            }, links[0]);
+
+            function updateActiveFromScroll() {
+                var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+                var doc = document.documentElement;
+                var maxScroll = Math.max(0, (doc.scrollHeight || 0) - window.innerHeight);
+                var best = links[0];
+                if (scrollY >= maxScroll - 2) {
+                    best = lastLink;
+                } else {
+                    var bestTarget = -1;
+                    links.forEach(function(l) {
+                        var target = linkTarget(l);
+                        if (target <= scrollY + 1 && target >= bestTarget) {
+                            bestTarget = target;
+                            best = l;
+                        }
+                    });
                 }
-                m.slides.forEach(function (s, k) {
-                  var rel = k - index,
-                    d = Math.abs(rel),
-                    sc = ramp(SCALE, d);
-                  var tx =
-                    rel === 0
-                      ? 0
-                      : -Math.sign(rel) * Math.min(d, 3) * PULL * m.w;
-                  var ty = ramp(DROP, d) * m.w;
-                  s.style.transform =
-                    "translate(" +
-                    tx.toFixed(1) +
-                    "px," +
-                    ty.toFixed(1) +
-                    "px) scale(" +
-                    sc +
-                    ")";
-                  s.style.opacity = ramp(FADE, d);
-                  s.style.filter =
-                    d === 0
-                      ? "saturate(1) brightness(1)"
-                      : "saturate(.9) brightness(" + ramp(DIM, d) + ")";
-                  s.style.zIndex = 20 - d;
-                  s.classList.toggle("is-active", rel === 0);
-                });
-                if (!animate) {
-                  void m.track.offsetHeight;
-                  m.slides.forEach(function (s) {
-                    s.style.transition = "";
-                  });
-                }
-              });
-              var it = items[((index % n) + n) % n];
-              labels.forEach(function (el) {
-                el.textContent = it.label;
-              });
-              descs.forEach(function (el) {
-                el.textContent = it.desc;
-              });
+                if (!best.classList.contains("is-active")) activate(best);
             }
-            function go(dir) {
-              if (busy) return;
-              busy = true;
-              index += dir;
-              place(true);
-              var t = mounts[0].track,
-                fired = false;
-              function done(e) {
-                if (fired || (e && e.target !== t)) return;
-                fired = true;
-                t.removeEventListener("transitionend", done);
-                if (index < n) index += n;
-                else if (index >= 2 * n) index -= n;
-                place(false);
-                busy = false;
-              }
-              t.addEventListener("transitionend", done);
-              setTimeout(function () {
-                done();
-              }, SLIDE_MS + 120);
-            }
-            function bind(sel, dir) {
-              q(sel).forEach(function (b) {
-                b.addEventListener("click", function (e) {
-                  e.preventDefault();
-                  go(dir);
-                });
-                b.addEventListener("keydown", function (e) {
-                  if (
-                    e.key === "Enter" ||
-                    e.key === " " ||
-                    e.key === "Spacebar"
-                  ) {
-                    e.preventDefault();
-                    go(dir);
-                  }
-                });
-              });
-            }
-            function relayout() {
-              mounts.forEach(layout);
-              place(false);
-            }
-            bind(cfg.prev, -1);
-            bind(cfg.next, 1);
-            relayout();
-            window.addEventListener("resize", relayout);
-            window.addEventListener("load", relayout);
-          }
 
-          build({
-            prev: '[data-wc="prev-btn"]',
-            next: '[data-wc="next-btn"]',
-            labels: '[data-wc="label"]',
-            descs: '[data-wc="desc"]',
-            scale: [1, 0.82, 0.82, 0.8],
-            dim: [1, 0.5, 0.5, 0.5],
-            fade: [1, 0.9, 0.5, 0],
-            mounts: [
-              {
-                el: document.getElementById("wcMount"),
-                widthPct: 0.345,
-                gap: 44,
-              },
-              {
-                el: document.getElementById("wcMountM"),
-                widthPct: 0.74,
-                gap: 10,
-              },
-            ],
-            items: [
-              {
-                img: "image/4.png",
-                label: "WILD FRONTTIERS",
-                desc: "Lush forests, floating island and untamed lands full of life and wonder.",
-              },
-              {
-                img: "image/3.png",
-                label: "COMING SOON",
-                desc: "A new realm is being forged — explore what lies beyond, very soon.",
-              },
-              {
-                img: "image/3.png",
-                label: "COMING SOON",
-                desc: "More worlds await discovery. Stay tuned for the next frontier.",
-              },
-            ],
-          });
-
-          build({
-            prev: '[data-ac="prev-btn"]',
-            next: '[data-ac="next-btn"]',
-            labels: '[data-ac="label"]',
-            descs: '[data-ac="desc"]',
-            scale: [1, 0.9, 0.82, 0.72, 0.66],
-            // ▼▲ VERTICAL POSITION of each ability circle, by how far it sits from the centre one.
-            //    drop[0] = centre · drop[1] = the pair beside it · drop[2] = next pair · drop[3] = next · drop[4] = furthest.
-            //    each number is a fraction of the circle's width:  BIGGER = that ring sits LOWER,  0 = level with the centre.
-            //    (e.g. raise drop[3] / drop[4] to push the outer circles further down.)
-            drop: [0, 0.08, 0.2, 0.42, 0.58],
-            pull: 0.02,
-            dim: [1, 0.96, 0.84, 0.62, 0.5],
-            fade: [1, 1, 0.9, 0.5, 0],
-            mounts: [
-              {
-                el: document.getElementById("acMount"),
-                widthPct: 0.145,
-                gap: 24,
-              },
-              {
-                el: document.getElementById("acMountM"),
-                widthPct: 0.4,
-                gap: 2,
-              },
-            ],
-            items: [
-              {
-                img: "image/8-1.png",
-                label: "TIME BUBBLE",
-                desc: "Freeze time within a localized bubble, slowing enemies and creating the perfect moment to strike.",
-              },
-              {
-                img: "image/8.png",
-                label: "EMBER STRIKE",
-                desc: "Ignite your fists and hammer down a lingering trail of scorching flame.",
-              },
-              {
-                img: "image/9.png",
-                label: "CRIMSON WARD",
-                desc: "Raise a barrier of hardened plasma that reflects incoming fire back at attackers.",
-              },
-              {
-                img: "image/10.png",
-                label: "STATIC SURGE",
-                desc: "Charge the air with lightning, chaining bolts between every enemy in range.",
-              },
-              {
-                img: "image/5.png",
-                label: "PHASE BLAST",
-                desc: "Unleash a burst of void energy that pierces armour and knocks foes off balance.",
-              },
-              {
-                img: "image/6.png",
-                label: "OVERGROWTH",
-                desc: "Summon living vines that root enemies in place while healing nearby allies.",
-              },
-              {
-                img: "image/7.png",
-                label: "PULSE DASH",
-                desc: "Blink through space in a shockwave, damaging every enemy along your path.",
-              },
-            ],
-          });
+            var scrollTicking = false;
+            window.addEventListener(
+                "scroll",
+                function() {
+                    if (scrollTicking) return;
+                    scrollTicking = true;
+                    requestAnimationFrame(function() {
+                        updateActiveFromScroll();
+                        scrollTicking = false;
+                    });
+                }, {
+                    passive: true
+                },
+            );
+            window.addEventListener("resize", updateActiveFromScroll);
+            updateActiveFromScroll();
         })();
 
-        // ---- nav: active underline + smooth scroll ----
-        var links = Array.prototype.slice.call(
-          document.querySelectorAll(".nav-link"),
-        );
-        var bar = document.getElementById("navUnderline");
-        if (!bar || !links.length) return;
+        /* ============ trailer lightbox (local video) ============ */
+        (function() {
+            var modal = document.getElementById("trailerModal");
+            var mount = document.getElementById("trailerMount");
+            if (!modal || !mount) return;
 
-        // matches .site-nav's own height: scrolling here lands a section's
-        // true top flush against the bottom edge of the fixed nav, so no
-        // sliver of the previous section's tail is ever revealed above it
-        var NAV_GAP = 80;
-        function sectionFor(l) {
-          var name = l.getAttribute("data-target");
-          return name ? document.querySelector("." + name) : null;
-        }
-        // section.offsetTop is measured in the unscaled design coordinate
-        // system (CSS transform: scale() doesn't affect layout), so it stays
-        // correct even if a section's height changes later.
-        function linkTarget(l) {
-          var sec = sectionFor(l);
-          var y = sec ? sec.offsetTop : 0;
-          return Math.max(0, Math.round((y - NAV_GAP) * scale));
-        }
+            function open(e) {
+                if (e) e.preventDefault();
+                var btn = e && e.currentTarget;
+                var src =
+                    (btn && btn.getAttribute("data-video")) || "video/trailer.mp4";
+                mount.innerHTML =
+                    '<video class="video-modal-video" src="' +
+                    src +
+                    '" controls autoplay playsinline></video>';
+                modal.hidden = false;
+                modal.classList.add("is-open");
+                document.body.style.overflow = "hidden";
+            }
 
-        function moveBar(el) {
-          bar.style.left = el.offsetLeft + "px";
-          bar.style.width = el.offsetWidth + "px";
-        }
-        function activate(el) {
-          links.forEach(function (l) {
-            l.classList.remove("is-active");
-          });
-          el.classList.add("is-active");
-          moveBar(el);
-        }
+            function close() {
+                modal.classList.remove("is-open");
+                modal.hidden = true;
+                mount.innerHTML = ""; // stops playback
+                document.body.style.overflow = "";
+            }
 
-        links.forEach(function (l) {
-          l.addEventListener("click", function () {
-            activate(l);
-            window.scrollTo({
-              top: linkTarget(l),
-              behavior: "smooth",
+            Array.prototype.forEach.call(
+                document.querySelectorAll("[data-trailer]"),
+                function(btn) {
+                    btn.addEventListener("click", open);
+                },
+            );
+            Array.prototype.forEach.call(
+                modal.querySelectorAll("[data-close]"),
+                function(el) {
+                    el.addEventListener("click", close);
+                },
+            );
+            document.addEventListener("keydown", function(e) {
+                if (e.key === "Escape" && !modal.hidden) close();
             });
-          });
-        });
-
-        var current = document.querySelector(".nav-link.is-active") || links[0];
-        moveBar(current);
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            bar.style.transition =
-              "left .35s cubic-bezier(.4,0,.2,1), width .35s cubic-bezier(.4,0,.2,1)";
-          });
-        });
-
-        window.addEventListener("resize", function () {
-          var prev = bar.style.transition;
-          bar.style.transition = "none";
-          moveBar(document.querySelector(".nav-link.is-active") || current);
-          requestAnimationFrame(function () {
-            bar.style.transition = prev;
-          });
-        });
-
-        // ---- nav: keep the active link in sync with actual scroll position ----
-        var lastLink = links.reduce(function (a, b) {
-          return linkTarget(b) > linkTarget(a) ? b : a;
-        }, links[0]);
-
-        function updateActiveFromScroll() {
-          var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-          var doc = document.documentElement;
-          var maxScroll = Math.max(0, (doc.scrollHeight || 0) - window.innerHeight);
-          var best = links[0];
-          if (scrollY >= maxScroll - 2) {
-            best = lastLink;
-          } else {
-            var bestTarget = -1;
-            links.forEach(function (l) {
-              var target = linkTarget(l);
-              if (target <= scrollY + 1 && target >= bestTarget) {
-                bestTarget = target;
-                best = l;
-              }
-            });
-          }
-          if (!best.classList.contains("is-active")) activate(best);
-        }
-
-        var scrollTicking = false;
-        window.addEventListener(
-          "scroll",
-          function () {
-            if (scrollTicking) return;
-            scrollTicking = true;
-            requestAnimationFrame(function () {
-              updateActiveFromScroll();
-              scrollTicking = false;
-            });
-          },
-          { passive: true },
-        );
-        window.addEventListener("resize", updateActiveFromScroll);
-        updateActiveFromScroll();
-      })();
-
-      /* ============ trailer lightbox (local video) ============ */
-      (function () {
-        var modal = document.getElementById("trailerModal");
-        var mount = document.getElementById("trailerMount");
-        if (!modal || !mount) return;
-
-        function open(e) {
-          if (e) e.preventDefault();
-          var btn = e && e.currentTarget;
-          var src =
-            (btn && btn.getAttribute("data-video")) || "video/trailer.mp4";
-          mount.innerHTML =
-            '<video class="video-modal-video" src="' +
-            src +
-            '" controls autoplay playsinline></video>';
-          modal.hidden = false;
-          modal.classList.add("is-open");
-          document.body.style.overflow = "hidden";
-        }
-        function close() {
-          modal.classList.remove("is-open");
-          modal.hidden = true;
-          mount.innerHTML = ""; // stops playback
-          document.body.style.overflow = "";
-        }
-
-        Array.prototype.forEach.call(
-          document.querySelectorAll("[data-trailer]"),
-          function (btn) {
-            btn.addEventListener("click", open);
-          },
-        );
-        Array.prototype.forEach.call(
-          modal.querySelectorAll("[data-close]"),
-          function (el) {
-            el.addEventListener("click", close);
-          },
-        );
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape" && !modal.hidden) close();
-        });
-      })();
+        })();
     </script>
-  </body>
+</body>
+
 </html>
