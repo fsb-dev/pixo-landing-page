@@ -2133,6 +2133,32 @@
                 return main ? main.offsetHeight : 7831;
             }
 
+            // Each section's authored height, in design px, captured once before any
+            // viewport-fit stretching is applied (so repeated fit() calls always grow
+            // from the original design size, never from a previously-stretched one).
+            var sections = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+            var baseSectionHeights = null;
+            function ensureBaseSectionHeights() {
+                if (baseSectionHeights) return;
+                baseSectionHeights = sections.map(function (sec) {
+                    return parseFloat(sec.style.height) || sec.offsetHeight;
+                });
+            }
+            // Stretch any section shorter than the viewport so it always fills the
+            // full screen height on its own — otherwise a nav click that lands flush
+            // on a short section's top edge lets the next section's top peek into
+            // view below the fold. Skip the last section (the footer): there's no
+            // section after it to hide, so stretching it would only add dead space
+            // at the very bottom of the page.
+            function fitSectionHeights() {
+                ensureBaseSectionHeights();
+                var neededDesignPx = Math.ceil(window.innerHeight / scale);
+                sections.forEach(function (sec, i) {
+                    if (i === sections.length - 1) return;
+                    sec.style.height = Math.max(baseSectionHeights[i], neededDesignPx) + "px";
+                });
+            }
+
             // Scale the fixed 1920px design to always fill the full viewport width (up or down).
             // <body> is sized to the scaled design so the browser produces exactly one scrollbar.
             function fit() {
@@ -2158,6 +2184,7 @@
                     return;
                 }
                 scale = baseVW / DESIGN_W;
+                fitSectionHeights();
                 var h = designH();
                 if (main) main.style.transform = "scale(" + scale + ")";
                 if (siteNav) siteNav.style.transform = "scale(" + scale + ")";
