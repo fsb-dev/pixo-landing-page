@@ -150,6 +150,25 @@
           #05eaf9 100%
         );
       }
+      .sec-footer .f-divider {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 145px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin: 0;
+      }
+      .sec-footer .f-divider .hr-box {
+        flex: none;
+      }
+      .sec-footer .f-divider .hr-line-l,
+      .sec-footer .f-divider .hr-line-r {
+        width: 296px;
+        height: 2px;
+      }
       /* footer flourish — Figma spec: 152.76px wide, 1.3px cyan gradient border */
       .m-footer .m-flourish .ln {
         width: 152.7595672607422px;
@@ -1954,16 +1973,11 @@
           battles, unique abilities, and worlds waiting to be discovered.
         </p>
        
-        <div
-          class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(50%-11px)] top-[222px]"
-        >
-          <div class="hr-box"></div>
+        <div class="f-divider">
+          <span class="hr-line-l"></span>
+          <span class="hr-box"></span>
+          <span class="hr-line-r"></span>
         </div>
-        <div
-          class="absolute h-[2px] w-[296px] left-[calc(50%+31px)] top-[232px] hr-line-r"
-        ></div><div
-          class="absolute h-[2px] w-[296px] left-[calc(25%+154px)] top-[232px] hr-line-l"
-        ></div>
         <p
           class="-translate-x-1/2 [word-break:break-word] absolute font-['Outfit'] font-normal leading-[36px] left-1/2 text-[26px] text-center text-white top-[512px] w-[696px]"
           data-node-id="6151:12670"
