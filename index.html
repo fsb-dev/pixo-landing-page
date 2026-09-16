@@ -2617,10 +2617,10 @@
         var bar = document.getElementById("navUnderline");
         if (!bar || !links.length) return;
 
-        // gap (design px) kept between the fixed nav and a section's top so
-        // its heading always has the same breathing room, however tall the
-        // section above it turns out to be
-        var NAV_GAP = 90;
+        // matches .site-nav's own height: scrolling here lands a section's
+        // true top flush against the bottom edge of the fixed nav, so no
+        // sliver of the previous section's tail is ever revealed above it
+        var NAV_GAP = 80;
         function sectionFor(l) {
           var name = l.getAttribute("data-target");
           return name ? document.querySelector("." + name) : null;
