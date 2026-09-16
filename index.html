@@ -381,7 +381,7 @@
         position: absolute;
         left: 0;
         right: 0;
-        top: 752px;
+        top: 700px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -433,9 +433,9 @@
       .sec-meet .mp-art {
         position: absolute;
         left: 893px;
-        top: 103px;
-        width: 1022.5px;
-        height: 903px;
+        top: 96px;
+        width: 1026.5px;
+        height: 858px;
         object-fit: cover;
         pointer-events: none;
         user-select: none;
@@ -1291,49 +1291,49 @@
       ></div>
       <p
         class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(33.33%+105px)] top-[38px] is-active"
-        data-scroll="0"
+        data-target="sec-hero"
         data-node-id="6118:23462"
       >
         HOME
       </p>
       <p
         class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(50%+64px)] top-[38px]"
-        data-scroll="2110"
+        data-target="sec-world"
         data-node-id="6118:23463"
       >
         WORLD
       </p>
       <p
         class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(41.67%+91px)] top-[38px]"
-        data-scroll="1300"
+        data-target="sec-meet"
         data-node-id="6118:23464"
       >
         PIXO
       </p>
       <p
         class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(58.33%+65px)] top-[38px]"
-        data-scroll="3095"
+        data-target="sec-abilities"
         data-node-id="6118:23465"
       >
         ABILITIES
       </p>
       <p
         class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(66.67%+82px)] top-[38px]"
-        data-scroll="4275"
+        data-target="sec-enemies"
         data-node-id="6118:23466"
       >
         ENEMIES
       </p>
       <p
         class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(75%+93px)] top-[38px]"
-        data-scroll="5200"
+        data-target="sec-gameplay"
         data-node-id="6118:23467"
       >
         GAME PLAY
       </p>
       <p
         class="nav-link [word-break:break-word] font-['Outfit'] font-medium leading-[20px] text-[20px] whitespace-nowrap absolute left-[calc(91.67%-30px)] top-[38px]"
-        data-scroll="6410"
+        data-target="sec-footer"
         data-node-id="6118:23468"
       >
         DEMO
@@ -2590,6 +2590,23 @@
         var bar = document.getElementById("navUnderline");
         if (!bar || !links.length) return;
 
+        // gap (design px) kept between the fixed nav and a section's top so
+        // its heading always has the same breathing room, however tall the
+        // section above it turns out to be
+        var NAV_GAP = 90;
+        function sectionFor(l) {
+          var name = l.getAttribute("data-target");
+          return name ? document.querySelector("." + name) : null;
+        }
+        // section.offsetTop is measured in the unscaled design coordinate
+        // system (CSS transform: scale() doesn't affect layout), so it stays
+        // correct even if a section's height changes later.
+        function linkTarget(l) {
+          var sec = sectionFor(l);
+          var y = sec ? sec.offsetTop : 0;
+          return Math.max(0, Math.round((y - NAV_GAP) * scale));
+        }
+
         function moveBar(el) {
           bar.style.left = el.offsetLeft + "px";
           bar.style.width = el.offsetWidth + "px";
@@ -2605,13 +2622,10 @@
         links.forEach(function (l) {
           l.addEventListener("click", function () {
             activate(l);
-            var y = parseInt(l.getAttribute("data-scroll"), 10);
-            if (!isNaN(y))
-              window.scrollTo({
-                // offset for the fixed nav so the section top clears it
-                top: Math.max(0, Math.round((y - 90) * scale)),
-                behavior: "smooth",
-              });
+            window.scrollTo({
+              top: linkTarget(l),
+              behavior: "smooth",
+            });
           });
         });
 
@@ -2632,6 +2646,47 @@
             bar.style.transition = prev;
           });
         });
+
+        // ---- nav: keep the active link in sync with actual scroll position ----
+        var lastLink = links.reduce(function (a, b) {
+          return linkTarget(b) > linkTarget(a) ? b : a;
+        }, links[0]);
+
+        function updateActiveFromScroll() {
+          var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+          var doc = document.documentElement;
+          var maxScroll = Math.max(0, (doc.scrollHeight || 0) - window.innerHeight);
+          var best = links[0];
+          if (scrollY >= maxScroll - 2) {
+            best = lastLink;
+          } else {
+            var bestTarget = -1;
+            links.forEach(function (l) {
+              var target = linkTarget(l);
+              if (target <= scrollY + 1 && target >= bestTarget) {
+                bestTarget = target;
+                best = l;
+              }
+            });
+          }
+          if (!best.classList.contains("is-active")) activate(best);
+        }
+
+        var scrollTicking = false;
+        window.addEventListener(
+          "scroll",
+          function () {
+            if (scrollTicking) return;
+            scrollTicking = true;
+            requestAnimationFrame(function () {
+              updateActiveFromScroll();
+              scrollTicking = false;
+            });
+          },
+          { passive: true },
+        );
+        window.addEventListener("resize", updateActiveFromScroll);
+        updateActiveFromScroll();
       })();
 
       /* ============ trailer lightbox (local video) ============ */
