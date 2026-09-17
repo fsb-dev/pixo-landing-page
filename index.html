@@ -229,6 +229,70 @@
                     #05eaf9 100%);
         }
 
+        /* ================= HERO section ================= */
+        /* full-bleed background art behind "BEYOND THE HORIZON" copy. Plain CSS (not
+           Tailwind utility classes) so it always fills edge-to-edge even if the
+           Tailwind CDN script is slow, blocked, or fails to load. */
+       .sec-hero {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sec-hero .h-bg-wrap {
+        position: absolute;
+        inset: 0;
+        width: 96%;
+        height: 100%;
+        pointer-events: none;
+        user-select: none;
+        z-index: 0;
+    }
+
+    .sec-hero .h-bg-overlay {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .sec-hero .h-bg-img {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        object-fit: contain;
+        object-position: center center;
+    }
+
+    .sec-hero .h-gradient-right {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: linear-gradient(
+            -89.97873232796866deg,
+            rgba(9, 31, 52, 0.66) 2.3857%,
+            rgba(9, 31, 52, 0.66) 23.633%,
+            rgba(9, 31, 52, 0.66) 41.847%,
+            rgba(9, 31, 52, 0) 66.374%
+        );
+    }
+
+    .sec-hero .h-gradient-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 260px;
+        pointer-events: none;
+        background-image: linear-gradient(
+            180deg,
+            rgba(9, 31, 52, 0) 0%,
+            #091f34 92%
+        );
+    }
+
         /* ================= GAMEPLAY section ================= */
         /* full-bleed background photo behind the "MOVE. FIGHT. MASTER." copy + art */
         .sec-gameplay .g-bg {
@@ -1524,24 +1588,23 @@
         <section class="sec sec-hero" style="position: relative; width: 1920px; height: 1092px">
 
 
-            </div>
             <div class="-translate-x-1/2 -translate-y-1/2 absolute h-[1132px] left-1/2 top-[566px] w-[1920px]"
                 data-node-id="6118:22943" data-name="BG"></div>
-            <div class="-translate-x-1/2 -translate-y-1/2 absolute h-[1241px] left-[calc(45.83%+32.5px)] top-[511.5px] w-[2105px]"
-                data-node-id="6118:23411" data-name="BG">
-                <div aria-hidden="" class="absolute inset-0 pointer-events-none">
-                    <img alt="" class="absolute inset-0 max-w-none object-cover size-full" src="image/1.png" />
-                    <div class="absolute inset-0"
-                        style="
-                background-image: linear-gradient(
-                  -89.97873232796866deg,
-                  rgba(9, 31, 52, 0.66) 2.3857%,
-                  rgba(9, 31, 52, 0.66) 23.633%,
-                  rgba(9, 31, 52, 0.66) 41.847%,
-                  rgba(9, 31, 52, 0) 66.374%
-                );
-              ">
-                    </div>
+           <div class="h-bg-wrap">
+        <div aria-hidden="true" class="h-bg-overlay">
+            <img
+                alt=""
+                class="h-bg-img"
+                src="image/1.png"
+            />
+
+            <!-- Right dark gradient -->
+            <div class="h-gradient-right"></div>
+
+            <!-- Bottom dark gradient -->
+            <div class="h-gradient-bottom"></div>
+        </div>
+    </div>
                     <div class="absolute bottom-0 left-0 right-0 h-[260px]"
                         style="
                 background-image: linear-gradient(
@@ -1629,8 +1692,9 @@
                 class="absolute flex items-center justify-center h-[23px] w-[23px] left-[calc(66.67%+3px)] top-[611px]">
                 <div class="hr-box"></div>
             </div>
-            <div class="absolute h-[2px] w-[296px] left-[calc(66.67%+45px)] top-[621px] hr-line-r"></div>
+             <div class="absolute h-[2px] w-[296px] left-[calc(66.67%+45px)] top-[621px] hr-line-r"></div>
             <div class="absolute h-[2px] w-[296px] left-[calc(50%+8px)] top-[621px] hr-line-l"></div>
+            
         </section>
         <!-- ==================== MEET PIXO  ·  "THIS IS PIXO" ==================== -->
         <section class="sec sec-meet" style="position: relative; width: 1920px; height: 1020px">
